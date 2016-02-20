@@ -70,10 +70,10 @@ void Quadro::SetMotorPower(int motor_index, BBBPWMDevice::PWM_RunValues val) {
 void Quadro::SetDefaultTargetValuesBasedOnStaticAverages() {
     Config.General.TargetValues.Pitch = Accelerometer.avgPitch;
     Config.General.TargetValues.Roll = Accelerometer.avgRoll;
-    Config.General.TargetValues.Heading = Magnetometer.avgHeading;
     Config.General.TargetValues.GyroX = Gyroscope.avgX;
     Config.General.TargetValues.GyroY = Gyroscope.avgY;
     Config.General.TargetValues.GyroZ = Gyroscope.avgZ;
+    Config.General.TargetValues.Heading = Magnetometer.avgHeading;
     Config.General.TargetValues.Altitude = ConvertAnalogReadingToAltitude(AnalogSensor[0].avgReading);
     cout << "Defaults : " << endl;
     cout << "Default Pitch = " << Config.General.TargetValues.Pitch;
