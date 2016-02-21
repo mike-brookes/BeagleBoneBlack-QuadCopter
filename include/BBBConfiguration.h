@@ -35,9 +35,9 @@ using namespace std;
 #define PITCH_ALLOWABLE_ERROR			1				//<!-- Allowable error for the Pitch Value in degrees.
 #define HEADING_ALLOWABLE_ERROR			2				//<!-- Allowable error for the Heading Value in degrees.
 #define ALTITUDE_ALLOWABLE_ERROR		1				//<!-- Allowable error for the Altitude Value in cm.
-#define GYROX_ALLOWABLE_ERROR			50				//<!-- Allowable error for the Gyro X Value in degrees per second.
-#define GYROY_ALLOWABLE_ERROR			10				//<!-- Allowable error for the Gyro Y Value in degrees per second.
-#define GYROZ_ALLOWABLE_ERROR			60				//<!-- Allowable error for the Gyro Z Value in degrees per second.
+#define GYROX_ALLOWABLE_ERROR			0				//<!-- Allowable error for the Gyro X Value in degrees per second.
+#define GYROY_ALLOWABLE_ERROR			0				//<!-- Allowable error for the Gyro Y Value in degrees per second.
+#define GYROZ_ALLOWABLE_ERROR			0				//<!-- Allowable error for the Gyro Z Value in degrees per second.
 
 #define MOTOR_1_BLOCK					9
 #define MOTOR_1_PIN						42
@@ -78,9 +78,9 @@ public:
             double dPitch = PITCH_ALLOWABLE_ERROR;
             double dRoll = ROLL_ALLOWABLE_ERROR;
             double dHeading = HEADING_ALLOWABLE_ERROR;
-            int16_t dGyroX = GYROX_ALLOWABLE_ERROR;
-            int16_t dGyroY = GYROY_ALLOWABLE_ERROR;
-            int16_t dGyroZ = GYROZ_ALLOWABLE_ERROR;
+            int dGyroX = GYROX_ALLOWABLE_ERROR;
+            int dGyroY = GYROY_ALLOWABLE_ERROR;
+            int dGyroZ = GYROZ_ALLOWABLE_ERROR;
             int dAltitude = ALTITUDE_ALLOWABLE_ERROR;
         } AllowedErrorValues;
     } General;

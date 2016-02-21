@@ -105,16 +105,19 @@ void Quadro::CheckSensorsForSense() {
 
     DataDiff = this->AnalyseData(this->Accelerometer.PitchDataStoredValues, Config.General.TargetValues.Pitch,
                                  Config.General.AllowedErrorValues.dPitch);
+
     if (DataDiff > 0)
         cout << "Pitch value has changed by " << DataDiff << "!" << endl;
 
     DataDiff = this->AnalyseData(this->Accelerometer.RollDataStoredValues, Config.General.TargetValues.Roll,
                                  Config.General.AllowedErrorValues.dRoll);
+
     if (DataDiff > 0)
         cout << "Roll value has changed by " << DataDiff << "!" << endl;
 
     DataDiff = this->AnalyseData(this->Magnetometer.HeadingDataStoredValues, Config.General.TargetValues.Heading,
                                  Config.General.AllowedErrorValues.dHeading);
+
     if (DataDiff > 0)
         cout << "Heading value has changed by " << DataDiff << "!" << endl;
 
@@ -125,16 +128,19 @@ void Quadro::CheckSensorsForSense() {
 
     DataDiff = this->AnalyseData(this->Gyroscope.GyroYDataStoredValues, Config.General.TargetValues.GyroY,
                                  Config.General.AllowedErrorValues.dGyroY);
+
     if (DataDiff > 0)
         cout << "GyroY value has changed by " << DataDiff << "!" << endl;
 
     DataDiff = this->AnalyseData(this->Gyroscope.GyroZDataStoredValues, Config.General.TargetValues.GyroZ,
                                  Config.General.AllowedErrorValues.dGyroZ);
+
     if (DataDiff > 0)
         cout << "GyroZ value has changed by " << DataDiff << "!" << endl;
 
     DataDiff = this->AnalyseData(this->AnalogSensor[0].DataStoredValues, Config.General.TargetValues.Altitude,
                                  Config.General.AllowedErrorValues.dAltitude);
+
     if (DataDiff > 0)
         cout << "Altitude value has changed by " << DataDiff << "!" << endl;
 
