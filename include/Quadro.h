@@ -2,7 +2,7 @@
  * BBBQuadro.h
  *
  *  Created on: 6 Dec 2015
- *      Author: michaelbrookes
+ *      Author: Michael Brookes
  */
 
 #ifndef SRC_H_BBBQUADRO_H_
