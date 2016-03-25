@@ -9,50 +9,50 @@
 #include "BBBConfiguration.h"
 #include "Quadro.h"
 
-int main(void) {
+int main( void ) {
 
     Quadro Quadro;
 
-    if (Quadro.AddAnalogDevices() == 0) {
+    if( Quadro.AddAnalogDevices( ) == 0 ) {
         cerr << "Error adding Analog Devices." << endl;
-        exit(1);
+        exit( 1 );
     }
 
-    if (Quadro.AddI2CDevices() == 0) {
+    if( Quadro.AddI2CDevices( ) == 0 ) {
         cerr << "Error adding I2C Devices." << endl;
-        exit(1);
+        exit( 1 );
     }
 
-    if (Quadro.AddMotors() == 0) {
+    if( Quadro.AddMotors( ) == 0 ) {
         cerr << "Error adding Motors." << endl;
-        exit(1);
+        exit( 1 );
     }
 
-    Quadro.SetAllMotorsPower(BBBPWMDevice::PWM_RunValues::ON);
-    Quadro.SetAllMotorsSpeed(MOTOR_SLOWSPEED);
+    Quadro.SetAllMotorsPower( BBBPWMDevice::PWM_RunValues::ON );
+    Quadro.SetAllMotorsSpeed( MOTOR_SLOWSPEED );
 
-    Quadro.Accelerometer.StartRecordingPitchAndRoll();
-    Quadro.Magnetometer.StartRecordingHeading();
-    Quadro.Gyroscope.Start();
-    Quadro.AnalogSensor[0].Start();
+    Quadro.Accelerometer.StartRecordingPitchAndRoll( );
+    Quadro.Magnetometer.StartRecordingHeading( );
+    Quadro.Gyroscope.Start( );
+    Quadro.AnalogSensor[ 0 ].Start( );
 
-    Quadro.Accelerometer.SetPitchAndRollAverages(50);
-    Quadro.Magnetometer.SetHeadingAverages(50);
-    Quadro.Gyroscope.SetAverages(50);
-    Quadro.AnalogSensor[0].SetAverages(50);
+    Quadro.Accelerometer.SetPitchAndRollAverages( 50 );
+    Quadro.Magnetometer.SetHeadingAverages( 50 );
+    Quadro.Gyroscope.SetAverages( 50 );
+    Quadro.AnalogSensor[ 0 ].SetAverages( 50 );
 
-    Quadro.SetDefaultTargetValuesBasedOnStaticAverages();
+    Quadro.SetDefaultTargetValuesBasedOnStaticAverages( );
 
-    usleep(20000);
+    usleep( 20000 );
 
-    while (1) {
-        Quadro.CheckSensorsForSense();
+    while( 1 ) {
+        Quadro.CheckSensorsForSense( );
 
         //for(int i = 0; i < PROPELLOR_COUNT; i++ ) {
         //cout << "Current speed of motor " << i << " : " << Quadro.PropellorMotor[ i ].PWM_GetPeriodVal( ) << endl;
         //}
 
-        usleep(5000);
+        usleep( 5000 );
     }
 
 }

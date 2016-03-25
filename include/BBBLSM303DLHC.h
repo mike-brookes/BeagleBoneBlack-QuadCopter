@@ -1,1 +1,1 @@
-/Users/michaelbrookes/ClionProjects/BBBLSM303DLHC/BBBLSM303DLHC.h
+/Users/michaelbrookes/ClionProjects/BBBLSM303DLHC/include/BBBLSM303DLHC.h
