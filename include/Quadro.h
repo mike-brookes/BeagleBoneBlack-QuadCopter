@@ -22,6 +22,7 @@ class Quadro {
 
 public:
     Quadro( );
+    ~Quadro( );
 
     int AddAnalogDevices( );
 
@@ -37,11 +38,27 @@ public:
 
     void SetMotorPower( int motor_index, BBBPWMDevice::PWM_RunValues val );
 
+    int SpeedUpMotor( int motor_index );
+
+    int SlowDownMotor( int motor_index );
+
+    void ControlPitch( double DataDiff );
+
+    void ControlRoll( double DataDiff );
+
+    void ControlYaw( double DataDiff );
+
     void CheckSensorsForSense( );
 
     void SetDefaultTargetValuesBasedOnStaticAverages( );
 
-    BBBPWMDevice PropellorMotor[PROPELLOR_COUNT];
+    void Pitch( );
+
+    void Roll( );
+
+    void Yaw( );
+
+    BBBPWMDevice propellerMotor[PROPELLER_COUNT];
     BBBAnalogDevice AnalogSensor[ANALOG_SENSOR_COUNT];
     BBBLSM303DLHC Accelerometer;
     BBBLSM303DLHC Magnetometer;
@@ -50,8 +67,6 @@ public:
 
 protected:
     void *status;
-
-    int ConvertAnalogReadingToAltitude( int AReading );
 };
 
 template <class T>

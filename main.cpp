@@ -35,23 +35,16 @@ int main( void ) {
     Quadro.Magnetometer.StartRecordingHeading( );
     Quadro.Gyroscope.Start( );
     Quadro.AnalogSensor[ 0 ].Start( );
-
     Quadro.Accelerometer.SetPitchAndRollAverages( 50 );
     Quadro.Magnetometer.SetHeadingAverages( 50 );
     Quadro.Gyroscope.SetAverages( 50 );
     Quadro.AnalogSensor[ 0 ].SetAverages( 50 );
-
     Quadro.SetDefaultTargetValuesBasedOnStaticAverages( );
 
     usleep( 20000 );
 
     while( 1 ) {
         Quadro.CheckSensorsForSense( );
-
-        //for(int i = 0; i < PROPELLOR_COUNT; i++ ) {
-        //cout << "Current speed of motor " << i << " : " << Quadro.PropellorMotor[ i ].PWM_GetPeriodVal( ) << endl;
-        //}
-
         usleep( 5000 );
     }
 
