@@ -32,10 +32,7 @@ using namespace std;
 #define MOTOR_TAKEOFFSPEED              250000          //<!-- Default Take Off Speed for the motors.
 #define MOTOR_SLOWSPEED                 700000          //<!-- Default Slow Speed for the motors.
 #define MOTOR_STOPSPEED                 780000          //<!-- Default Stop Speed for the motors without turning the power off.
-#define MOTOR_ROLL_OFFSET               100
-#define MOTOR_PITCH_OFFSET              100
-#define MOTOR_YAW_OFFSET                100
-#define MOTOR_ALTITUDE_OFFSET           100            //<!-- Default speed change for altitude adjustments.
+#define MOTOR_SPEED_OFFSET              250
 
 #define ROLL_ALLOWABLE_ERROR            0               //<!-- Allowable error for the Roll Value in degrees.
 #define PITCH_ALLOWABLE_ERROR           0               //<!-- Allowable error for the Pitch Value in degrees.
@@ -130,6 +127,7 @@ public:
         Motors[ 0 ].Name = "FL";                                                                    //<!--propeller 1 Name
         Motors[ 0 ].Block = ( BBBPWMDevice::PWM_BlockNum ) MOTOR_1_BLOCK;                           //<!--propeller 1 Block Location
         Motors[ 0 ].Pin = ( BBBPWMDevice::PWM_PinNum ) MOTOR_1_PIN;                                 //<!--propeller 1 Pin Location
+        Motors[ 0 ].TargetSpeed = MOTOR_SLOWSPEED;
         //<!-- End of Propeller 1 info --!>//
 
         //<!-- Propeller 2 info --!>//
@@ -137,6 +135,7 @@ public:
         Motors[ 1 ].Name = "FR";                                                                    //<!--propeller 2 Name
         Motors[ 1 ].Block = ( BBBPWMDevice::PWM_BlockNum ) MOTOR_2_BLOCK;                           //<!--propeller 2 Block Location
         Motors[ 1 ].Pin = ( BBBPWMDevice::PWM_PinNum ) MOTOR_2_PIN;                                 //<!--propeller 2 Pin Location
+        Motors[ 1 ].TargetSpeed = MOTOR_SLOWSPEED;
         //<!-- End of Propeller 2 info --!>//
 
         //<!-- Propeller 3 info --!>//
@@ -144,6 +143,7 @@ public:
         Motors[ 2 ].Name = "BL";                                                                    //<!--propeller 3 Name
         Motors[ 2 ].Block = ( BBBPWMDevice::PWM_BlockNum ) MOTOR_3_BLOCK;                           //<!--propeller 3 Block Location
         Motors[ 2 ].Pin = ( BBBPWMDevice::PWM_PinNum ) MOTOR_3_PIN;                                 //<!--propeller 3 Pin Location
+        Motors[ 2 ].TargetSpeed = MOTOR_SLOWSPEED;
         //<!-- End of Propeller 3 info --!>//
 
         //<!-- propeller 4 info --!>//
@@ -151,6 +151,7 @@ public:
         Motors[ 3 ].Name = "BR";                                                                    //<!--propeller 4 Name
         Motors[ 3 ].Block = ( BBBPWMDevice::PWM_BlockNum ) MOTOR_4_BLOCK;                           //<!--propeller 4 Block Location
         Motors[ 3 ].Pin = ( BBBPWMDevice::PWM_PinNum ) MOTOR_4_PIN;                                 //<!--propeller 4 Pin Location
+        Motors[ 3 ].TargetSpeed = MOTOR_SLOWSPEED;
         //<!-- End of propeller 4 info --!>//
 
         //<!-- Analog Sensor 1 info --!>//

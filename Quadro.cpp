@@ -63,7 +63,6 @@ int Quadro::AddMotors( ) {
 void Quadro::SetAllMotorsSpeed( int motor_speed ) {
     for( int i = 0; i < PROPELLER_COUNT; i++ ) {
         this->SetMotorSpeed( i, motor_speed );
-        sleep(2);
     }
 }
 
@@ -85,70 +84,62 @@ void Quadro::SetMotorPower( int motor_index, BBBPWMDevice::PWM_RunValues val ) {
 }
 
 void Quadro::SetDefaultTargetValuesBasedOnStaticAverages( ) {
-    Config.General.TargetValues.Pitch = Accelerometer.avgPitch;
-    Config.General.TargetValues.Roll = Accelerometer.avgRoll;
-    Config.General.TargetValues.GyroX = Gyroscope.avgX;
-    Config.General.TargetValues.GyroY = Gyroscope.avgY;
-    Config.General.TargetValues.GyroZ = Gyroscope.avgZ;
+    Config.General.TargetValues.Pitch = 0;//Accelerometer.avgPitch;
+    Config.General.TargetValues.Roll = 0;//Accelerometer.avgRoll;
+    Config.General.TargetValues.GyroX = 0;//Gyroscope.avgX;
+    Config.General.TargetValues.GyroY = 0;//Gyroscope.avgY;
+    Config.General.TargetValues.GyroZ = 0;//Gyroscope.avgZ;
     Config.General.TargetValues.Heading = Magnetometer.avgHeading;
     Config.General.TargetValues.Altitude = AnalogSensor[ 0 ].avgReading;
-    cout << "Defaults : " << endl;
-    cout << "Default Pitch = " << Config.General.TargetValues.Pitch;
-    cout << "Default Roll = " << Config.General.TargetValues.Roll;
-    cout << "Default Heading = " << Config.General.TargetValues.Heading;
-    cout << "Default Gyro X = " << Config.General.TargetValues.GyroX;
-    cout << "Default Gyro Y = " << Config.General.TargetValues.GyroY;
-    cout << "Default Gyro Z = " << Config.General.TargetValues.GyroZ;
-    cout << "Default Altitude = " << Config.General.TargetValues.Altitude << endl;
 }
 
 int Quadro::SpeedUpMotor( int motor_index ) {
-    propellerMotor[ motor_index ].PWM_TargetSpeed -= MOTOR_PITCH_OFFSET;
-    if( propellerMotor[ motor_index ].PWM_TargetSpeed < MAX_DUTY )
-        propellerMotor[ motor_index ].PWM_TargetSpeed = MAX_DUTY;
+    propellerMotor[ motor_index ].PWM_TargetSpeed -= MOTOR_SPEED_OFFSET;
+    if( propellerMotor[ motor_index ].PWM_TargetSpeed < 420000 )
+        propellerMotor[ motor_index ].PWM_TargetSpeed = 420000;
     if( propellerMotor[ motor_index ].PWM_TargetSpeed > MIN_DUTY )
         propellerMotor[ motor_index ].PWM_TargetSpeed = MIN_DUTY;
     return propellerMotor[ motor_index ].PWM_TargetSpeed;
 }
 
 int Quadro::SlowDownMotor( int motor_index ) {
-    propellerMotor[ motor_index ].PWM_TargetSpeed += MOTOR_PITCH_OFFSET;
-    if( propellerMotor[ motor_index ].PWM_TargetSpeed < MAX_DUTY )
-        propellerMotor[ motor_index ].PWM_TargetSpeed = MAX_DUTY;
+    propellerMotor[ motor_index ].PWM_TargetSpeed += MOTOR_SPEED_OFFSET;
+    if( propellerMotor[ motor_index ].PWM_TargetSpeed < 420000 )
+        propellerMotor[ motor_index ].PWM_TargetSpeed = 420000;
     if( propellerMotor[ motor_index ].PWM_TargetSpeed > MIN_DUTY )
         propellerMotor[ motor_index ].PWM_TargetSpeed = MIN_DUTY;
     return propellerMotor[ motor_index ].PWM_TargetSpeed;
 }
 
 void Quadro::ControlPitch( double DataDiff ) {
-    cout << "Actual Pitch Diff = " << this->Accelerometer.Pitch - Config.General.TargetValues.Pitch << endl;            /*   xxxxx                   xxxxx                      */
-    if( this->Accelerometer.Pitch - Config.General.TargetValues.Pitch  > 0 ) {                                          /*   x 0 x                   x 1 x                      */
-        propellerMotor[ 0 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 0 ) );                                  //FL        /*   xxxxx                   xxxxx                      */
-        propellerMotor[ 1 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 1 ) );                                  //FR        /*     \\                     //                        */
-        propellerMotor[ 2 ].PWM_SetTargetSpeed( this->SlowDownMotor( 2 ) );                                 //BL        /*      \\                   //                         */
-        propellerMotor[ 3 ].PWM_SetTargetSpeed( this->SlowDownMotor( 3 ) );                                 //BR        /*       \\                 //                          */
+                                                                                                                        /*   xxxxx                   xxxxx                      */
+    if( this->Accelerometer.Pitch - Config.General.TargetValues.Pitch  > 0 ) {                                          /*   x 3 x                   x 2 x                      */
+        propellerMotor[ 0 ].PWM_SetTargetSpeed( this->SlowDownMotor( 3 ) );                                //FL         /*   xxxxx                   xxxxx                      */
+        propellerMotor[ 1 ].PWM_SetTargetSpeed( this->SlowDownMotor( 2 ) );                                //FR         /*     \\                     //                        */
+        propellerMotor[ 2 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 1 ) );                                 //BL         /*      \\ (white arm)       // (white arm)             */
+        propellerMotor[ 3 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 0 ) );                                 //BR         /*       \\                 //                          */
     }                                                                                                                   /*        \\               //     -                     */
-    else {                                                                                                              /*         \\    Front    //       <--. _               */
-        propellerMotor[ 0 ].PWM_SetTargetSpeed( this->SlowDownMotor( 0 ) );                                 //FL        /*           -------------               `.             */
-        propellerMotor[ 1 ].PWM_SetTargetSpeed( this->SlowDownMotor( 1 ) );                                 //FR        /*          |L          R |             P  \            */
-        propellerMotor[ 2 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 2 ) );                                  //BL        /*          |E          I |             I   |           */
-        propellerMotor[ 3 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 3 ) );                                  //BR        /*          |F          G |             T   |           */
+    else {                                                                                                              /*         \\    BACK     //       <--. _               */
+        propellerMotor[ 0 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 3 ) );                                 //FL         /*           -------------               `.             */
+        propellerMotor[ 1 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 2 ) );                                 //FR         /*          |L          R |             P  \            */
+        propellerMotor[ 2 ].PWM_SetTargetSpeed( this->SlowDownMotor( 1 ) );                                //BL         /*          |E          I |             I   |           */
+        propellerMotor[ 3 ].PWM_SetTargetSpeed( this->SlowDownMotor( 0 ) );                                //BR         /*          |F          G |             T   |           */
     }                                                                                                                   /*          |T          H |             C   |           */
 }                                                                                                                       /*          |           T |             H  /            */
                                                                                                                         /*           -------------              _.'             */
-void Quadro::ControlRoll( double DataDiff ) {                                                                           /*         //    Back     \\       <--'                 */
-    cout << "Actual Roll Diff = " << this->Accelerometer.Roll - Config.General.TargetValues.Roll << endl;               /*        //               \\     +                     */
+void Quadro::ControlRoll( double DataDiff ) {                                                                           /*         //    FRONT    \\       <--'                 */
+                                                                                                                        /*        //               \\     +                     */
     if( this->Accelerometer.Roll - Config.General.TargetValues.Roll  > 0 ) {                                            /*       //                 \\                          */
-        propellerMotor[ 0 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 0 ) );                                  //FL        /*      //                   \\                         */
+        propellerMotor[ 0 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 0 ) );                                  //FL        /*      // (red arm)         \\ (red arm)               */
         propellerMotor[ 1 ].PWM_SetTargetSpeed( this->SlowDownMotor( 1 ) );                                 //FR        /*     //                     \\                        */
-        propellerMotor[ 2 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 2 ) );                                  //BL        /*   xxxxx                   xxxxx                      */
-        propellerMotor[ 3 ].PWM_SetTargetSpeed( this->SlowDownMotor( 3 ) );                                 //BR        /*   x 2 x                   x 3 x                      */
+        propellerMotor[ 2 ].PWM_SetTargetSpeed( this->SlowDownMotor( 2 ) );                                 //BL        /*   xxxxx                   xxxxx                      */
+        propellerMotor[ 3 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 3 ) );                                  //BR        /*   x 0 x                   x 1 x                      */
     }                                                                                                                   /*   xxxxx                   xxxxx                      */
     else {
         propellerMotor[ 0 ].PWM_SetTargetSpeed( this->SlowDownMotor( 0 ) );                                 //FL        /*             _.-""""-._                               */
         propellerMotor[ 1 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 1 ) );                                  //FR        /*           .'   Roll   `.                             */
-        propellerMotor[ 2 ].PWM_SetTargetSpeed( this->SlowDownMotor( 2 ) );                                 //BL        /*          /              \                            */
-        propellerMotor[ 3 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 3 ) );                                  //BR        /*         |                |                           */
+        propellerMotor[ 2 ].PWM_SetTargetSpeed( this->SpeedUpMotor( 2 ) );                                  //BL        /*          /              \                            */
+        propellerMotor[ 3 ].PWM_SetTargetSpeed( this->SlowDownMotor( 3 ) );                                 //BR        /*         |                |                           */
     }                                                                                                                   /*       + \/               \/ -                        */
 }
 
@@ -163,31 +154,14 @@ void Quadro::CheckSensorsForSense( ) {
     DataDiffAsDouble = AnalyseData( this->Accelerometer.PitchDataStoredValues, Config.General.TargetValues.Pitch,
                                   Config.General.AllowedErrorValues.dPitch );
 
-    if( DataDiffAsDouble > 0 ) {
-        //cout << "Pitch value has changed by " << DataDiffAsDouble << "!" << endl;
-
+    if( DataDiffAsDouble > 0 )
         this->ControlPitch( DataDiffAsDouble );
-
-        //cout << "Controlling QuadCopter Pitch | current motor values = " << endl;
-        for( int i = 0; i < PROPELLER_COUNT; i++ ) {
-            cout << "Propeller " << i << " current speed = " << propellerMotor[ i ].PWM_GetDutyVal( ) << " | Target speed = " << propellerMotor[ i ].PWM_TargetSpeed << endl;
-        }
-    }
 
     DataDiffAsDouble = AnalyseData( this->Accelerometer.RollDataStoredValues, Config.General.TargetValues.Roll,
                                   Config.General.AllowedErrorValues.dRoll );
 
-    if( DataDiffAsDouble > 0 ) {
-        //cout << "Roll value has changed by " << DataDiffAsDouble << "!" << endl;
-
+    if( DataDiffAsDouble > 0 )
         this->ControlRoll( DataDiffAsDouble );
-
-        //cout << "Controlling QuadCopter Roll | current motor values = " << endl;
-        for( int i = 0; i < PROPELLER_COUNT; i++ ) {
-            cout << "Propeller " << i << " current speed = " << propellerMotor[ i ].PWM_GetDutyVal( ) <<
-            " | Target speed = " << propellerMotor[ i ].PWM_TargetSpeed << endl;
-        }
-    }
 
     DataDiffAsDouble = AnalyseData( this->Magnetometer.HeadingDataStoredValues, Config.General.TargetValues.Heading,
                                   Config.General.AllowedErrorValues.dHeading );
