@@ -53,14 +53,6 @@ sleep(5);
         my_file << "\t\tPitch\t\t=\t" << Quadro.Accelerometer.Pitch << "\t\t|\tRoll\t\t=\t" << Quadro.Accelerometer.Roll << endl;
         my_file << "\t\tTarget Pitch\t=\t" << Quadro.Config.General.TargetValues.Pitch << "\t\t|\tTarget Roll\t=\t" << Quadro.Config.General.TargetValues.Roll << endl;
         my_file.close();
-        //if( Quadro.Accelerometer.Pitch > 45 || Quadro.Accelerometer.Pitch < -45 || Quadro.Accelerometer.Roll > 45 || Quadro.Accelerometer.Roll < -45 ) {
-        //    cout << "Pitch or Roll went higher than 45 degrees - program exited." << endl;
-        //    cout << "Pitch = " << Quadro.Accelerometer.Pitch << endl;
-        //    cout << "Roll = " << Quadro.Accelerometer.Roll << endl;
-        //    Quadro.SetAllMotorsSpeed( MOTOR_SLOWSPEED );
-        //    usleep(10000);
-        //    exit( 1 );
-        //}
         usleep( 5000 );
     }
 
