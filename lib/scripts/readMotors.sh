@@ -34,7 +34,7 @@ do
 
                         for ((i=$ENDING_POS; i>=$STARTING_POS; i--));
                         do
-                                if [ "$i" -lt "$READING_END" ]; then
+                                if [ "$i" -lt "${READING_END}" ]; then
                                         STATUS_STR="$STATUS_STR\e[7m\e[0m ";
                                 else
                                         STATUS_STR="$STATUS_STR\e[7m\e[32m \e[0m";
