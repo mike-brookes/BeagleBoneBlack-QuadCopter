@@ -29,13 +29,12 @@ int main(){
     LSM303Magnetometer *Magnetometer;
     Accelerometer = new LSM303Accelerometer( );
     Magnetometer = new LSM303Magnetometer( );
-    Accelerometer->SetPitchAndRollAverages( 50 );
-    Magnetometer->SetHeadingAverages( 50 );
 
     while(1){
         cout << "Current Distance In Cm : " << SonicSensor.Distance( ) << endl;
         cout << "Heading = " << Magnetometer->Heading( ) << endl;
         cout << "Roll = " << Accelerometer->Roll( ) << endl;
         cout << "Pitch = " << Accelerometer->Pitch( ) << endl;
+        usleep( 500000 );
     }
 }
