@@ -1,59 +1,41 @@
 //
-//  main.cpp
-//  QuadCopter
-//
-//  Created by Michael Brookes on 03/10/2015.
-//  Copyright © 2015 Michael Brookes. All rights reserved.
+// Created by Michael Brookes on 12/06/2016.
 //
 
-#include "BBBConfiguration.h"
 #include "Quadro.h"
-#include <iostream>
-#include <fstream>
-using namespace std;
 
-int main( void ) {
+int main(){
 
-    Quadro Quadro;
+    using namespace abIDevice;
+    DJI_2212 *Motor1, *Motor2, *Motor3, *Motor4;
+    Motor1 = new DJI_2212( iDeviceOverlay::PinBlocks::BLOCK_P9, iDeviceOverlay::PWMPins::PIN_42 );
+    Motor2 = new DJI_2212( iDeviceOverlay::PinBlocks::BLOCK_P8, iDeviceOverlay::PWMPins::PIN_19 );
+    Motor3 = new DJI_2212( iDeviceOverlay::PinBlocks::BLOCK_P9, iDeviceOverlay::PWMPins::PIN_14 );
+    Motor4 = new DJI_2212( iDeviceOverlay::PinBlocks::BLOCK_P9, iDeviceOverlay::PWMPins::PIN_22 );
 
-    if( Quadro.AddAnalogDevices( ) == 0 ) {
-        cerr << "Error adding Analog Devices." << endl;
-        exit( 1 );
+    Motor1->Init( );
+    Motor2->Init( );
+    Motor3->Init( );
+    Motor4->Init( );
+
+    using namespace abAnalog;
+    LVMaxSonarEZ SonicSensor;
+    SonicSensor.Start( );
+    sleep( 1 );
+    SonicSensor.SetMode( LVMaxSonarEZ::DeviceMode::Cm );
+
+    using namespace abI2C;
+    LSM303Accelerometer *Accelerometer;
+    LSM303Magnetometer *Magnetometer;
+    Accelerometer = new LSM303Accelerometer( );
+    Magnetometer = new LSM303Magnetometer( );
+    Accelerometer->SetPitchAndRollAverages( 50 );
+    Magnetometer->SetHeadingAverages( 50 );
+
+    while(1){
+        cout << "Current Distance In Cm : " << SonicSensor.Distance( ) << endl;
+        cout << "Heading = " << Magnetometer->Heading( ) << endl;
+        cout << "Roll = " << Accelerometer->Roll( ) << endl;
+        cout << "Pitch = " << Accelerometer->Pitch( ) << endl;
     }
-
-    if( Quadro.AddI2CDevices( ) == 0 ) {
-        cerr << "Error adding I2C Devices." << endl;
-        exit( 1 );
-    }
-
-    if( Quadro.AddMotors( ) == 0 ) {
-        cerr << "Error adding Motors." << endl;
-        exit( 1 );
-    }
-sleep(5);
-    Quadro.SetAllMotorsPower( BBBPWMDevice::PWM_RunValues::ON );
-    Quadro.SetAllMotorsSpeed( 450000 );
-
-    Quadro.Accelerometer.StartRecordingPitchAndRoll( );
-    Quadro.Magnetometer.StartRecordingHeading( );
-    Quadro.Gyroscope.Start( );
-    Quadro.AnalogSensor[ 0 ].Start( );
-    Quadro.Accelerometer.SetPitchAndRollAverages( 50 );
-    Quadro.Magnetometer.SetHeadingAverages( 50 );
-    Quadro.Gyroscope.SetAverages( 50 );
-    Quadro.AnalogSensor[ 0 ].SetAverages( 50 );
-    Quadro.SetDefaultTargetValuesBasedOnStaticAverages( );
-
-    usleep( 20000 );
-
-    while( 1 ) {
-        Quadro.CheckSensorsForSense( );
-        ofstream my_file;
-        my_file.open ("accel_data.dat");
-        my_file << "\t\tPitch\t\t=\t" << Quadro.Accelerometer.Pitch << "\t\t|\tRoll\t\t=\t" << Quadro.Accelerometer.Roll << endl;
-        my_file << "\t\tTarget Pitch\t=\t" << Quadro.Config.General.TargetValues.Pitch << "\t\t|\tTarget Roll\t=\t" << Quadro.Config.General.TargetValues.Roll << endl;
-        my_file.close();
-        usleep( 5000 );
-    }
-
 }
