@@ -19,13 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef BEAGLEBONE_MOTOR_DJI_2212_H
 #define BEAGLEBONE_MOTOR_DJI_2212_H
-#define MAX_DUTY            150000
-#define MIN_DUTY            780000
+#define MAX_DUTY            320000 //150000
+#define MIN_DUTY            500000
 #define SPIN_SLOWSPEED      700000
 #define SPIN_TAKEOFFSPEED   250000
 #define DEFAULT_PERIOD      1900000
 #define ACTIVATE_PERIOD     1200000
-#define DEFAULT_SPEED_STEP  250
+#define DEFAULT_SPEED_STEP  50
 
 #include "../Motors.h"
 
