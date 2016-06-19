@@ -62,7 +62,6 @@ namespace abPWM {
 
     void *Motors::MaintainTargetSpeed( void *_inst ) {
         Motors* MotorInst = (Motors*)_inst;
-        cout << "Thread : MotorInst -> Run == " << MotorInst->CurrentRun << endl;
         while( MotorInst->CurrentRun == status::On ) {
             if( MotorInst->CurrentDuty > MotorInst->TargetSpeed )
                 MotorInst->IncreaseSpeed( );
