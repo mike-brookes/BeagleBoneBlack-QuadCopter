@@ -26,14 +26,14 @@ DJI_2212::DJI_2212( abIDevice::iDeviceOverlay::PinBlocks _block,
     this->SetMaxSpeed( MAX_DUTY );
     this->SetMinSpeed( MIN_DUTY );
     this->SetSpeedStep( DEFAULT_SPEED_STEP );
-    this->SetDuty( this->GetMinSpeed( ) );
     this->SetPeriod( DEFAULT_PERIOD );
+    this->SetDuty( this->GetMinSpeed( ) );
     this->SetPolarity( 1 );
 
 }
 
 void DJI_2212::Init( ){
-    this->SetPeriod( ACTIVATE_PERIOD );
+    this->SetPeriod( DEFAULT_PERIOD );
     this->SetTargetSpeed( SPIN_SLOWSPEED );
     this->SetRun( 1 );
     this->Start( );
