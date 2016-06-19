@@ -26,6 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_OPERATING_HEIGHT 255
 #define MIN_OPERATING_HEIGHT 6
 
+#define EMERGENCY_HEIGHT_CM 23
+#define EMERGENCY_HEIGHT_INCH 9
+
 #define MAX_DATASTORE        15
 #define SONIC_INCH_MODIFYER  9.8
 #define SONIC_CM_MODIFYER    2.54
