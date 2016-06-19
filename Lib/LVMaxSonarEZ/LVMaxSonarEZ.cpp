@@ -93,7 +93,7 @@ void LVMaxSonarEZ::AddToDataStore( ) {
     for( int i = 0; i < MAX_DATASTORE; i++ )
         this->DataStoredValues[ i ] = this->DataStoredValues[ i + 1 ];
 
-    this->DataStoredValues[ MAX_DATASTORE -1 ] = this->Reading;
+    this->DataStoredValues[ MAX_DATASTORE -1 ] = this->ConvertReadingToDistance( this->Reading );
 }
 
 void LVMaxSonarEZ::SetMode( DeviceMode _mode ) {
