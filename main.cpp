@@ -1,40 +1,36 @@
 //
-// Created by Michael Brookes on 12/06/2016.
-//
+// Created by Michael Brookes on 27/05/2016.
+/*
+Copyright (C) 2016 Michael Brookes
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "Quadro.h"
 
-int main(){
+int main( ) {
 
-    using namespace abIDevice;
-    DJI_2212 *Motor1, *Motor2, *Motor3, *Motor4;
-    Motor1 = new DJI_2212( iDeviceOverlay::PinBlocks::BLOCK_P9, iDeviceOverlay::PWMPins::PIN_42 );
-    Motor2 = new DJI_2212( iDeviceOverlay::PinBlocks::BLOCK_P8, iDeviceOverlay::PWMPins::PIN_19 );
-    Motor3 = new DJI_2212( iDeviceOverlay::PinBlocks::BLOCK_P9, iDeviceOverlay::PWMPins::PIN_14 );
-    Motor4 = new DJI_2212( iDeviceOverlay::PinBlocks::BLOCK_P9, iDeviceOverlay::PWMPins::PIN_22 );
+    Quadro* AeroBot;
+    AeroBot = new Quadro;
 
-    Motor1->Init( );
-    Motor2->Init( );
-    Motor3->Init( );
-    Motor4->Init( );
+    AeroBot->SetStartupTargets( );
 
-    using namespace abAnalog;
-    LVMaxSonarEZ SonicSensor;
-    SonicSensor.Start( );
-    sleep( 1 );
-    SonicSensor.SetMode( LVMaxSonarEZ::DeviceMode::Cm );
+    while( 1 ) {
 
-    using namespace abI2C;
-    LSM303Accelerometer *Accelerometer;
-    LSM303Magnetometer *Magnetometer;
-    Accelerometer = new LSM303Accelerometer( );
-    Magnetometer = new LSM303Magnetometer( );
+        AeroBot->MaintainTargets( );
 
-    while(1){
-        cout << "Current Distance In Cm : " << SonicSensor.Distance( ) << endl;
-        cout << "Heading = " << Magnetometer->Heading( ) << endl;
-        cout << "Roll = " << Accelerometer->Roll( ) << endl;
-        cout << "Pitch = " << Accelerometer->Pitch( ) << endl;
-        usleep( 500000 );
+        usleep( AeroBot->Accelerometer->DataTimer );
+
     }
 }
