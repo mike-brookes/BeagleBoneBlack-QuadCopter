@@ -1,23 +1,13 @@
 #=============================================================================
 # Target rules for targets named Quadro
 
-# Build rule for target.
-Quadro: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Quadro
-.PHONY : Quadro
-
-# fast build rule for target.
-Quadro/fast:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/build
-.PHONY : Quadro/fast
-
 Lib/Analog/AnalogDevice.o: Lib/Analog/AnalogDevice.cpp.o
 
 .PHONY : Lib/Analog/AnalogDevice.o
 
 # target to build an object file
 Lib/Analog/AnalogDevice.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Analog/AnalogDevice.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Analog/AnalogDevice.cpp.o
 .PHONY : Lib/Analog/AnalogDevice.cpp.o
 
 Lib/Analog/AnalogDevice.i: Lib/Analog/AnalogDevice.cpp.i
@@ -26,7 +16,7 @@ Lib/Analog/AnalogDevice.i: Lib/Analog/AnalogDevice.cpp.i
 
 # target to preprocess a source file
 Lib/Analog/AnalogDevice.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Analog/AnalogDevice.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Analog/AnalogDevice.cpp.i
 .PHONY : Lib/Analog/AnalogDevice.cpp.i
 
 Lib/Analog/AnalogDevice.s: Lib/Analog/AnalogDevice.cpp.s
@@ -35,7 +25,7 @@ Lib/Analog/AnalogDevice.s: Lib/Analog/AnalogDevice.cpp.s
 
 # target to generate assembly for a file
 Lib/Analog/AnalogDevice.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Analog/AnalogDevice.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Analog/AnalogDevice.cpp.s
 .PHONY : Lib/Analog/AnalogDevice.cpp.s
 
 Lib/I2C/I2CDevice.o: Lib/I2C/I2CDevice.cpp.o
@@ -44,7 +34,7 @@ Lib/I2C/I2CDevice.o: Lib/I2C/I2CDevice.cpp.o
 
 # target to build an object file
 Lib/I2C/I2CDevice.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/I2C/I2CDevice.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/I2C/I2CDevice.cpp.o
 .PHONY : Lib/I2C/I2CDevice.cpp.o
 
 Lib/I2C/I2CDevice.i: Lib/I2C/I2CDevice.cpp.i
@@ -53,7 +43,7 @@ Lib/I2C/I2CDevice.i: Lib/I2C/I2CDevice.cpp.i
 
 # target to preprocess a source file
 Lib/I2C/I2CDevice.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/I2C/I2CDevice.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/I2C/I2CDevice.cpp.i
 .PHONY : Lib/I2C/I2CDevice.cpp.i
 
 Lib/I2C/I2CDevice.s: Lib/I2C/I2CDevice.cpp.s
@@ -62,7 +52,7 @@ Lib/I2C/I2CDevice.s: Lib/I2C/I2CDevice.cpp.s
 
 # target to generate assembly for a file
 Lib/I2C/I2CDevice.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/I2C/I2CDevice.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/I2C/I2CDevice.cpp.s
 .PHONY : Lib/I2C/I2CDevice.cpp.s
 
 Lib/LSM303/Accelerometer/LSM303Accelerometer.o: Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.o
@@ -71,7 +61,7 @@ Lib/LSM303/Accelerometer/LSM303Accelerometer.o: Lib/LSM303/Accelerometer/LSM303A
 
 # target to build an object file
 Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.o
 .PHONY : Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.o
 
 Lib/LSM303/Accelerometer/LSM303Accelerometer.i: Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.i
@@ -80,7 +70,7 @@ Lib/LSM303/Accelerometer/LSM303Accelerometer.i: Lib/LSM303/Accelerometer/LSM303A
 
 # target to preprocess a source file
 Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.i
 .PHONY : Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.i
 
 Lib/LSM303/Accelerometer/LSM303Accelerometer.s: Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.s
@@ -89,7 +79,7 @@ Lib/LSM303/Accelerometer/LSM303Accelerometer.s: Lib/LSM303/Accelerometer/LSM303A
 
 # target to generate assembly for a file
 Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.s
 .PHONY : Lib/LSM303/Accelerometer/LSM303Accelerometer.cpp.s
 
 Lib/LSM303/LSM303DLHC.o: Lib/LSM303/LSM303DLHC.cpp.o
@@ -98,7 +88,7 @@ Lib/LSM303/LSM303DLHC.o: Lib/LSM303/LSM303DLHC.cpp.o
 
 # target to build an object file
 Lib/LSM303/LSM303DLHC.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LSM303/LSM303DLHC.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LSM303/LSM303DLHC.cpp.o
 .PHONY : Lib/LSM303/LSM303DLHC.cpp.o
 
 Lib/LSM303/LSM303DLHC.i: Lib/LSM303/LSM303DLHC.cpp.i
@@ -107,7 +97,7 @@ Lib/LSM303/LSM303DLHC.i: Lib/LSM303/LSM303DLHC.cpp.i
 
 # target to preprocess a source file
 Lib/LSM303/LSM303DLHC.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LSM303/LSM303DLHC.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LSM303/LSM303DLHC.cpp.i
 .PHONY : Lib/LSM303/LSM303DLHC.cpp.i
 
 Lib/LSM303/LSM303DLHC.s: Lib/LSM303/LSM303DLHC.cpp.s
@@ -116,7 +106,7 @@ Lib/LSM303/LSM303DLHC.s: Lib/LSM303/LSM303DLHC.cpp.s
 
 # target to generate assembly for a file
 Lib/LSM303/LSM303DLHC.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LSM303/LSM303DLHC.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LSM303/LSM303DLHC.cpp.s
 .PHONY : Lib/LSM303/LSM303DLHC.cpp.s
 
 Lib/LSM303/Magnetometer/LSM303Magnetometer.o: Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.o
@@ -125,7 +115,7 @@ Lib/LSM303/Magnetometer/LSM303Magnetometer.o: Lib/LSM303/Magnetometer/LSM303Magn
 
 # target to build an object file
 Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.o
 .PHONY : Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.o
 
 Lib/LSM303/Magnetometer/LSM303Magnetometer.i: Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.i
@@ -134,7 +124,7 @@ Lib/LSM303/Magnetometer/LSM303Magnetometer.i: Lib/LSM303/Magnetometer/LSM303Magn
 
 # target to preprocess a source file
 Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.i
 .PHONY : Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.i
 
 Lib/LSM303/Magnetometer/LSM303Magnetometer.s: Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.s
@@ -143,7 +133,7 @@ Lib/LSM303/Magnetometer/LSM303Magnetometer.s: Lib/LSM303/Magnetometer/LSM303Magn
 
 # target to generate assembly for a file
 Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.s
 .PHONY : Lib/LSM303/Magnetometer/LSM303Magnetometer.cpp.s
 
 Lib/LVMaxSonarEZ/LVMaxSonarEZ.o: Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.o
@@ -152,7 +142,7 @@ Lib/LVMaxSonarEZ/LVMaxSonarEZ.o: Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.o
 
 # target to build an object file
 Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.o
 .PHONY : Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.o
 
 Lib/LVMaxSonarEZ/LVMaxSonarEZ.i: Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.i
@@ -161,7 +151,7 @@ Lib/LVMaxSonarEZ/LVMaxSonarEZ.i: Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.i
 
 # target to preprocess a source file
 Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.i
 .PHONY : Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.i
 
 Lib/LVMaxSonarEZ/LVMaxSonarEZ.s: Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.s
@@ -170,7 +160,7 @@ Lib/LVMaxSonarEZ/LVMaxSonarEZ.s: Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.s
 
 # target to generate assembly for a file
 Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.s
 .PHONY : Lib/LVMaxSonarEZ/LVMaxSonarEZ.cpp.s
 
 Lib/Motors/DJI_2212/DJI_2212.o: Lib/Motors/DJI_2212/DJI_2212.cpp.o
@@ -179,7 +169,7 @@ Lib/Motors/DJI_2212/DJI_2212.o: Lib/Motors/DJI_2212/DJI_2212.cpp.o
 
 # target to build an object file
 Lib/Motors/DJI_2212/DJI_2212.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Motors/DJI_2212/DJI_2212.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Motors/DJI_2212/DJI_2212.cpp.o
 .PHONY : Lib/Motors/DJI_2212/DJI_2212.cpp.o
 
 Lib/Motors/DJI_2212/DJI_2212.i: Lib/Motors/DJI_2212/DJI_2212.cpp.i
@@ -188,7 +178,7 @@ Lib/Motors/DJI_2212/DJI_2212.i: Lib/Motors/DJI_2212/DJI_2212.cpp.i
 
 # target to preprocess a source file
 Lib/Motors/DJI_2212/DJI_2212.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Motors/DJI_2212/DJI_2212.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Motors/DJI_2212/DJI_2212.cpp.i
 .PHONY : Lib/Motors/DJI_2212/DJI_2212.cpp.i
 
 Lib/Motors/DJI_2212/DJI_2212.s: Lib/Motors/DJI_2212/DJI_2212.cpp.s
@@ -197,7 +187,7 @@ Lib/Motors/DJI_2212/DJI_2212.s: Lib/Motors/DJI_2212/DJI_2212.cpp.s
 
 # target to generate assembly for a file
 Lib/Motors/DJI_2212/DJI_2212.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Motors/DJI_2212/DJI_2212.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Motors/DJI_2212/DJI_2212.cpp.s
 .PHONY : Lib/Motors/DJI_2212/DJI_2212.cpp.s
 
 Lib/Motors/Motors.o: Lib/Motors/Motors.cpp.o
@@ -206,7 +196,7 @@ Lib/Motors/Motors.o: Lib/Motors/Motors.cpp.o
 
 # target to build an object file
 Lib/Motors/Motors.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Motors/Motors.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Motors/Motors.cpp.o
 .PHONY : Lib/Motors/Motors.cpp.o
 
 Lib/Motors/Motors.i: Lib/Motors/Motors.cpp.i
@@ -215,7 +205,7 @@ Lib/Motors/Motors.i: Lib/Motors/Motors.cpp.i
 
 # target to preprocess a source file
 Lib/Motors/Motors.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Motors/Motors.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Motors/Motors.cpp.i
 .PHONY : Lib/Motors/Motors.cpp.i
 
 Lib/Motors/Motors.s: Lib/Motors/Motors.cpp.s
@@ -224,7 +214,7 @@ Lib/Motors/Motors.s: Lib/Motors/Motors.cpp.s
 
 # target to generate assembly for a file
 Lib/Motors/Motors.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Motors/Motors.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Motors/Motors.cpp.s
 .PHONY : Lib/Motors/Motors.cpp.s
 
 Lib/Overlays/Analog/AnalogOverlay.o: Lib/Overlays/Analog/AnalogOverlay.cpp.o
@@ -233,7 +223,7 @@ Lib/Overlays/Analog/AnalogOverlay.o: Lib/Overlays/Analog/AnalogOverlay.cpp.o
 
 # target to build an object file
 Lib/Overlays/Analog/AnalogOverlay.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/Analog/AnalogOverlay.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/Analog/AnalogOverlay.cpp.o
 .PHONY : Lib/Overlays/Analog/AnalogOverlay.cpp.o
 
 Lib/Overlays/Analog/AnalogOverlay.i: Lib/Overlays/Analog/AnalogOverlay.cpp.i
@@ -242,7 +232,7 @@ Lib/Overlays/Analog/AnalogOverlay.i: Lib/Overlays/Analog/AnalogOverlay.cpp.i
 
 # target to preprocess a source file
 Lib/Overlays/Analog/AnalogOverlay.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/Analog/AnalogOverlay.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/Analog/AnalogOverlay.cpp.i
 .PHONY : Lib/Overlays/Analog/AnalogOverlay.cpp.i
 
 Lib/Overlays/Analog/AnalogOverlay.s: Lib/Overlays/Analog/AnalogOverlay.cpp.s
@@ -251,7 +241,7 @@ Lib/Overlays/Analog/AnalogOverlay.s: Lib/Overlays/Analog/AnalogOverlay.cpp.s
 
 # target to generate assembly for a file
 Lib/Overlays/Analog/AnalogOverlay.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/Analog/AnalogOverlay.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/Analog/AnalogOverlay.cpp.s
 .PHONY : Lib/Overlays/Analog/AnalogOverlay.cpp.s
 
 Lib/Overlays/PWM/PWMOverlay.o: Lib/Overlays/PWM/PWMOverlay.cpp.o
@@ -260,7 +250,7 @@ Lib/Overlays/PWM/PWMOverlay.o: Lib/Overlays/PWM/PWMOverlay.cpp.o
 
 # target to build an object file
 Lib/Overlays/PWM/PWMOverlay.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/PWM/PWMOverlay.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/PWM/PWMOverlay.cpp.o
 .PHONY : Lib/Overlays/PWM/PWMOverlay.cpp.o
 
 Lib/Overlays/PWM/PWMOverlay.i: Lib/Overlays/PWM/PWMOverlay.cpp.i
@@ -269,7 +259,7 @@ Lib/Overlays/PWM/PWMOverlay.i: Lib/Overlays/PWM/PWMOverlay.cpp.i
 
 # target to preprocess a source file
 Lib/Overlays/PWM/PWMOverlay.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/PWM/PWMOverlay.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/PWM/PWMOverlay.cpp.i
 .PHONY : Lib/Overlays/PWM/PWMOverlay.cpp.i
 
 Lib/Overlays/PWM/PWMOverlay.s: Lib/Overlays/PWM/PWMOverlay.cpp.s
@@ -278,7 +268,7 @@ Lib/Overlays/PWM/PWMOverlay.s: Lib/Overlays/PWM/PWMOverlay.cpp.s
 
 # target to generate assembly for a file
 Lib/Overlays/PWM/PWMOverlay.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/PWM/PWMOverlay.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/PWM/PWMOverlay.cpp.s
 .PHONY : Lib/Overlays/PWM/PWMOverlay.cpp.s
 
 Lib/Overlays/PWM/PinOverlay.o: Lib/Overlays/PWM/PinOverlay.cpp.o
@@ -287,7 +277,7 @@ Lib/Overlays/PWM/PinOverlay.o: Lib/Overlays/PWM/PinOverlay.cpp.o
 
 # target to build an object file
 Lib/Overlays/PWM/PinOverlay.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/PWM/PinOverlay.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/PWM/PinOverlay.cpp.o
 .PHONY : Lib/Overlays/PWM/PinOverlay.cpp.o
 
 Lib/Overlays/PWM/PinOverlay.i: Lib/Overlays/PWM/PinOverlay.cpp.i
@@ -296,7 +286,7 @@ Lib/Overlays/PWM/PinOverlay.i: Lib/Overlays/PWM/PinOverlay.cpp.i
 
 # target to preprocess a source file
 Lib/Overlays/PWM/PinOverlay.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/PWM/PinOverlay.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/PWM/PinOverlay.cpp.i
 .PHONY : Lib/Overlays/PWM/PinOverlay.cpp.i
 
 Lib/Overlays/PWM/PinOverlay.s: Lib/Overlays/PWM/PinOverlay.cpp.s
@@ -305,7 +295,7 @@ Lib/Overlays/PWM/PinOverlay.s: Lib/Overlays/PWM/PinOverlay.cpp.s
 
 # target to generate assembly for a file
 Lib/Overlays/PWM/PinOverlay.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/PWM/PinOverlay.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/PWM/PinOverlay.cpp.s
 .PHONY : Lib/Overlays/PWM/PinOverlay.cpp.s
 
 Lib/Overlays/iDeviceOverlay.o: Lib/Overlays/iDeviceOverlay.cpp.o
@@ -314,7 +304,7 @@ Lib/Overlays/iDeviceOverlay.o: Lib/Overlays/iDeviceOverlay.cpp.o
 
 # target to build an object file
 Lib/Overlays/iDeviceOverlay.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/iDeviceOverlay.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/iDeviceOverlay.cpp.o
 .PHONY : Lib/Overlays/iDeviceOverlay.cpp.o
 
 Lib/Overlays/iDeviceOverlay.i: Lib/Overlays/iDeviceOverlay.cpp.i
@@ -323,7 +313,7 @@ Lib/Overlays/iDeviceOverlay.i: Lib/Overlays/iDeviceOverlay.cpp.i
 
 # target to preprocess a source file
 Lib/Overlays/iDeviceOverlay.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/iDeviceOverlay.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/iDeviceOverlay.cpp.i
 .PHONY : Lib/Overlays/iDeviceOverlay.cpp.i
 
 Lib/Overlays/iDeviceOverlay.s: Lib/Overlays/iDeviceOverlay.cpp.s
@@ -332,7 +322,7 @@ Lib/Overlays/iDeviceOverlay.s: Lib/Overlays/iDeviceOverlay.cpp.s
 
 # target to generate assembly for a file
 Lib/Overlays/iDeviceOverlay.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/Overlays/iDeviceOverlay.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/Overlays/iDeviceOverlay.cpp.s
 .PHONY : Lib/Overlays/iDeviceOverlay.cpp.s
 
 Lib/PWM/PWMDevice.o: Lib/PWM/PWMDevice.cpp.o
@@ -341,7 +331,7 @@ Lib/PWM/PWMDevice.o: Lib/PWM/PWMDevice.cpp.o
 
 # target to build an object file
 Lib/PWM/PWMDevice.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/PWM/PWMDevice.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/PWM/PWMDevice.cpp.o
 .PHONY : Lib/PWM/PWMDevice.cpp.o
 
 Lib/PWM/PWMDevice.i: Lib/PWM/PWMDevice.cpp.i
@@ -350,7 +340,7 @@ Lib/PWM/PWMDevice.i: Lib/PWM/PWMDevice.cpp.i
 
 # target to preprocess a source file
 Lib/PWM/PWMDevice.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/PWM/PWMDevice.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/PWM/PWMDevice.cpp.i
 .PHONY : Lib/PWM/PWMDevice.cpp.i
 
 Lib/PWM/PWMDevice.s: Lib/PWM/PWMDevice.cpp.s
@@ -359,7 +349,7 @@ Lib/PWM/PWMDevice.s: Lib/PWM/PWMDevice.cpp.s
 
 # target to generate assembly for a file
 Lib/PWM/PWMDevice.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Lib/PWM/PWMDevice.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Lib/PWM/PWMDevice.cpp.s
 .PHONY : Lib/PWM/PWMDevice.cpp.s
 
 Quadro.o: Quadro.cpp.o
@@ -368,7 +358,7 @@ Quadro.o: Quadro.cpp.o
 
 # target to build an object file
 Quadro.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Quadro.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Quadro.cpp.o
 .PHONY : Quadro.cpp.o
 
 Quadro.i: Quadro.cpp.i
@@ -377,7 +367,7 @@ Quadro.i: Quadro.cpp.i
 
 # target to preprocess a source file
 Quadro.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Quadro.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Quadro.cpp.i
 .PHONY : Quadro.cpp.i
 
 Quadro.s: Quadro.cpp.s
@@ -386,7 +376,7 @@ Quadro.s: Quadro.cpp.s
 
 # target to generate assembly for a file
 Quadro.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/Quadro.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/Quadro.cpp.s
 .PHONY : Quadro.cpp.s
 
 main.o: main.cpp.o
@@ -395,7 +385,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/main.cpp.o
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -404,7 +394,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/main.cpp.i
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -413,5 +403,5 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/Quadro.dir/build.make CMakeFiles/Quadro.dir/main.cpp.s
+	$(MAKE) -f Src/Quadro.dir/build.make Src/Quadro.dir/main.cpp.s
 .PHONY : main.cpp.s
