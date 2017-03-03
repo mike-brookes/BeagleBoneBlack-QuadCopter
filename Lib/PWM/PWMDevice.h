@@ -21,92 +21,96 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define BEAGLEBONE_PWM_PWMDEVICE_H
 
 #include <fstream>
+#include <string>
+#include <exception>
+#include "../interfaces/IDevice.h"
+#include "../overlays/pinOverlay.h"
+#include "./overlays/pwmOverlay.h"
 
-#include "../Device/IDevice.h"
-#include "../Exceptions/ExceptionAid.h"
-#include "../Overlays/PWM/PWMOverlay.h"
-#include "../Overlays/PWM/PinOverlay.h"
+namespace quadro {
 
-namespace abPWM {
+    using namespace overlays;
 
-    using namespace abIDevice;
+    namespace pwm {
 
-    class PWMDevice : public abIDevice::IDevice, abPWM::PWMOverlay {
+        class pwmDevice : public IDevice, pwmOverlay {
 
-    public:
+        public:
 
-        PWMDevice(){};
+            pwmDevice() { };
 
-        PWMDevice( PinBlocks _block, PWMPins _pin ) throw( PWMSetupException& );
+            pwmDevice( pinBlocks _block, PWMPins _pin ) throw( pwmSetupException& );
 
-        enum ValType{
-            Run, Duty, Period, Polarity, Power_Control, Power_RunTime_Active, Power_RunTime_Suspended
+            enum valType {
+                Run, Duty, Period, Polarity, Power_Control, Power_RunTime_Active, Power_RunTime_Suspended
+            };
+
+            pinBlocks blockNum;
+            PWMPins pinNum;
+
+            string powerControlStr;
+
+            long get( valType );
+
+            void set( valType, long _val );
+
+            void setPinNum( PWMPins _pin );
+
+            void setBlockNum( pinBlocks _block );
+
+        private:
+
+            valType VT;
+
+            void readDevice( valType );
+
+            short readDevice( size_t _bufferSize );
+
+            void initDevice() throw( pwmSetupException& );
+
+            int connectToDevice() { return 1; }
+
+            int writeToDevice( size_t _bufferSize ) throw( pwmSetupException& );
+
+            void writeToDevice( valType, long _val ) throw( pwmSetupException& );
+
+            int openDevice() throw( pwmSetupException& );
+
+            long getCurrentReading( valType );
+
+            char* getFilePath();
+
+            void setValType( valType );
+
+            void setWriteVal( long _val );
+
+            void setFilePaths();
+
+            long val2Write;
+
+            ifstream PWMFile;
+
+            string currentReading;
+
+            overlays::pinOverlay* _pinOverlay;
+
+            char dutyPath[50];
+
+            char periodPath[50];
+
+            char runPath[50];
+
+            char polarityPath[50];
+
+            char powerControlPath[100];
+
+            char powerRunTime_ActivePath[100];
+
+            char powerRunTime_SuspendedPath[100];
+
         };
 
-        PinBlocks BlockNum;
-        PWMPins PinNum;
-
-        string Power_ControlStr;
-
-        long Get( ValType );
-
-        void Set( ValType, long _val );
-
-        void SetPinNum( PWMPins _pin );
-
-        void SetBlockNum( PinBlocks _block );
-
-    private:
-
-        ValType VT;
-
-        void ReadDevice( ValType );
-
-        short ReadDevice( size_t _BufferSize );
-
-        void InitDevice( ) throw( PWMSetupException& );
-
-        int ConnectToDevice( ) { return 1; }
-
-        int WriteToDevice( size_t _BufferSize ) throw( PWMSetupException& );
-
-        void WriteToDevice( ValType, long int _val ) throw( PWMSetupException& );
-
-        int OpenDevice( ) throw( PWMSetupException& );
-
-        long GetCurrentReading( ValType );
-
-        char* GetFilePath( );
-
-        void SetValType( ValType );
-
-        void SetWriteVal( long int _val );
-
-        void SetFilePaths( );
-
-        long Val2Write;
-
-        ifstream PWMFile;
-
-        string CurrentReading;
-
-        PinOverlay* _PinOverlay;
-
-        char DutyPath[ 50 ];
-
-        char PeriodPath[ 50 ];
-
-        char RunPath[ 50 ];
-
-        char PolarityPath[ 50 ];
-
-        char PowerControlPath[ 100 ];
-
-        char PowerRunTime_ActivePath[ 100 ];
-
-        char PowerRunTime_SuspendedPath[ 100 ];
-
-    };
+    }
 
 }
 

@@ -17,23 +17,31 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "quadroCopter.h"
+#ifndef BEAGLEBONE_PWM_PWMOVERLAY_H
+#define BEAGLEBONE_PWM_PWMOVERLAY_H
 
-int main()
-{
-    using namespace quadro;
+#include "../../overlays/overlayBase.h"
+#include "../exceptions/pwmSetupException.h"
 
-    quadroCopter* AeroBot;
-    AeroBot = new quadroCopter;
+namespace quadro {
 
-    int startTime;
+    namespace pwm {
 
-    while ( 1 ) {
-    //while( AeroBot->myOrientation->pitch < 45 ) {
-        startTime = Timer::milliTimer();
-        AeroBot->maintainTargets();
-        while ( Timer::milliTimer() - startTime < ( DATA_RATE * 1000 )) {
-            usleep( 100 );
-        }
+        class pwmOverlay : public overlays::overlayBase {
+        public:
+
+            pwmOverlay() throw( pwmSetupException& );
+
+            struct overlaySettings {
+                const char* overlay = "am33xx_pwm";
+                const char* searchFile = "/sys/devices/ocp.3/48300000.epwmss/modalias";
+                bool overlayLoaded;
+            } settings;
+
+        };
+
     }
+
 }
+
+#endif //BEAGLEBONE_PWM_PWMOVERLAY_H

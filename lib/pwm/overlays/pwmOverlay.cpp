@@ -17,23 +17,23 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "quadroCopter.h"
+#include "pwmOverlay.h"
 
-int main()
+using namespace quadro::pwm;
+
+pwmOverlay::pwmOverlay() throw( pwmSetupException& )
 {
-    using namespace quadro;
 
-    quadroCopter* AeroBot;
-    AeroBot = new quadroCopter;
+    this->settings.overlayLoaded = this->isLoaded( this->settings.searchFile );
 
-    int startTime;
+    if ( !this->settings.overlayLoaded )
+        this->settings.overlayLoaded = this->load( this->settings.overlay );
 
-    while ( 1 ) {
-    //while( AeroBot->myOrientation->pitch < 45 ) {
-        startTime = Timer::milliTimer();
-        AeroBot->maintainTargets();
-        while ( Timer::milliTimer() - startTime < ( DATA_RATE * 1000 )) {
-            usleep( 100 );
-        }
+    if ( !this->settings.overlayLoaded ) {
+        snprintf( this->errMessage, sizeof( this->errMessage ),
+                "Fatal analogBase Error - Unable to load overlays : %s",
+                this->settings.overlay );
+        throw pwmSetupException( this->errMessage );
     }
+
 }

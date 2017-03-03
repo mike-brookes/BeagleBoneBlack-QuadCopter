@@ -5,8 +5,8 @@
 #ifndef I2CDEVICE_H
 #define I2CDEVICE_H
 
-#include "../Device/IDevice.h"
-#include "../Exceptions/ExceptionAid.h"
+#include "../Interfaces/IDevice.h"
+#include "exceptions/i2cSetupException.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -23,170 +23,175 @@
 #define TWO_BYTES       2               //!< Used for specifying how many bytes to write
 #define MAX_BUFF        1024            //!< Used to store fatal error.
 
-namespace abI2C {
+namespace quadro {
 
-    using namespace std;
+    namespace i2c {
 
-    class I2CDevice : public abIDevice::IDevice {
+        class i2cDevice : public IDevice {
 
-    public:
-        /**
-         \fn Public Destructor
-         */
-        ~I2CDevice( );
+        public:
+            /**
+             \fn Public Destructor
+             */
+            ~i2cDevice();
 
-        /**
-         \fn Public Constructor
-         */
-        I2CDevice( );
+            /**
+             \fn Public Constructor
+             */
+            i2cDevice();
 
-        /*I2C Specific Members*/
+            /*i2c Specific Members*/
 
-        /**
-         \fn Public InitDevice
-         \brief Requires the device address and bus id to be configured.
-         */
-        void InitDevice( ) throw( I2CSetupException& );
+            /**
+             \fn Public initDevice
+             \brief Requires the device address and bus id to be configured.
+             */
+            void initDevice() throw( i2cSetupException& );
 
-        /**
-         \fn Public GetValueFromRegister
-         \param unsigned char _RegisterValue
-         \brief Writes the register that you want to read, then performs a read on that register.
-         */
-        short GetValueFromRegister( unsigned char _RegisterAddress );
+            /**
+             \fn Public getValueFromRegister
+             \param unsigned char _registerValue
+             \brief Writes the register that you want to read, then performs a read on that register.
+             */
+            short getValueFromRegister( unsigned char _registerAddress );
 
-        /**
-         \fn Public SetRegisterValue
-         \param unsigned char _RegisterValue
-         \brief Set the value that will next be written to the I2C device.
-         */
-        void SetRegisterValue( unsigned char _RegisterValue );
+            /**
+             \fn Public setRegisterValue
+             \param unsigned char _registerValue
+             \brief Set the value that will next be written to the I2C device.
+             */
+            void setRegisterValue( unsigned char _registerValue );
 
-        /**
-         \fn Public SetRegisterAddress
-         \param unsigned char _RegisterAddress
-         \brief Set the Register address that the _RegisterValue will be written to.
-         */
-        void SetRegisterAddress( unsigned char _RegisterAddress );
+            /**
+             \fn Public setRegisterAddress
+             \param unsigned char _registerAddress
+             \brief Set the Register address that the _RegisterValue will be written to.
+             */
+            void setRegisterAddress( unsigned char _registerAddress );
 
-        /**
-         \fn Public WriteToDevice
-         \param size_t _BufferSize
-         \brief Perform the write request. The _BufferSize is used to differentiate between a read or write request.
-         */
-        int WriteToDevice( size_t _BufferSize ) throw( I2CSetupException& );
+            /**
+             \fn Public writeToDevice
+             \param size_t _bufferSize
+             \brief Perform the write request. The _bufferSize is used to differentiate between a read or write request.
+             */
+            int writeToDevice( size_t _bufferSize ) throw( i2cSetupException& );
 
-    private:
+        private:
 
-        /**
-         \fn Private Struct I2CBus
-         \brief used to store Bus Paths for ease of access.
-         */
-        struct I2CBus { const char * BusPath; } _Bus[ I2C_BUS_COUNT ];
+            /**
+             \fn Private Struct I2CBus
+             \brief used to store Bus Paths for ease of access.
+             */
+            struct I2CBus {
+                const char* busPath;
+            } _bus[I2C_BUS_COUNT];
 
-        /**
-         \fn Private Struct stat
-         \brief used to check file paths.
-         */
-        struct stat buffer;
+            /**
+             \fn Private Struct stat
+             \brief used to check file paths.
+             */
+            struct stat buffer;
 
-    protected:
+        protected:
 
-        /**
-         \fn Protected GetDeviceHandle
-         \param none
-         \brief Returns the current FileHandle for reading and writing to the I2C device.
-         */
-        int GetDeviceFileHandle( );
+            /**
+             \fn Protected getDeviceHandle
+             \param none
+             \brief Returns the current fileHandle for reading and writing to the I2C device.
+             */
+            int getDeviceFileHandle();
 
-        /**
-         \fn Protected GetFilePath
-         \param none
-         \brief Returns then FilePath for accessing the I2C device.
-         */
-        const char * GetFilePath( );
+            /**
+             \fn Protected getFilePath
+             \param none
+             \brief Returns then filePath for accessing the I2C device.
+             */
+            const char* getFilePath();
 
-        /**
-         \fn Protected SetBusPaths
-         \param none
-         \brief Set Path to all the available buses. As set with I2CBus (struct) and Defines.
-         */
-        void SetBusPaths( );
+            /**
+             \fn Protected setBusPaths
+             \param none
+             \brief Set Path to all the available buses. As set with I2CBus (struct) and Defines.
+             */
+            void setBusPaths();
 
-        /**
-         \fn Protected ValidateBusId
-         \param int _BusId
-         \brief Make sure the BusId being used is valid.
-         */
-        int ValidateBusId( ) throw( I2CSetupException& );
+            /**
+             \fn Protected validateBusId
+             \param int _busId
+             \brief Make sure the BusId being used is valid.
+             */
+            int validateBusId() throw( i2cSetupException& );
 
-        /**
-         \fn Protected ValidateBusPath
-         \param I2CBus _BusId
-         \brief Make sure the BusPath exists.
-         */
-        char * ValidateBusPath( char * _BusProposedPath ) throw( I2CSetupException& );
+            /**
+             \fn Protected validateBusPath
+             \param I2CBus _busId
+             \brief Make sure the busPath exists.
+             */
+            char* validateBusPath( char* _busProposedPath ) throw( i2cSetupException& );
 
-        /**
-         \fn Protected SelectABusPath
-         \param none
-         \brief Select which Bus Path we can find your I2C device at.
-         */
-        void SelectABusPath( );
+            /**
+             \fn Protected selectABusPath
+             \param none
+             \brief Select which Bus Path we can find your I2C device at.
+             */
+            void selectABusPath();
 
-        /**
-         \fn Protected SetDeviceAddress
-         \param int _DeviceAddress
-         \brief Used to store the device address (Hex)
-         */
-        virtual void SetDeviceAddress( unsigned char _DeviceAddress ) = 0;
+            /**
+             \fn Protected setDeviceAddress
+             \param int _deviceAddress
+             \brief Used to store the device address (Hex)
+             */
+            virtual void setDeviceAddress( unsigned char _deviceAddress ) = 0;
 
-        /**
-         \fn Protected SetBusId
-         \param int _BusId
-         \brief Used to store the bus id (int)
-         */
-        virtual void SetBusId( int _BusId ) = 0;
+            /**
+             \fn Protected setBusId
+             \param int _busId
+             \brief Used to store the bus id (int)
+             */
+            virtual void setBusId( int _busId ) = 0;
 
-        /* From IDevice Interface*/
+            /* From IDevice Interface*/
 
-        /**
-         \fn Protected ConnectToDevice
-         \param none
-         \brief Sets up an IOCTL connection to the I2C device as a Slave for Linux.
-         */
-        int ConnectToDevice( ) { return ioctl( this->FileHandle, I2C_SLAVE, this->DeviceAddress ); };
+            /**
+             \fn Protected connectToDevice
+             \param none
+             \brief Sets up an IOCTL connection to the I2C device as a Slave for Linux.
+             */
+            int connectToDevice() { return ioctl( this->fileHandle, I2C_SLAVE, this->deviceAddress ); };
 
-        /**
-         \fn Protected OpenDevice
-         \param none
-         \brief Attempt to open the FileHandle.
-         */
-        int OpenDevice( ) throw( I2CSetupException& );
+            /**
+             \fn Protected openDevice
+             \param none
+             \brief Attempt to open the fileHandle.
+             */
+            int openDevice() throw( i2cSetupException& );
 
-        /**
-         \fn Protected ReadDevice
-         \param size_t _BufferSize
-         \brief Reads the current buffer from the I2C device - first writes the register address that will be read.
-         */
-        short ReadDevice( size_t _BufferSize ) throw( I2CSetupException& );
+            /**
+             \fn Protected readDevice
+             \param size_t _bufferSize
+             \brief Reads the current buffer from the I2C device - first writes the register address that will be read.
+             */
+            short readDevice( size_t _bufferSize ) throw( i2cSetupException& );
 
-        const char * DeviceBusPath;
+            const char* deviceBusPath;
 
-        unsigned char DeviceAddress;
-        unsigned char RegisterValue;
-        unsigned char RegisterAddress;
+            unsigned char deviceAddress;
+            unsigned char registerValue;
+            unsigned char registerAddress;
 
-        char ReadAndWriteBuffer[ TWO_BYTES ];
-        char WriteBufferOnly[ ONE_BYTE ];
+            char readAndWriteBuffer[TWO_BYTES];
+            char writeBufferOnly[ONE_BYTE];
 
-        char ErrMessage[ MAX_BUFF ];
-        int FileHandle;
-        int BusId;
+            char errMessage[MAX_BUFF];
+            int fileHandle;
+            int busId;
 
-        bool DeviceInitialised;
+            bool deviceInitialised;
 
-    };
+        };
+
+    }
+
 }
 
 #endif //I2CDEVICE_H

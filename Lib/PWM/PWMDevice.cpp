@@ -17,129 +17,157 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "PWMDevice.h"
+#include "pwmDevice.h"
 
-namespace abPWM {
+using namespace quadro::pwm;
 
-    PWMDevice::PWMDevice( PinBlocks _block, PWMPins _pin ) throw( PWMSetupException& ) {
+pwmDevice::pwmDevice( pinBlocks _block, PWMPins _pin ) throw( pwmSetupException& )
+{
 
-        this->SetBlockNum( _block );
-        this->SetPinNum( _pin );
+    this->setBlockNum( _block );
+    this->setPinNum( _pin );
 
-        if( this->Settings.OverlayLoaded ) {
-            this->_PinOverlay = new PinOverlay( this->BlockNum, this->PinNum );
+    if ( this->settings.overlayLoaded ) {
+        this->_pinOverlay = new pinOverlay( this->blockNum, this->pinNum );
 
-            if( this->_PinOverlay->Settings.OverlayLoaded )
-                this->SetFilePaths( );
+        if ( this->_pinOverlay->settings.overlayLoaded )
+            this->setFilePaths();
+    }
+
+}
+
+void pwmDevice::readDevice( valType _vt )
+{
+    this->setValType( _vt );
+    this->readDevice( 1024 );
+}
+
+short pwmDevice::readDevice( size_t _bufferSize )
+{
+    if ( !this->PWMFile.is_open()) {
+        if ( this->openDevice()) {
+            try {
+                getline( this->PWMFile, this->currentReading );
+                this->PWMFile.close();
+            }
+            catch ( ifstream::failure e ) {
+                cout << "Exception caught handling binary file : " << e.what() << endl;
+            }
+        }
+        return 1;
+    }
+    else
+        return -1;
+}
+
+void pwmDevice::initDevice() throw( pwmSetupException& )
+{
+    if ( !this->settings.overlayLoaded ) {
+        snprintf( this->errMessage, sizeof( this->errMessage ),
+                "Fatal pwm Error - Unable to set up your pwm device : %s",
+                this->settings.overlay );
+        throw pwmSetupException( this->errMessage );
+    }
+}
+
+void pwmDevice::writeToDevice( valType _vt, long _val ) throw( pwmSetupException& )
+{
+    this->setValType( _vt );
+    this->setWriteVal( _val );
+    this->writeToDevice( 1024 );
+}
+
+int pwmDevice::writeToDevice( size_t _bufferSize ) throw( pwmSetupException& )
+{
+    try {
+
+        ofstream PWMWriteFile;
+        PWMWriteFile.open( this->getFilePath());
+        if ( PWMWriteFile.is_open()) {
+            PWMWriteFile << this->val2Write;
+            PWMWriteFile.close();
         }
 
     }
-
-    void PWMDevice::ReadDevice( ValType _vt ) {
-        this->SetValType( _vt );
-        this->ReadDevice( 1024 );
+    catch( exception& e ){
+        cout << "Exception Occurred" << e.what() << endl;
     }
+}
 
-    short PWMDevice::ReadDevice( size_t _BufferSize ) {
-        if( !this->PWMFile.is_open( ) ) {
-            if( this->OpenDevice( ) ) {
-                try {
-                    getline( this->PWMFile, this->CurrentReading );
-                    this->PWMFile.close( );
-                }
-                catch( ifstream::failure e ) {
-                    cout << "Exception caught handling binary file : " << e.what( ) << endl;
-                }
-            }
+int pwmDevice::openDevice() throw( pwmSetupException& )
+{
+    try {
+        this->PWMFile.open( this->getFilePath(), ios::binary );
+        return 1;
+    }
+    catch ( exception& e ) {
+        snprintf( this->errMessage, sizeof( this->errMessage ),
+                "Fatal pwm Error - Unable to create fileHandle : %s - %s",
+                this->_pinOverlay->pinOverlayDir, e.what());
+        throw pwmSetupException( this->errMessage );
+    }
+}
+
+long pwmDevice::get( valType _vt ) { return this->getCurrentReading( _vt ); }
+
+void pwmDevice::set( valType _vt, long _val ) { this->writeToDevice( _vt, _val ); }
+
+long pwmDevice::getCurrentReading( valType _vt )
+{
+    this->readDevice( _vt );
+    if ( this->currentReading != "" ) {
+        if ( _vt == Run )
+            return ( this->currentReading.compare( "1" ) == 0 );
+        else if ( _vt == Power_Control ) {
+            this->powerControlStr = this->currentReading;
             return 1;
         }
         else
-            return -1;
+            return stoi( this->currentReading );
     }
-
-    void PWMDevice::InitDevice( ) throw( PWMSetupException& ) {
-        if( !this->Settings.OverlayLoaded ) {
-            snprintf( this->ErrMessage, sizeof( this->ErrMessage ),
-                      "Fatal PWM Error - Unable to set up your PWM device : %s",
-                      this->Settings.Overlay );
-            throw PWMSetupException( this->ErrMessage );
-        }
-    }
-
-    void PWMDevice::WriteToDevice( ValType _vt, long int _val ) throw( PWMSetupException& ) {
-        this->SetValType( _vt );
-        this->SetWriteVal( _val );
-        this->WriteToDevice( 1024 );
-    }
-
-    int PWMDevice::WriteToDevice( size_t _BufferSize ) throw( PWMSetupException& ) {
-        ofstream PWMWriteFile;
-        PWMWriteFile.open( this->GetFilePath( ) );
-        if( PWMWriteFile.is_open( ) ) {
-            PWMWriteFile << this->Val2Write;
-            PWMWriteFile.close( );
-        }
-    }
-
-    int PWMDevice::OpenDevice( ) throw( PWMSetupException& ) {
-        try {
-            this->PWMFile.open( this->GetFilePath( ), ios::binary );
-            return 1;
-        } catch ( exception& e ) {
-            snprintf( this->ErrMessage, sizeof( this->ErrMessage ),
-                      "Fatal PWM Error - Unable to create FileHandle : %s - %s",
-                      this->_PinOverlay->PinOverlayDir, e.what( ) );
-            throw PWMSetupException( this->ErrMessage );
-        }
-    }
-
-    long PWMDevice::Get( ValType _vt ) { return this->GetCurrentReading ( _vt ); }
-
-    void PWMDevice::Set( ValType _vt, long _val ) { this->WriteToDevice( _vt, _val ); }
-
-    long PWMDevice::GetCurrentReading( ValType _vt ) {
-        this->ReadDevice( _vt );
-        if( this->CurrentReading != "" ) {
-            if( _vt == Run )
-                return ( this->CurrentReading.compare( "1" ) == 0 ) ? true : false;
-            else if( _vt == Power_Control ) {
-                this->Power_ControlStr = this->CurrentReading;
-                return 1;
-            }
-            else
-                return stoi( this->CurrentReading );
-        }
-    }
-
-    char* PWMDevice::GetFilePath( ){
-        switch( this->VT ) {
-            case Run : return this->RunPath;
-            case Duty : return this->DutyPath;
-            case Period : return this->PeriodPath;
-            case Polarity : return this->PolarityPath;
-            case Power_Control : return this->PowerControlPath;
-            case Power_RunTime_Active : return this->PowerRunTime_ActivePath;
-            case Power_RunTime_Suspended : return this->PowerRunTime_SuspendedPath;
-            default: return this->DutyPath;
-        }
-    }
-
-    void PWMDevice::SetFilePaths( ) {
-        snprintf( this->RunPath, sizeof( this->RunPath ), "%s/%s", this->_PinOverlay->PinOverlayDir, "run" );
-        snprintf( this->DutyPath, sizeof( this->DutyPath ), "%s/%s", this->_PinOverlay->PinOverlayDir, "duty" );
-        snprintf( this->PeriodPath, sizeof( this->PeriodPath ), "%s/%s", this->_PinOverlay->PinOverlayDir, "period" );
-        snprintf( this->PolarityPath, sizeof( this->PolarityPath ), "%s/%s", this->_PinOverlay->PinOverlayDir, "polarity" );
-        snprintf( this->PowerControlPath, sizeof( this->PowerControlPath ), "%s/%s", this->_PinOverlay->PinOverlayDir, "power/control" );
-        snprintf( this->PowerRunTime_ActivePath, sizeof( this->PowerRunTime_ActivePath ), "%s/%s", this->_PinOverlay->PinOverlayDir, "power/runtime_active_time" );
-        snprintf( this->PowerRunTime_SuspendedPath, sizeof( this->PowerRunTime_SuspendedPath ), "%s/%s", this->_PinOverlay->PinOverlayDir, "power/runtime_suspended_time" );
-    }
-
-    void PWMDevice::SetPinNum( PWMPins _pin ) { this->PinNum = _pin; }
-
-    void PWMDevice::SetBlockNum( PinBlocks _block ) { this->BlockNum = _block; }
-
-    void PWMDevice::SetValType( ValType _vt ) { this->VT = _vt; }
-
-    void PWMDevice::SetWriteVal( long _val ) { this->Val2Write = _val; }
-
 }
+
+char* pwmDevice::getFilePath()
+{
+    switch ( this->VT ) {
+    case Run :
+        return this->runPath;
+    case Duty :
+        return this->dutyPath;
+    case Period :
+        return this->periodPath;
+    case Polarity :
+        return this->polarityPath;
+    case Power_Control :
+        return this->powerControlPath;
+    case Power_RunTime_Active :
+        return this->powerRunTime_ActivePath;
+    case Power_RunTime_Suspended :
+        return this->powerRunTime_SuspendedPath;
+    default:
+        return this->dutyPath;
+    }
+}
+
+void pwmDevice::setFilePaths()
+{
+    snprintf( this->runPath, sizeof( this->runPath ), "%s/%s", this->_pinOverlay->pinOverlayDir, "run" );
+    snprintf( this->dutyPath, sizeof( this->dutyPath ), "%s/%s", this->_pinOverlay->pinOverlayDir, "duty" );
+    snprintf( this->periodPath, sizeof( this->periodPath ), "%s/%s", this->_pinOverlay->pinOverlayDir, "period" );
+    snprintf( this->polarityPath, sizeof( this->polarityPath ), "%s/%s", this->_pinOverlay->pinOverlayDir,
+            "polarity" );
+    snprintf( this->powerControlPath, sizeof( this->powerControlPath ), "%s/%s", this->_pinOverlay->pinOverlayDir,
+            "power/control" );
+    snprintf( this->powerRunTime_ActivePath, sizeof( this->powerRunTime_ActivePath ), "%s/%s",
+            this->_pinOverlay->pinOverlayDir, "power/runtime_active_time" );
+    snprintf( this->powerRunTime_SuspendedPath, sizeof( this->powerRunTime_SuspendedPath ), "%s/%s",
+            this->_pinOverlay->pinOverlayDir, "power/runtime_suspended_time" );
+}
+
+void pwmDevice::setPinNum( PWMPins _pin ) { this->pinNum = _pin; }
+
+void pwmDevice::setBlockNum( pinBlocks _block ) { this->blockNum = _block; }
+
+void pwmDevice::setValType( valType _vt ) { this->VT = _vt; }
+
+void pwmDevice::setWriteVal( long _val ) { this->val2Write = _val; }
