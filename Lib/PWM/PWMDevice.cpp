@@ -127,6 +127,10 @@ long pwmDevice::getCurrentReading( valType _vt )
     }
 }
 
+/**
+ *
+ * @return char full path to the requested file.
+ */
 char* pwmDevice::getFilePath()
 {
     switch ( this->VT ) {

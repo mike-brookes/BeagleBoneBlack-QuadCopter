@@ -56,28 +56,56 @@ namespace quadro {
 
             void setPinNum( PWMPins _pin );
 
+            /**
+             * Sets the pwm block number - on the beaglebone black this will be 8 or 9 only
+             *
+             * @see ../overlayBase.h
+             * @param _block
+             */
             void setBlockNum( pinBlocks _block );
 
         private:
 
             valType VT;
 
+            /**
+             * Reads the file of valType (enum) e.g duty
+             */
             void readDevice( valType );
 
             short readDevice( size_t _bufferSize );
 
+            /**
+             * Runs an init check to make sure the applicable pwm overlay has been loaded.
+             *
+             * @throws pwmSetupException
+             */
             void initDevice() throw( pwmSetupException& );
 
+            /**
+             * TODO: Implement a connection test functionality here.
+             * @return
+             */
             int connectToDevice() { return 1; }
 
             int writeToDevice( size_t _bufferSize ) throw( pwmSetupException& );
 
+            /**
+             * This function is called when setting a pwm value, the valType is the file you need to write to : e.g duty
+             * Only values from the valType Enum will be allowed.
+             *
+             * @param _val
+             */
             void writeToDevice( valType, long _val ) throw( pwmSetupException& );
 
             int openDevice() throw( pwmSetupException& );
 
             long getCurrentReading( valType );
 
+            /**
+             *
+             * @return char full path to the specified file
+             */
             char* getFilePath();
 
             void setValType( valType );
