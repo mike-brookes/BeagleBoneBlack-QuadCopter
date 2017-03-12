@@ -29,7 +29,6 @@ int main()
     int startTime;
 
     while ( 1 ) {
-    //while( AeroBot->myOrientation->pitch < 45 ) {
         startTime = Timer::milliTimer();
         AeroBot->maintainTargets();
         while ( Timer::milliTimer() - startTime < ( DATA_RATE * 1000 )) {
