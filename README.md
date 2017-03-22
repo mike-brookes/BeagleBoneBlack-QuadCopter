@@ -5,7 +5,7 @@ The flight controller will maintain targets, the targets are currently set as pa
 
 ## Current version : 0.1.3
 
-## Project current status as of 12.03.17
+## Project status
 
 * Pitch and Roll are being controlled and are maintaining targets correctly.
 * Tests are being done in a controlled environment with the Quadcopter tethered.
