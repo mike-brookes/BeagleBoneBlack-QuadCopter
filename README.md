@@ -40,12 +40,12 @@ Nothing should happen - unless you have your beaglebone connected to all the cor
 ## Requirements
 
 1. BeagleBone Black
-2. [10 DOF IMU](https://www.adafruit.com/products/1604)
+2. [10 DOF IMU Breakout Board](https://www.adafruit.com/products/1604)
   * L3GD20H 3-axis gyroscope: ±250, ±500, or ±2000 degree-per-second scale
   * LSM303 3-axis compass: ±1.3 to ±8.1 gauss magnetic field scale
   * LSM303 3-axis accelerometer: ±2g/±4g/±8g/±16g selectable scale
   * BMP180 barometric pressure/temperature: -40 to 85 °C, 300 - 1100hPa range, 0.17m resolution
-3. [MAXBOTIX ULTRASONIC RANGEFINDER - LV-EZ1](https://www.adafruit.com/products/172)  
+3. [MaxBotix UltraSonic RangeFinder - LV-EZ1](https://www.adafruit.com/products/172)  
 4. [Recommended : DJI Frame Kit](http://www.dji.com/flame-wheel-arf)
 
 ## Contributing
