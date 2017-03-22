@@ -63,9 +63,12 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [C++](http://www.cplusplus.com)
+* [I2C Library](https://github.com/mbircohoakeels/BeagleBone-I2C)
+* [LSM303DLHC Library](https://github.com/mbircohoakeels/BeagleBone-LSM303DLHC)
+* [Analog Library](https://github.com/mbircohoakeels/BeagleBone-Analog)
+* [PWM Library](https://github.com/mbircohoakeels/BeagleBone-PWM)
+* [L3GD20H Library](https://github.com/mbircohoakeels/BeagleBoneBlack-L3GD20H)
 
 ## Versioning
 
