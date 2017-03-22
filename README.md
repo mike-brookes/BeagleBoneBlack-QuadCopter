@@ -21,9 +21,9 @@ The flight controller will maintain targets, the targets are currently set as pa
 
 ## Setup
 
-[MAC](http://gnuarmeclipse.github.io/toolchain/install/#macos) - Setting up an ARM toolchain on a MAC
-[Linux](http://gnuarmeclipse.github.io/toolchain/install/#gnulinux) - Setting up an ARM toolchain on Linux
-[Windows](http://gnuarmeclipse.github.io/toolchain/install/#windows) - Setting up an ARM toolchain using Windows
+* [MAC](http://gnuarmeclipse.github.io/toolchain/install/#macos) - Setting up an ARM toolchain on a MAC
+* [Linux](http://gnuarmeclipse.github.io/toolchain/install/#gnulinux) - Setting up an ARM toolchain on Linux
+* [Windows](http://gnuarmeclipse.github.io/toolchain/install/#windows) - Setting up an ARM toolchain using Windows
 
 Next :
 
@@ -64,11 +64,11 @@ Add additional notes about how to deploy this on a live system
 ## Built With
 
 * [C++](http://www.cplusplus.com)
-* [I2C Library](https://github.com/mbircohoakeels/BeagleBone-I2C)
-* [LSM303DLHC Library](https://github.com/mbircohoakeels/BeagleBone-LSM303DLHC)
-* [Analog Library](https://github.com/mbircohoakeels/BeagleBone-Analog)
-* [PWM Library](https://github.com/mbircohoakeels/BeagleBone-PWM)
-* [L3GD20H Library](https://github.com/mbircohoakeels/BeagleBoneBlack-L3GD20H)
+* [I2C C++ Library](https://github.com/mbircohoakeels/BeagleBone-I2C)
+* [LSM303DLHC C++ Library](https://github.com/mbircohoakeels/BeagleBone-LSM303DLHC)
+* [Analog C++ Library](https://github.com/mbircohoakeels/BeagleBone-Analog)
+* [PWM C++ Library](https://github.com/mbircohoakeels/BeagleBone-PWM)
+* [L3GD20H C++ Library](https://github.com/mbircohoakeels/BeagleBoneBlack-L3GD20H)
 
 ## Versioning
 
