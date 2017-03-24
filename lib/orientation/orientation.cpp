@@ -1,11 +1,29 @@
-//
-// Created by Michael Brookes on 06/02/2017.
-//
+/*
+Copyright (C) 2017 Michael Brookes
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "orientation.h"
 
 using namespace quadro;
 
+/**
+ * orientation constructor
+ * Sets up objects for each orientation sensor and starts the thread.
+ * @params none
+ */
 orientation::orientation( )
 {
     sonicSensor = new LVMaxSonarEZ();
@@ -20,6 +38,10 @@ orientation::orientation( )
     pthread_create( &this->orientationNotifyer, NULL, orientation::setValues, this );
 }
 
+/**
+ * setValues is a static method that runs in it's own thread assigning values from all assigned orientation sensors.
+ * @params *this
+ */
 void* orientation::setValues( void* orientationInst )
 {
 
@@ -58,6 +80,10 @@ void* orientation::setValues( void* orientationInst )
     }
 }
 
+/**
+ * This method is used for determining urgency of movements, attempting to give some kind of priority to avoid crashes.
+ * @return int (a value of cm or inches depending on sensor setting)
+ */
 int orientation::getEmergencyHeight()
 {
     return ( this->sonicSensor->currentMode == this->sonicSensor->deviceMode::Cm ) ? EMERGENCY_HEIGHT_CM

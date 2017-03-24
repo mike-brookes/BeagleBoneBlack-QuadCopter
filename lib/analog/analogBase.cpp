@@ -1,7 +1,5 @@
-//
-// Created by Michael Brookes on 20/05/2016.
 /*
-Copyright (C) 2016 Michael Brookes
+Copyright (C) 2017 Michael Brookes
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

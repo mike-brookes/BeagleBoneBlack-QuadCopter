@@ -1,7 +1,5 @@
-//
-// Created by Michael Brookes on 27/05/2016.
 /*
-Copyright (C) 2016 Michael Brookes
+Copyright (C) 2017 Michael Brookes
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,14 +31,32 @@ namespace quadro {
 
         quadroCopter();
 
+        /**
+         * maintainTargets()
+         * Allows me to determine what targets should be met in each run.
+         * @param none
+         * @returns none
+         */
         void maintainTargets();
 
+        /**
+         * setStartupTargets()
+         * This method is only called once - it determines what the quadcopter will do on startup.
+         * @param none
+         * @return none
+         */
         void setStartupTargets();
 
+        /**
+         * A storage struct that contains all the quadcopters targets.
+         */
         struct target {
             double targetVal;
         } height, roll, pitch, heading;
 
+        /**
+         * What is the quadcopters current state
+         */
         enum STATE {
             NORMAL = 1,
             MOVING = 2,
@@ -48,20 +64,64 @@ namespace quadro {
             PANIC = 10
         } state;
 
+        /**
+         * Four pointers for new DJI_2212 objects
+         */
         pwm::dji_2212* motor[4];
+
+        /**
+         * Pointer for a new orientation object
+         */
         orientation* myOrientation;
+
+        /**
+         * Pointer for a new PID (Proportional–Integral–Derivative) object for pitch values
+         */
         PID* pitchPID;
+
+        /**
+         * Pointer for a new PID (Proportional–Integral–Derivative) object for roll values
+         */
         PID* rollPID;
 
     private:
 
+        /**
+         * maintainHeight()
+         * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+         * @param none
+         * @return none
+         * TODO: implement this method
+         */
         void maintainHeight();
 
+        /**
+         * maintainHeading()
+         * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+         * @param none
+         * @return none
+         * TODO: implement this method
+         */
+        void maintainHeading();
+
+        /**
+         * maintainRoll()
+         * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+         * @param none
+         * @return none
+         * TODO: handle potential errors.
+         */
         void maintainRoll();
 
+        /**
+         * maintainPitch()
+         * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+         * @param none
+         * @return none
+         * TODO: handle potential errors.
+         */
         void maintainPitch();
 
-        void maintainHeading();
 
     };
 

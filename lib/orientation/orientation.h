@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2016 Michael Brookes
+Copyright (C) 2017 Michael Brookes
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ namespace quadro {
         static void* setValues( void* orientationInst );
 
         /**
-         * The method is used for determining urgency of movements, attempting to give some kind of priority to avoid crashes.
+         * This method is used for determining urgency of movements, attempting to give some kind of priority to avoid crashes.
          * @return int (a value of cm or inches depending on sensor setting)
          */
         int getEmergencyHeight();

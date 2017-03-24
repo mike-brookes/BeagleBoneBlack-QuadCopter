@@ -1,7 +1,5 @@
-//
-// Created by Michael Brookes on 27/05/2016.
 /*
-Copyright (C) 2016 Michael Brookes
+Copyright (C) 2017 Michael Brookes
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,12 +20,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using namespace quadro;
 using namespace quadro::pwm;
 
+/**
+ * quadroCopter constructor
+ * Initialises motors
+ * Sets up a new orientation object which contains all sensor data related to orientation.
+ * Also sets up the PID controllers.
+ * @params none
+ */
 quadroCopter::quadroCopter()
 {
 
+    /**
+     * Create a new orientation object
+     */
     myOrientation = new orientation();
 
-    this->setStartupTargets();
+    setStartupTargets();
 
     motor[ 0 ] = new dji_2212( pinBlocks::BLOCK_P9,
             PWMPins::PIN_42 );
@@ -53,76 +61,115 @@ quadroCopter::quadroCopter()
 
 }
 
+/**
+ * setStartupTargets()
+ * This method is only called once - it determines what the quadcopter will do on startup.
+ * @param none
+ * @return none
+ */
 void quadroCopter::setStartupTargets()
 {
-    this->height.targetVal = 25.00;
-    this->pitch.targetVal = 0.00;
-    this->roll.targetVal = 0.00;
-    //this->heading.targetVal = myOrientation->heading;
+    height.targetVal = 25.00;
+    pitch.targetVal = 0.00;
+    roll.targetVal = 0.00;
+    //heading.targetVal = myOrientation->heading;
 }
 
+/**
+ * maintainTargets()
+ * Allows me to determine what targets should be met in each run.
+ * @param none
+ * @returns none
+ */
 void quadroCopter::maintainTargets()
 {
-    //this->maintainHeight( );
-    this->maintainRoll( );
-    this->maintainPitch();
-    //this->maintainHeading();
+    //maintainHeight( );
+    maintainRoll( );
+    maintainPitch();
+    //maintainHeading();
 }
 
+/**
+ * maintainHeight()
+ * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+ * @param none
+ * @return none
+ * TODO: implement this method
+ */
 void quadroCopter::maintainHeight()
 {
-
+//Plan here is to use Barometer, GPS and Sonic Sensor to maintain height
 }
 
+/**
+ * maintainHeading()
+ * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+ * @param none
+ * @return none
+ * TODO: implement this method
+ */
+void quadroCopter::maintainHeading()
+{
+//Plan here is to use Magnetometer and GPS readings to maintain heading
+}
+
+/**
+ * maintainRoll()
+ * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+ * @param none
+ * @return none
+ * TODO: handle potential errors.
+ */
 void quadroCopter::maintainRoll()
 {
 
-    double dutyIncreaseValue = pitchPID->calculate( this->roll.targetVal, this->myOrientation->roll );
+    double dutyIncreaseValue = rollPID->calculate( roll.targetVal, myOrientation->roll );
 
-    if( this->myOrientation->roll < 0 ) {
-        this->motor[ 0 ]->setTargetSpeed( long( this->motor[ 0 ]->currentDuty + dutyIncreaseValue ) ); //slow down
-        this->motor[ 1 ]->setTargetSpeed( long( this->motor[ 3 ]->currentDuty + dutyIncreaseValue ) ); //slow down
-        this->motor[ 2 ]->setTargetSpeed( long( this->motor[ 1 ]->currentDuty - dutyIncreaseValue ) ); //speed up
-        this->motor[ 3 ]->setTargetSpeed( long( this->motor[ 2 ]->currentDuty - dutyIncreaseValue ) ); //speed up
+    if( myOrientation->roll < 0 ) {
+        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty + dutyIncreaseValue ) ); //slow down
+        motor[ 1 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty + dutyIncreaseValue ) ); //slow down
+        motor[ 2 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty - dutyIncreaseValue ) ); //speed up
+        motor[ 3 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty - dutyIncreaseValue ) ); //speed up
     }
     else {
-        this->motor[ 0 ]->setTargetSpeed( long( this->motor[ 0 ]->currentDuty - dutyIncreaseValue ) ); //speed up
-        this->motor[ 1 ]->setTargetSpeed( long( this->motor[ 3 ]->currentDuty - dutyIncreaseValue ) ); //speed up
-        this->motor[ 2 ]->setTargetSpeed( long( this->motor[ 1 ]->currentDuty + dutyIncreaseValue ) ); //slow down
-        this->motor[ 3 ]->setTargetSpeed( long( this->motor[ 2 ]->currentDuty + dutyIncreaseValue ) ); //slow down
+        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty - dutyIncreaseValue ) ); //speed up
+        motor[ 1 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty - dutyIncreaseValue ) ); //speed up
+        motor[ 2 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty + dutyIncreaseValue ) ); //slow down
+        motor[ 3 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty + dutyIncreaseValue ) ); //slow down
     }
 
-    printf( "   Current Roll : \033[22;36m%7.2f \033[0m \t Increase Value :  \033[22;36m%7.2f \033[0m\n",
-            this->myOrientation->roll, dutyIncreaseValue );
-
+//    printf( "   Current Roll : \033[22;36m%7.2f \033[0m \t Increase Value :  \033[22;36m%7.2f \033[0m\n",
+//            myOrientation->roll, dutyIncreaseValue );
 
 }
 
+/**
+ * maintainPitch()
+ * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+ * @param none
+ * @return none
+ * TODO: handle potential errors.
+ */
 void quadroCopter::maintainPitch()
 {
 
-    double dutyIncreaseValue = pitchPID->calculate( this->pitch.targetVal, this->myOrientation->pitch );
+    double dutyIncreaseValue = pitchPID->calculate( pitch.targetVal, myOrientation->pitch );
 
-    if( this->myOrientation->pitch < 0 ) {
-        this->motor[ 0 ]->setTargetSpeed( long( this->motor[ 0 ]->currentDuty + dutyIncreaseValue ) ); //slow down
-        this->motor[ 1 ]->setTargetSpeed( long( this->motor[ 1 ]->currentDuty + dutyIncreaseValue ) ); //slow down
-        this->motor[ 2 ]->setTargetSpeed( long( this->motor[ 2 ]->currentDuty - dutyIncreaseValue ) ); //speed up
-        this->motor[ 3 ]->setTargetSpeed( long( this->motor[ 3 ]->currentDuty - dutyIncreaseValue ) ); //speed up
+    if( myOrientation->pitch < 0 ) {
+        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty + dutyIncreaseValue ) ); //slow down
+        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty + dutyIncreaseValue ) ); //slow down
+        motor[ 2 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty - dutyIncreaseValue ) ); //speed up
+        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty - dutyIncreaseValue ) ); //speed up
     }
     else {
-        this->motor[ 0 ]->setTargetSpeed( long( this->motor[ 0 ]->currentDuty - dutyIncreaseValue ) ); //speed up
-        this->motor[ 1 ]->setTargetSpeed( long( this->motor[ 1 ]->currentDuty - dutyIncreaseValue ) ); //speed up
-        this->motor[ 2 ]->setTargetSpeed( long( this->motor[ 2 ]->currentDuty + dutyIncreaseValue ) ); //slow down
-        this->motor[ 3 ]->setTargetSpeed( long( this->motor[ 3 ]->currentDuty + dutyIncreaseValue ) ); //slow down
+        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty - dutyIncreaseValue ) ); //speed up
+        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty - dutyIncreaseValue ) ); //speed up
+        motor[ 2 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty + dutyIncreaseValue ) ); //slow down
+        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty + dutyIncreaseValue ) ); //slow down
     }
 
-    printf( "   Current Pitch : \033[22;36m%7.2f \033[0m \t Increase Value :  \033[22;36m%7.2f \033[0m\n",
-            this->myOrientation->pitch, dutyIncreaseValue );
+//    printf( "   Current Pitch : \033[22;36m%7.2f \033[0m \t Increase Value :  \033[22;36m%7.2f \033[0m\n",
+//            myOrientation->pitch, dutyIncreaseValue );
 
-
-}
-
-void quadroCopter::maintainHeading()
-{
 
 }
