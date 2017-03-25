@@ -29,6 +29,13 @@ namespace quadro {
 
     public:
 
+        /**
+         * quadroCopter constructor
+         * Initialises motors
+         * Sets up a new orientation object which contains all sensor data related to orientation.
+         * Also sets up the PID controllers.
+         * @params none
+         */
         quadroCopter();
 
         /**
