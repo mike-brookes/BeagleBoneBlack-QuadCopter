@@ -72,12 +72,6 @@ void* orientation::setValues( void* orientationInst )
             position->runKalmanCalculations();
         }
 
-        /*
-         * printf( "   GyroX  %7.3f \t AccXangle \e[m %7.3f \t \033[22;31mCFangleX %7.3f\033[0m\t GyroY  %7.3f \t AccYangle %7.3f \t \033[22;36mCFangleY %7.3f\t\033[0m\n",
-                position->gyroscope->angle.x, position->accelerometer->pitch(), CFANGLEX,
-                position->gyroscope->angle.y, position->accelerometer->roll(), CFANGLEY );
-        */
-
         while ( Timer::milliTimer() - startTime < ( DATA_RATE * 1000 )) {
             usleep( 100 );
         }
