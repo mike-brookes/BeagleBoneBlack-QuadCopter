@@ -19,29 +19,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace quadro;
 
-/**
- * orientation constructor
- * Sets up objects for each orientation sensor and starts the thread.
- * @params none
- */
 orientation::orientation( )
 {
-    sonicSensor = new LVMaxSonarEZ();
-    sonicSensor->start();
-    sonicSensor->setMode( LVMaxSonarEZ::deviceMode::Cm );
+    try {
+        //Create a new LVMaxSonarEZ object
+        sonicSensor = new LVMaxSonarEZ();
 
-    accelerometer = new LSM303Accelerometer();
+        //Set the height calculation mode to Centimetres.
+        sonicSensor->setMode( LVMaxSonarEZ::deviceMode::Cm );
 
-    magnetometer = new LSM303Magnetometer();
+        //Start the sensors main thread, runs while the sensor is on.
+        sonicSensor->start();
 
-    gyroscope = new L3GD20H();
-    pthread_create( &this->orientationNotifyer, NULL, orientation::setValues, this );
+        //Create a new LSM303Accelerometer, this sensors thread is initiated in the constructor
+        accelerometer = new LSM303Accelerometer();
+
+        //Create a new LSM303Magnetometer, this sensors thread is initiated in the constructor
+        magnetometer = new LSM303Magnetometer();
+
+        //Create a new L3GD20H, this sensors thread is initiated in the constructor
+        gyroscope = new L3GD20H();
+    }
+    catch( analog::analogSetupException& e ){
+        throw new setupException( analog::STARTUP_FAILURE + " Details : " + e.what() );
+    }
+
+    //select the Kalman filter method by default, this can be altered using the public setDataFilterSelection method.
+    setDataFilterSelection( KALMAN );
+
+    //Start the orientation main thread that calculates it's own values based on sensor thread updated values.
+    pthread_create( &orientationNotifyer, NULL, orientation::setValues, this );
 }
 
-/**
- * setValues is a static method that runs in it's own thread assigning values from all assigned orientation sensors.
- * @params *this
- */
 void* orientation::setValues( void* orientationInst )
 {
 
@@ -54,25 +63,21 @@ void* orientation::setValues( void* orientationInst )
         startTime = Timer::milliTimer();
 
         //Complimentary filter method
-        //float CFANGLEX = 0;
-        //float CFANGLEY = 0;
-        //position->pitch = FILTER_TUNING * ( CFANGLEX + position->gyroscope->angle.x * DATA_RATE ) + ( 1 - FILTER_TUNING ) * position->accelerometer->pitch();
-        //position->roll = FILTER_TUNING * ( CFANGLEY + position->gyroscope->angle.y * DATA_RATE ) + ( 1 - FILTER_TUNING ) * position->accelerometer->roll();
-
+        if( position->dataFilterSelection == COMPLIMENTARY )  {
+            position->runComplimentaryCalculations();
+        }
+        
         //Kalman Filter Method.
-        position->pitch = float( position->kalmanPitch.getAngle( position->accelerometer->pitch(), position->gyroscope->angle.x, DATA_RATE ) );
-        position->roll = float( position->kalmanRoll.getAngle( position->accelerometer->roll(), position->gyroscope->angle.y, DATA_RATE ) );
+        if( position->dataFilterSelection == KALMAN ) {
+            position->runKalmanCalculations();
+        }
 
-        position->yaw = 0;
-        position->height = 0;
-        position->baroHeight = 0;
-        position->sonicHeight = 0;
-        position->heading = 0;
         /*
          * printf( "   GyroX  %7.3f \t AccXangle \e[m %7.3f \t \033[22;31mCFangleX %7.3f\033[0m\t GyroY  %7.3f \t AccYangle %7.3f \t \033[22;36mCFangleY %7.3f\t\033[0m\n",
                 position->gyroscope->angle.x, position->accelerometer->pitch(), CFANGLEX,
                 position->gyroscope->angle.y, position->accelerometer->roll(), CFANGLEY );
         */
+
         while ( Timer::milliTimer() - startTime < ( DATA_RATE * 1000 )) {
             usleep( 100 );
         }
@@ -80,12 +85,39 @@ void* orientation::setValues( void* orientationInst )
     }
 }
 
-/**
- * This method is used for determining urgency of movements, attempting to give some kind of priority to avoid crashes.
- * @return int (a value of cm or inches depending on sensor setting)
- */
 int orientation::getEmergencyHeight()
 {
-    return ( this->sonicSensor->currentMode == this->sonicSensor->deviceMode::Cm ) ? EMERGENCY_HEIGHT_CM
-                                                                                   : EMERGENCY_HEIGHT_INCH;
+    return ( sonicSensor->currentMode == sonicSensor->deviceMode::Cm ) ? EMERGENCY_HEIGHT_CM
+                                                                       : EMERGENCY_HEIGHT_INCH;
+}
+
+void orientation::runKalmanCalculations()
+{
+    pitch = float( kalmanPitch.getAngle( accelerometer->pitch(), gyroscope->angle.x, quadro::DATA_RATE ) );
+    roll = float( kalmanRoll.getAngle( accelerometer->roll(), gyroscope->angle.y, quadro::DATA_RATE ) );
+
+    yaw = 0;
+    height = 0;
+    baroHeight = 0;
+    sonicHeight = 0;
+    heading = 0;
+}
+
+void orientation::runComplimentaryCalculations()
+{
+    float CFANGLEX = 0;
+    float CFANGLEY = 0;
+    pitch = quadro::COMPLIMENTARY_FILTER_TUNING * ( CFANGLEX + gyroscope->angle.x * DATA_RATE ) + ( 1 - quadro::COMPLIMENTARY_FILTER_TUNING ) * accelerometer->pitch();
+    roll = quadro::COMPLIMENTARY_FILTER_TUNING * ( CFANGLEY + gyroscope->angle.y * DATA_RATE ) + ( 1 - quadro::COMPLIMENTARY_FILTER_TUNING ) * accelerometer->roll();
+
+    yaw = 0;
+    height = 0;
+    baroHeight = 0;
+    sonicHeight = 0;
+    heading = 0;
+}
+
+void orientation::setDataFilterSelection( int _dataFilter )
+{
+    dataFilterSelection = _dataFilter;
 }
