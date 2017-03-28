@@ -1,0 +1,8 @@
+//
+// Created by Michael Brookes on 26/03/2017.
+//
+
+#ifndef QUADRO_RUNTIMEEXCEPTIONS_H
+#define QUADRO_RUNTIMEEXCEPTIONS_H
+
+#endif //QUADRO_RUNTIMEEXCEPTIONS_H

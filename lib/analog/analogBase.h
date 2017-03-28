@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ANALOGDEVICE_ANALOGDEVICE_H
 
 #include "Exceptions/analogSetupException.h"
+#include "Exceptions/analogRuntimeException.h"
+
 #include "../Interfaces/IDevice.h"
 #include "overlays/analogOverlay.h"
 
