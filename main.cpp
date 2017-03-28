@@ -32,7 +32,7 @@ int main()
     quadroCopter* AeroBot;
     
     /**
-    * @param AeroBot new quadroCopter object.
+    * @var AeroBot as new quadroCopter object.
     * The constructor in the quadroCopter :
     *  - Loads the device tree overlays
     *  - Exports the pins required by Motors and Sensors
@@ -40,9 +40,16 @@ int main()
     *  - Initialises the Accelerometer, Magnetometer, Gyroscope, Motors and Sonic Sensor
     *  - Starts the threads that update values constantly.
     */
-    AeroBot = new quadroCopter;
+    try {
+        AeroBot = new quadroCopter;
+    }
+    catch( exceptions::fatalException& e ) {
+        cout << "Fatal Exception With Message : " << e.what() << endl;
+        //exit immediately, running exit here will cause everything to destruct properly.
+        exit( 1 );
+    }
 
-    /*
+    /**
     * Program initialisation.
     * From here, I loop for the lifetime of the program - the idea is to have this as stream lined as possible to allow for ease of adding new features later.
     * This main thread simply reads current values and makes required changes to maintain set targets. i.e 0 degree pitch and roll to hover.
