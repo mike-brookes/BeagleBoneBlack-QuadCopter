@@ -1,5 +1,3 @@
-//
-// Created by Michael Brookes on 26/05/2016.
 /*
 Copyright (C) 2017 Michael Brookes
 
@@ -20,40 +18,79 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "LVMaxSonarEZ.h"
 
 using namespace quadro::analog;
+using namespace std;
 
 LVMaxSonarEZ::LVMaxSonarEZ()
 {
-    this->setMode( deviceMode::Cm );
-    this->setStatus( deviceStatus::Off );
+    //Set device startup settings
+    setMode( deviceMode::Cm );
+    setStatus( deviceStatus::Off );
 }
 
-void LVMaxSonarEZ::start()
+int LVMaxSonarEZ::start()
 {
-    this->threadRet = pthread_create( &this->sonicReaderThread, NULL, LVMaxSonarEZ::getValueAsInt, this );
 
-    if ( this->threadRet == 0 )
-        this->setStatus( deviceStatus::On );
-    else {
-        this->setStatus( deviceStatus::Error );
-        if ( this->threadRet == EAGAIN )
-            this->currentError = "Unable to create thread : Resource Limit Reached.";
-        else
-            this->currentError = "Unable to create thread : Unknown Error Occurred.";
+    //pthread_create doesn't throw an exception, only returns error codes - these are handled below.
+    threadRet = pthread_create( &sonicReaderThread, NULL, LVMaxSonarEZ::getValueAsInt, this );
+
+    //Thread returned 0 (Success Code)
+    if ( threadRet == 0 ) {
+        //The thread started correctly, so set the status of the Sonic Sensor to "On".
+        setStatus( deviceStatus::On );
     }
+    else {
+        //The sonic sensor thread failed, set the status to "Error" and throw an appropriate exception.
+        setStatus( deviceStatus::Error );
+        if ( threadRet == EAGAIN ) {
+            //Failed because of resource unavailability, try once more and then throw an exception on failure
+            threadRet = pthread_create( &sonicReaderThread, NULL, LVMaxSonarEZ::getValueAsInt, this );
+            if ( threadRet != 0 ) {
+                throw new analogSetupException(
+                        "(LVMaxSonarEZ) " + analog::THREAD_FATAL + " : errorNumber = "
+                                + to_string( threadRet ) );
+            }
+        }
+        else if ( threadRet == EPERM ) {
+            //Thread creation failed because of invalid permissions on the system to create threads.
+            throw new analogSetupException(
+                    "(LVMaxSonarEZ) " + analog::THREAD_PERMISSIONS + " : errorNumber = " + to_string( threadRet ) );
+        }
+        else if ( threadRet == EINVAL ) {
+            //Thread creation failed because the argument used is invalid.
+            throw new analogSetupException(
+                    "(LVMaxSonarEZ) " + analog::THREAD_INVALID_ARG + " : errorNumber = " + to_string( threadRet ) );
+        }
+        else {
+            //An unknown error occurred - unknown error code.
+            throw new analogSetupException(
+                    "(LVMaxSonarEZ) " + analog::THREAD_UNKNOWN + " : errorNumber = " + to_string( threadRet ) );
+        }
+    }
+    //return the device status - realistically it should always be "On" if we get this far...
+    return getStatus();
+
 }
 
 void LVMaxSonarEZ::stop()
 {
-    this->threadRet = pthread_cancel( this->sonicReaderThread );
+    //pthread_cancel doesn't throw an exception, only returns error codes - these are handled below.
+    threadRet = pthread_cancel( sonicReaderThread );
 
-    if ( this->threadRet == 0 )
-        this->setStatus( deviceStatus::Off );
+    if ( threadRet == 0 ) {
+        //The thread was cancelled successfully - set the device status to "Off".
+        setStatus( deviceStatus::Off );
+    }
     else {
-        this->setStatus( deviceStatus::Error );
-        if ( this->threadRet == ESRCH )
-            this->currentError = "Unable to cancel thread : Unable to locate process.";
-        else
-            this->currentError = "Unable to cancel thread : Unknown Error Occurred.";
+        //The sonic sensor thread cancellation failed, set the status to "Error" and throw an appropriate exception.
+        setStatus( deviceStatus::Error );
+        if ( threadRet == ESRCH ) {
+            //Unable to locate process to cancel.
+            throw new analogRuntimeException( THREAD_CANCELLATION_FAILURE );
+        }
+        else {
+            //An unknown error occurred - unknown error code.
+            throw new analogRuntimeException( THREAD_CANCELLATION_UNKNOWN );
+        }
     }
 
 }
@@ -63,19 +100,18 @@ void* LVMaxSonarEZ::getValueAsInt( void* static_inst )
     LVMaxSonarEZ* SonicInst = ( LVMaxSonarEZ* ) static_inst;
     while ( SonicInst->currentStatus == deviceStatus::On ) {
         SonicInst->reading = SonicInst->getReading();
-        SonicInst->addToDataStore();
         usleep( SONIC_DATATIMER );
     }
 }
 
 int LVMaxSonarEZ::getReading()
 {
-    return this->getCurrentReading();
+    return getCurrentReading();
 }
 
 double LVMaxSonarEZ::convertReadingToDistance( int _reading )
 {
-    switch ( this->currentMode ) {
+    switch ( currentMode ) {
     case deviceMode::Inches :
         return _reading / SONIC_INCH_MODIFYER;
     case deviceMode::Cm :
@@ -85,43 +121,22 @@ double LVMaxSonarEZ::convertReadingToDistance( int _reading )
     }
 }
 
-void LVMaxSonarEZ::setAverage( int iterations = 50 )
-{
-    double total_reading = 0;
-    int i = 0;
-    while ( i < iterations ) {
-        total_reading += this->reading;
-        usleep( this->dataTimer );
-        i++;
-    }
-    this->avgReading = total_reading / iterations;
-}
-
-void LVMaxSonarEZ::addToDataStore()
-{
-    for ( int i = 0; i < MAX_DATASTORE; i++ )
-        this->dataStoredValues[ i ] = this->dataStoredValues[ i + 1 ];
-
-    this->dataStoredValues[ MAX_DATASTORE - 1 ] = this->convertReadingToDistance( this->reading );
-}
-
 void LVMaxSonarEZ::setMode( deviceMode _mode )
 {
-    this->currentMode = _mode;
+    currentMode = _mode;
 }
 
 void LVMaxSonarEZ::setStatus( deviceStatus _status )
 {
-    this->currentStatus = _status;
+    currentStatus = _status;
+}
+
+int LVMaxSonarEZ::getStatus()
+{
+    return currentStatus;
 }
 
 double LVMaxSonarEZ::distance()
 {
-    return this->convertReadingToDistance( this->reading );
-}
-
-double LVMaxSonarEZ::avgDistance()
-{
-    this->setAverage( 50 );
-    return this->avgReading;
+    return convertReadingToDistance( reading );
 }
