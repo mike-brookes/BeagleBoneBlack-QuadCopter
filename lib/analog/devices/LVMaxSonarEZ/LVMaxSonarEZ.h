@@ -1,5 +1,3 @@
-//
-// Created by Michael Brookes on 26/05/2016.
 /*
 Copyright (C) 2017 Michael Brookes
 
@@ -23,16 +21,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../../analogBase.h"
 #include <sstream>
 
-#define MAX_OPERATING_HEIGHT 255
-#define MIN_OPERATING_HEIGHT 6
+#define MAX_OPERATING_HEIGHT_IN_INCES   255
+#define MIN_OPERATING_HEIGHT_IN_INCES   6
 
-#define EMERGENCY_HEIGHT_CM 23
-#define EMERGENCY_HEIGHT_INCH 9
+#define EMERGENCY_HEIGHT_CM             23
+#define EMERGENCY_HEIGHT_INCH           9
 
-#define MAX_DATASTORE        15
-#define SONIC_INCH_MODIFYER  9.8
-#define SONIC_CM_MODIFYER    2.54
-#define SONIC_DATATIMER      50000 //20HZ
+#define SONIC_INCH_MODIFYER             9.8
+#define SONIC_CM_MODIFYER               2.54
+#define SONIC_DATATIMER                 50000 //20HZ
 
 namespace quadro {
 
@@ -41,17 +38,29 @@ namespace quadro {
         class LVMaxSonarEZ : public analogBase {
         public:
 
+            /**
+             * Class constructor - by default this constructor sets the height mode to CM and the devices status to off.
+             * @see start() for initialising the sensors main thread.
+             */
             LVMaxSonarEZ();
 
-            void start();
+            /**
+             * start() - Allows the independent control to start the thread that updates the Sonic Sensor readings.
+             * @param none
+             * @throws analogSetupException
+             * @returns int deviceStatus : 1 = on, 0 = off or 2 = error
+             */
+            int start();
 
+            /**
+             * stop() - Allows the independent control to stop the current thread.
+             * @param none
+             * @throws analogRuntimeException
+             * @returns enum deviceStatus : 1 = on, 0 = off or 2 = error
+             */
             void stop();
 
             double distance();
-
-            double avgDistance();
-
-            double dataStoredValues[MAX_DATASTORE];
 
             __useconds_t dataTimer = SONIC_DATATIMER;
 
@@ -68,9 +77,10 @@ namespace quadro {
 
             deviceStatus currentStatus;
             deviceMode currentMode;
-            string currentError;
 
             void setMode( deviceMode _mode );
+
+            int getStatus();
 
             void setStatus( deviceStatus _status );
 
@@ -80,16 +90,12 @@ namespace quadro {
 
             int getReading();
 
-            void setAverage( int iterations );
-
-            void addToDataStore();
-
             double convertReadingToDistance( int _reading );
 
             int reading;
-            double avgReading;
 
             pthread_t sonicReaderThread;
+
             int threadRet;
         };
 
