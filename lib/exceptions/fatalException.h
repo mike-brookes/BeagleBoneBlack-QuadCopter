@@ -15,8 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QUADRO_ASETUPEXCEPTION_H
-#define QUADRO_ASETUPEXCEPTION_H
+#ifndef QUADRO_AFATALEXCEPTION_H
+#define QUADRO_AFATALEXCEPTION_H
 
 #include <cstdio>
 #include <exception>
@@ -31,12 +31,12 @@ namespace quadro {
         /**
          * TODO: add logging.
          */
-        class setupException : public exception {
+        class fatalException : public exception {
         public:
 
-            setupException() { }
+            fatalException() { }
 
-            setupException( string errMessage )
+            fatalException( string errMessage )
                     :errMessage_( errMessage ) { }
 
             const char* what() const throw() { return errMessage_.c_str(); }
@@ -48,4 +48,4 @@ namespace quadro {
 
 }
 
-#endif //QUADRO_ASETUPEXCEPTION_H
+#endif //QUADRO_AFATALEXCEPTION_H
