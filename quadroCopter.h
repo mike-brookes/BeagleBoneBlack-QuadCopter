@@ -20,8 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MOTOR_COUNT 4
 
 #include "lib/PWM/motors/dji_2212/dji_2212.h"
-#include "Lib/Orientation/orientation.h"
-#include "Lib/External/PID.h"
+#include "lib/exceptions/fatalException.h"
+#include "lib/Orientation/orientation.h"
+#include "lib/External/PID.h"
+#include <sstream>
 
 namespace quadro {
 
@@ -94,17 +96,17 @@ namespace quadro {
     private:
 
         /**
-         * maintainHeight()
-         * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+         * maintainAltitude()
+         * Allow the quadcopter to analyse current altitude related sensor readings against target settings and adjust motors accordingly
          * @param none
          * @return none
          * TODO: implement this method
          */
-        void maintainHeight();
+        void maintainAltitude();
 
         /**
          * maintainHeading()
-         * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
+         * Allow the quadcopter to analyse current heading readings against target settings and adjust motors accordingly
          * @param none
          * @return none
          * TODO: implement this method

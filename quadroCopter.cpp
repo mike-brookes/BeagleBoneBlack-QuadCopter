@@ -19,21 +19,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace quadro;
 using namespace quadro::pwm;
+using namespace quadro::exceptions;
 
-/**
- * quadroCopter constructor
- * Initialises motors
- * Sets up a new orientation object which contains all sensor data related to orientation.
- * Also sets up the PID controllers.
- * @params none
- */
 quadroCopter::quadroCopter()
 {
 
-    /**
-     * Create a new orientation object
-     */
-    myOrientation = new orientation();
+    try{
+        /*! @var myOrientation sets up a new orientation object */
+        myOrientation = new orientation();
+    }
+    catch( setupException& e ) {
+        //If a setup error occurred, we need to exit before we start flying otherwise catastrophic consequences undoubtedly will follow...
+        //Re throw an exception here for the main thread to catch for a proper exit.
+        throw new fatalException( e.what() );
+    }
 
     setStartupTargets();
 
@@ -61,12 +60,6 @@ quadroCopter::quadroCopter()
 
 }
 
-/**
- * setStartupTargets()
- * This method is only called once - it determines what the quadcopter will do on startup.
- * @param none
- * @return none
- */
 void quadroCopter::setStartupTargets()
 {
     height.targetVal = 25.00;
@@ -75,12 +68,6 @@ void quadroCopter::setStartupTargets()
     //heading.targetVal = myOrientation->heading;
 }
 
-/**
- * maintainTargets()
- * Allows me to determine what targets should be met in each run.
- * @param none
- * @returns none
- */
 void quadroCopter::maintainTargets()
 {
     //maintainHeight( );
@@ -89,37 +76,16 @@ void quadroCopter::maintainTargets()
     //maintainHeading();
 }
 
-/**
- * maintainHeight()
- * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
- * @param none
- * @return none
- * TODO: implement this method
- */
-void quadroCopter::maintainHeight()
+void quadroCopter::maintainAltitude()
 {
-//Plan here is to use Barometer, GPS and Sonic Sensor to maintain height
+//Plan here is to use Barometer, GPS and Sonic Sensor to maintain altitude
 }
 
-/**
- * maintainHeading()
- * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
- * @param none
- * @return none
- * TODO: implement this method
- */
 void quadroCopter::maintainHeading()
 {
 //Plan here is to use Magnetometer and GPS readings to maintain heading
 }
 
-/**
- * maintainRoll()
- * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
- * @param none
- * @return none
- * TODO: handle potential errors.
- */
 void quadroCopter::maintainRoll()
 {
 
@@ -143,13 +109,6 @@ void quadroCopter::maintainRoll()
 
 }
 
-/**
- * maintainPitch()
- * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
- * @param none
- * @return none
- * TODO: handle potential errors.
- */
 void quadroCopter::maintainPitch()
 {
 
@@ -170,6 +129,5 @@ void quadroCopter::maintainPitch()
 
 //    printf( "   Current Pitch : \033[22;36m%7.2f \033[0m \t Increase Value :  \033[22;36m%7.2f \033[0m\n",
 //            myOrientation->pitch, dutyIncreaseValue );
-
 
 }
