@@ -3,7 +3,7 @@ This project hopes to achieve a flying BeagleBone, this project is a hobby. The 
 The general goal is to have a Linux board (BeagleBone Black currently) attached to a Quadcopter frame and acting as it's flight controller.
 The flight controller will maintain targets, the targets are currently set as part of testing but they could easily be modified to come from a controller.
 
-## Current version : 0.1.3
+## Current version : 0.1.4
 
 ## Project status
 
@@ -13,6 +13,8 @@ The flight controller will maintain targets, the targets are currently set as pa
 
 ## Current TODO's :
 
+* ~~Add doxygen documentation to the project.~~ To-Done
+* Write a better motor control class.
 * Add 'maintain height' / 'move to target height' functionality utilising both the onboard Barometer and the Sonic Sensor.
 * Add 'maintain heading' / 'move to target heading' functionality utilising the onboard magnetometer.
 * Implement GPS.
