@@ -1,5 +1,3 @@
-//
-// Created by Michael Brookes on 12/06/2016.
 /*
 Copyright (C) 2017 Michael Brookes
 
@@ -27,43 +25,43 @@ dji_2212::dji_2212( pinBlocks _block,
         :motors( _block, _pin )
 {
 
-    this->setMaxSpeed( MAX_DUTY );
-    this->setMinSpeed( MIN_DUTY );
-    this->setSpeedStep( DEFAULT_SPEED_STEP );
-    this->setPeriod( DEFAULT_PERIOD );
-    this->setDuty( this->getMinSpeed());
-    this->setPolarity( 1 );
+    setMaxSpeed( MAX_DUTY );
+    setMinSpeed( MIN_DUTY );
+    setSpeedStep( DEFAULT_SPEED_STEP );
+    setPeriod( DEFAULT_PERIOD );
+    setDuty( getMinSpeed());
+    setPolarity( 1 );
 
 }
 
 void dji_2212::init()
 {
-    this->setPeriod( DEFAULT_PERIOD );
-    this->setTargetSpeed( SPIN_SLOWSPEED );
-    this->setRun( 1 );
-    this->Start();
+    setPeriod( DEFAULT_PERIOD );
+    setTargetSpeed( SPIN_SLOWSPEED );
+    setRun( 1 );
+    start();
 }
 
 void dji_2212::setDuty( long _duty )
 {
-    this->currentDuty = _duty;
-    this->set( Duty, this->currentDuty );
+    currentDuty = _duty;
+    set( Duty, currentDuty );
 }
 
 void dji_2212::setPeriod( long _period )
 {
-    this->currentPeriod = _period;
-    this->set( Period, this->currentPeriod );
+    currentPeriod = _period;
+    set( Period, currentPeriod );
 }
 
 void dji_2212::setRun( int _run )
 {
-    this->currentRun = _run;
-    this->set( Run, this->currentRun );
+    currentRun = _run;
+    set( Run, currentRun );
 }
 
 void dji_2212::setPolarity( int _polarity )
 {
-    this->currentPolarity = _polarity;
-    this->set( Polarity, this->currentPolarity );
+    currentPolarity = _polarity;
+    set( Polarity, currentPolarity );
 }

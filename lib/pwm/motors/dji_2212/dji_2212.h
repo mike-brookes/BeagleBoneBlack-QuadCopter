@@ -1,5 +1,3 @@
-//
-// Created by Michael Brookes on 12/06/2016.
 /*
 Copyright (C) 2017 Michael Brookes
 
@@ -19,13 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef BEAGLEBONE_MOTOR_DJI_2212_H
 #define BEAGLEBONE_MOTOR_DJI_2212_H
-#define MAX_DUTY            320000 //150000
-#define MIN_DUTY            500000
-#define SPIN_SLOWSPEED      700000
-#define SPIN_TAKEOFFSPEED   250000
-#define DEFAULT_PERIOD      1900000
-#define ACTIVATE_PERIOD     1200000
-#define DEFAULT_SPEED_STEP  50
 
 #include "../motors.h"
 
@@ -35,21 +26,61 @@ namespace quadro {
 
         using namespace quadro::overlays;
 
+        /**
+         * Class for running DJI_2212 motors, extends the motors class
+         */
         class dji_2212 : public motors {
+
+            const long MAX_DUTY = 320000; //150000
+            const long MIN_DUTY = 500000;
+            const long SPIN_SLOWSPEED = 700000;
+            const long SPIN_TAKEOFFSPEED = 250000;
+            const long DEFAULT_PERIOD = 1900000;
+            const long ACTIVATE_PERIOD = 1200000;
+            const int DEFAULT_SPEED_STEP = 50;
 
         public:
 
-            dji_2212( pinBlocks, PWMPins );
+            /**
+             * Public entry point for running a DJI_2212 motor, set the Block and Pin number in the constructor.
+             *
+             * @param pinBlock _block
+             * @param PWMPins _pin
+             */
+            dji_2212( pinBlocks _block, PWMPins _pin );
 
+            /**
+             * This method will set the basic settings to initialise the motor, this will normally result in the motor spinning slowly.
+             */
             void init();
 
-            void setDuty( long );
+            /**
+             * Set the motors duty value
+             *
+             * @param _duty
+             */
+            void setDuty( long _duty );
 
-            void setPeriod( long );
+            /**
+             * Set the motors Period value here
+             *
+             * @param _period
+             */
+            void setPeriod( long _period );
 
-            void setRun( int );
+            /**
+             * Set the motors Run value here
+             *
+             * @param _run
+             */
+            void setRun( int _run );
 
-            void setPolarity( int );
+            /**
+             * Set the motors Polarity here.
+             *
+             * @param _polarity
+             */
+            void setPolarity( int _polarity );
 
         };
 
