@@ -1,5 +1,3 @@
-//
-// Created by Michael Brookes on 27/05/2016.
 /*
 Copyright (C) 2017 Michael Brookes
 
@@ -27,15 +25,26 @@ namespace quadro {
 
     namespace pwm {
 
+        /**
+         * This class is a helper for loading device tree overlays required for PWM communication on the BBB
+         */
         class pwmOverlay : public overlays::overlayBase {
         public:
 
+            /**
+             * This class is a helper for loading device tree overlays required for PWM communication on the BBB
+             *
+             * @throws pwmSetupException
+             */
             pwmOverlay() throw( pwmSetupException& );
 
+            /**
+             * struct for settings related to the pwm overlay
+             */
             struct overlaySettings {
-                const char* overlay = "am33xx_pwm";
-                const char* searchFile = "/sys/devices/ocp.3/48300000.epwmss/modalias";
-                bool overlayLoaded;
+                const char* overlay = "am33xx_pwm"; //!< overlay name
+                const char* searchFile = "/sys/devices/ocp.3/48300000.epwmss/modalias"; //!< overlay created file
+                bool overlayLoaded; //!< overlay Loaded switch
             } settings;
 
         };
