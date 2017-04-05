@@ -34,25 +34,25 @@ namespace quadro { //<! Main Quadro Namespace
 
     namespace analog {
 
-        /**
+        /*!
          * This class provides functionality for controlling analog devices on the beaglebone.
          * @implements IDevice
          */
         class analogBase : public IDevice {
 
         public:
-            /**
-             \fn Public Destructor
+            /*!
+             * Public Destructor
              */
             ~analogBase();
 
-            /**
+            /*!
              * Public Constructor - sets the default port to 0 and attempts to initialise that device.
              * @throws analogSetupException
              */
             analogBase();
 
-            /**
+            /*!
              * enum for the available ports that can be used for Analog communication
              */
             enum analogPort {
@@ -65,13 +65,13 @@ namespace quadro { //<! Main Quadro Namespace
                 PORT6 = 6  //!< Analog Port 6 (P9, Pin 35)
             };
 
-            /**
+            /*!
              * getCurrentReading is the public method that returns the result from the private readDevice()
              * @return
              */
             int getCurrentReading();
 
-            /**
+            /*!
              * setDevicePort allows selection of an analog port (analogPort)
              * @param analogPort _AP
              */
@@ -79,52 +79,52 @@ namespace quadro { //<! Main Quadro Namespace
 
         private:
 
-            analogOverlay _analogOverlay; //<! Loads the overlays for Analog devices.
+            analogOverlay _analogOverlay; //!< Loads the overlays for Analog devices.
 
-            analogPort devicePort; //<! Enum type analogPort
+            analogPort devicePort; //!< Enum type analogPort
 
-            ifstream deviceFile; //<! Streaming object
+            ifstream deviceFile; //!< Streaming object
 
-            string deviceFilePath; //<! File path
+            string deviceFilePath; //!< File path
 
-            string currentReading; //<! Last reading from the device
+            string currentReading; //!< Last reading from the device
 
-            /**
+            /*!
              * readDevice allows us to read the value on a specified Analog Port.
              * @param _bufferSize
-             * @return
+             * @return short
              */
             short readDevice( size_t _bufferSize );
 
-            /**
+            /*!
              * initDevice attempts to load the overlay
              * @throws analogSetupException
              */
             void initDevice() throw( analogSetupException& );
 
-            /**
+            /*!
              * setDeviceFilePath appends the helper file path with the analog file name and port.
              */
             void setDeviceFilePath();
 
-            /**
+            /*!
              * unused but a part of the interface
              * @todo use this function to check everything is setup correctly
-             * @return boolean
+             * @return int
              */
             int connectToDevice() throw( analogSetupException& ) { return 1; }
 
-            /**
+            /*!
              * unused but a part of the interface
              * @param _bufferSize
-             * @return
+             * @return int
              */
             int writeToDevice( size_t _bufferSize ) throw( analogSetupException& ) { return 1; }
 
-            /**
+            /*!
              * This method checks the analog file can be opened in binary mode for reading.
              * @throws analogSetupException
-             * @return boolean
+             * @return int
              */
             int openDevice() throw( analogSetupException& );
 
