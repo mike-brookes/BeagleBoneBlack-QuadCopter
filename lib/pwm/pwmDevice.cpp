@@ -112,23 +112,19 @@ void pwmDevice::set( valType _vt, long _val ) { this->writeToDevice( _vt, _val )
 
 long pwmDevice::getCurrentReading( valType _vt )
 {
-    this->readDevice( _vt );
-    if ( this->currentReading != "" ) {
+    readDevice( _vt );
+    if ( currentReading != "" ) {
         if ( _vt == Run )
-            return ( this->currentReading.compare( "1" ) == 0 );
+            return ( currentReading.compare( "1" ) == 0 );
         else if ( _vt == Power_Control ) {
-            this->powerControlStr = this->currentReading;
+            powerControlStr = currentReading;
             return 1;
         }
         else
-            return stoi( this->currentReading );
+            return stoi( currentReading );
     }
 }
 
-/**
- *
- * @return char full path to the requested file.
- */
 char* pwmDevice::getFilePath()
 {
     switch ( this->VT ) {

@@ -1,5 +1,3 @@
-//
-// Created by Michael Brookes on 27/05/2016.
 /*
 Copyright (C) 2017 Michael Brookes
 
@@ -33,46 +31,94 @@ namespace quadro {
 
     namespace pwm {
 
+        /**
+         * Base class for PWM devices
+         * @uses IDevice, pwmOverlay
+         */
         class pwmDevice : public IDevice, pwmOverlay {
 
         public:
 
+            /**
+             * Base class for PWM devices
+             * @uses IDevice, pwmOverlay
+             */
             pwmDevice() { };
 
+            /**
+             * Alternative constructor, setting the pins on setup.
+             *
+             * @throws pwmSetupException
+             * @param pinBlocks _block
+             * @param PWNPins _pin
+             */
             pwmDevice( pinBlocks _block, PWMPins _pin ) throw( pwmSetupException& );
 
+            /**
+             * This is a list of types allowed when accessing PWM Values.
+             */
             enum valType {
-                Run, Duty, Period, Polarity, Power_Control, Power_RunTime_Active, Power_RunTime_Suspended
+                Run, //!< Run Value Type
+                Duty, //!< Duty Value Type
+                Period, //!< Period Value Type
+                Polarity, //!< Polarity Value Type
+                Power_Control, //!< Power_Control Value Type
+                Power_RunTime_Active, //!< Power_RunTime_Active Value Type
+                Power_RunTime_Suspended //!< Power_RunTime_Suspended Value Type
             };
 
-            pinBlocks blockNum;
-            PWMPins pinNum;
+            pinBlocks blockNum; //!< stores the PWM device block num
+            PWMPins pinNum; //!< stores the PWM device pin num
 
-            string powerControlStr;
+            string powerControlStr; //!< stores the current power setting string
 
-            long get( valType );
+            /**
+             * Use this method to get a pwm value as specified from valType
+             *
+             * @param _vt
+             * @return
+             */
+            long get( valType _vt );
 
-            void set( valType, long _val );
+            /**
+             * Use this method to set a pwm value as specified by valType
+             *
+             * @param _vt
+             * @param _val
+             */
+            void set( valType _vt, long _val );
 
+            /**
+             * Set PWM Pin num from available PWMPins
+             *
+             * @param _pin
+             */
             void setPinNum( PWMPins _pin );
 
             /**
              * Sets the pwm block number - on the beaglebone black this will be 8 or 9 only
              *
-             * @see ../overlayBase.h
-             * @param _block
+             * @param pinBlocks _block
              */
             void setBlockNum( pinBlocks _block );
 
         private:
 
-            valType VT;
+            valType VT; //!< Container for the val type
 
             /**
              * Reads the file of valType (enum) e.g duty
+             *
+             * @param valType
              */
-            void readDevice( valType );
+            void readDevice( valType _vt );
 
+            /**
+             * Read _bufferSize amount of bytes from the device file
+             *
+             * @param _bufferSize
+             * @return short
+             */
             short readDevice( size_t _bufferSize );
 
             /**
@@ -88,53 +134,85 @@ namespace quadro {
              */
             int connectToDevice() { return 1; }
 
+            /**
+             * Write a value to the PWM file
+             *
+             * @throws pwmSetupException
+             * @param _bufferSize
+             * @return int
+             */
             int writeToDevice( size_t _bufferSize ) throw( pwmSetupException& );
 
             /**
              * This function is called when setting a pwm value, the valType is the file you need to write to : e.g duty
              * Only values from the valType Enum will be allowed.
              *
+             * @param _vt a member of valType
              * @param _val
              */
-            void writeToDevice( valType, long _val ) throw( pwmSetupException& );
-
-            int openDevice() throw( pwmSetupException& );
-
-            long getCurrentReading( valType );
+            void writeToDevice( valType _vt, long _val ) throw( pwmSetupException& );
 
             /**
+             * Open the device's duty file unless otherwise specified
+             *
+             * @thows pwmSetupException
+             * @return int
+             */
+            int openDevice() throw( pwmSetupException& );
+
+            /**
+             *
+             * @return long
+             */
+            long getCurrentReading( valType _vt );
+
+            /**
+             * Returns the current file name full path
              *
              * @return char full path to the specified file
              */
             char* getFilePath();
 
-            void setValType( valType );
+            /**
+             * Return the filepath of the type specified with valType
+             *
+             * @param _vt
+             */
+            void setValType( valType _vt );
 
+            /**
+             * Set the value to be written
+             *
+             * @param _val
+             */
             void setWriteVal( long _val );
 
+            /**
+             * Set all file paths now for ease of use.
+             */
             void setFilePaths();
 
-            long val2Write;
+            long val2Write; //!< stores the value to be written
 
-            ifstream PWMFile;
+            ifstream PWMFile; //!< File stream handle
 
-            string currentReading;
+            string currentReading; //!< latest reading from a file
 
-            overlays::pinOverlay* _pinOverlay;
+            overlays::pinOverlay* _pinOverlay; //!< setup a pointer to the pinOverlay class
 
-            char dutyPath[50];
+            char dutyPath[50]; //!< storage for the duty file path
 
-            char periodPath[50];
+            char periodPath[50]; //!< storage for the period file path
 
-            char runPath[50];
+            char runPath[50]; //!< storage for the run file path
 
-            char polarityPath[50];
+            char polarityPath[50]; //!< storage for the polarity file path
 
-            char powerControlPath[100];
+            char powerControlPath[100]; //!< storage for the power control file path
 
-            char powerRunTime_ActivePath[100];
+            char powerRunTime_ActivePath[100]; //!< storage for the power run time active file path
 
-            char powerRunTime_SuspendedPath[100];
+            char powerRunTime_SuspendedPath[100]; //!< storage for the power run time suspended file path
 
         };
 
