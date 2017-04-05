@@ -31,19 +31,15 @@ int LVMaxSonarEZ::start()
 {
 
     //pthread_create doesn't throw an exception, only returns error codes - these are handled below.
-    threadRet = pthread_create( &sonicReaderThread, NULL, LVMaxSonarEZ::getValueAsInt, this );
+    threadRet = pthread_create( &threadHandle, NULL, LVMaxSonarEZ::runMainSensorUpdateThread, this );
 
     //Thread returned 0 (Success Code)
-    if ( threadRet == 0 ) {
-        //The thread started correctly, so set the status of the Sonic Sensor to "On".
-        setStatus( deviceStatus::On );
-    }
-    else {
+    if ( threadRet != 0 ) {
         //The sonic sensor thread failed, set the status to "Error" and throw an appropriate exception.
         setStatus( deviceStatus::Error );
         if ( threadRet == EAGAIN ) {
             //Failed because of resource unavailability, try once more and then throw an exception on failure
-            threadRet = pthread_create( &sonicReaderThread, NULL, LVMaxSonarEZ::getValueAsInt, this );
+            threadRet = pthread_create( &threadHandle, NULL, LVMaxSonarEZ::runMainSensorUpdateThread, this );
             if ( threadRet != 0 ) {
                 throw new analogSetupException(
                         "(LVMaxSonarEZ) " + analog::THREAD_FATAL + " : errorNumber = "
@@ -66,21 +62,21 @@ int LVMaxSonarEZ::start()
                     "(LVMaxSonarEZ) " + analog::THREAD_UNKNOWN + " : errorNumber = " + to_string( threadRet ) );
         }
     }
+
+    //The thread started correctly, so set the status of the Sonic Sensor to "On".
+    setStatus( deviceStatus::On );
+
     //return the device status - realistically it should always be "On" if we get this far...
     return getStatus();
 
 }
 
-void LVMaxSonarEZ::stop()
+int LVMaxSonarEZ::stop()
 {
     //pthread_cancel doesn't throw an exception, only returns error codes - these are handled below.
-    threadRet = pthread_cancel( sonicReaderThread );
+    threadRet = pthread_cancel( threadHandle );
 
-    if ( threadRet == 0 ) {
-        //The thread was cancelled successfully - set the device status to "Off".
-        setStatus( deviceStatus::Off );
-    }
-    else {
+    if ( threadRet != 0 ) {
         //The sonic sensor thread cancellation failed, set the status to "Error" and throw an appropriate exception.
         setStatus( deviceStatus::Error );
         if ( threadRet == ESRCH ) {
@@ -93,31 +89,31 @@ void LVMaxSonarEZ::stop()
         }
     }
 
+    //The thread was cancelled successfully - set the device status to "Off".
+    setStatus( deviceStatus::Off );
+
+    return getStatus();
+
 }
 
-void* LVMaxSonarEZ::getValueAsInt( void* static_inst )
+void* LVMaxSonarEZ::runMainSensorUpdateThread( void* static_inst )
 {
     LVMaxSonarEZ* SonicInst = ( LVMaxSonarEZ* ) static_inst;
     while ( SonicInst->currentStatus == deviceStatus::On ) {
-        SonicInst->reading = SonicInst->getReading();
-        usleep( SONIC_DATATIMER );
+        SonicInst->reading = SonicInst->getCurrentReading();
+        usleep( SonicInst->dataTimer );
     }
-}
-
-int LVMaxSonarEZ::getReading()
-{
-    return getCurrentReading();
 }
 
 double LVMaxSonarEZ::convertReadingToDistance( int _reading )
 {
     switch ( currentMode ) {
     case deviceMode::Inches :
-        return _reading / SONIC_INCH_MODIFYER;
+        return _reading / SONIC_INCH_MODIFIER;
     case deviceMode::Cm :
-        return ( _reading / SONIC_INCH_MODIFYER ) * SONIC_CM_MODIFYER;
+        return ( _reading / SONIC_INCH_MODIFIER ) * SONIC_CM_MODIFIER;
     default:
-        return _reading / SONIC_INCH_MODIFYER;
+        return _reading / SONIC_INCH_MODIFIER;
     }
 }
 
@@ -136,7 +132,7 @@ int LVMaxSonarEZ::getStatus()
     return currentStatus;
 }
 
-double LVMaxSonarEZ::distance()
+double LVMaxSonarEZ::getDistance()
 {
     return convertReadingToDistance( reading );
 }
