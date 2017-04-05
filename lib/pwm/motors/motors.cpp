@@ -15,15 +15,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-    This class handles some of the low level operations required for controlling PWM motors.
-    It has been designed to be extended by a class that sets your specific motor type requirements.
-
-    @namespace abPWM
-    @author Michael Brookes
-
-*/
-
 #include "motors.h"
 
 using namespace quadro::pwm;
@@ -34,112 +25,110 @@ motors::motors(
 )
         :pwmDevice( _block, _pin )
 {
-    this->targetSpeed = this->getMinSpeed();
+    targetSpeed = getMinSpeed();
 };
 
-void motors::setTargetSpeed( long _targetSpeed ) throw( long )
+void motors::setTargetSpeed( long _targetSpeed )
 {
-    this->targetSpeed = _targetSpeed;
-    try {
-        if ( this->targetSpeed < this->getMaxSpeed())
-            throw ( this->getMaxSpeed());
-        else if ( this->targetSpeed > this->getMinSpeed())
-            throw ( this->getMinSpeed());
+    if( _targetSpeed < getMaxSpeed() ) {
+        targetSpeed = getMaxSpeed();
     }
-    catch ( long& e ) {
-        this->setTargetSpeed( e );
+    else if( _targetSpeed > getMinSpeed() ) {
+        targetSpeed = getMinSpeed();
+    }
+    else {
+        targetSpeed = _targetSpeed;
     }
 }
 
 void motors::increaseSpeed( unsigned short _speedMod )
 {
-    this->currentDuty -= _speedMod;
-    this->set( Duty, ( this->currentDuty ));
+    currentDuty -= _speedMod;
+    set( Duty, ( currentDuty ));
 }
 
 void motors::decreaseSpeed( unsigned short _speedMod )
 {
-    this->currentDuty += _speedMod;
-    this->set( Duty, ( this->currentDuty ));
+    currentDuty += _speedMod;
+    set( Duty, ( currentDuty ));
 }
 
 void motors::reversePolarity()
 {
-    this->currentPolarity = ( this->currentPolarity == polarity::Positive ) ? polarity::Negative
-                                                                            : polarity::Positive;
-    this->set( Polarity, this->currentPolarity );
+    currentPolarity = ( currentPolarity == polarity::Positive ) ? polarity::Negative
+                                                                : polarity::Positive;
+    set( Polarity, currentPolarity );
 }
 
 void motors::setStatus( status _status )
 {
-    this->Status = _status;
-    this->set( Run, ( this->Status != 3 ) ? _status : 0 );
+    Status = _status;
+    set( Run, ( Status != 3 ) ? _status : 0 );
 }
 
 void* motors::maintainTargetSpeed( void* _inst )
 {
-    motors* MotorInst = ( motors* ) _inst;
-    while ( MotorInst->currentRun == status::On ) {
-        if ( MotorInst->currentDuty > MotorInst->targetSpeed )
-            MotorInst->increaseSpeed();
+    motors* motorInst = ( motors* ) _inst;
+    while ( motorInst->currentRun == status::On ) {
+        if ( motorInst->currentDuty > motorInst->targetSpeed )
+            motorInst->increaseSpeed();
         else
-            MotorInst->decreaseSpeed();
+            motorInst->decreaseSpeed();
     }
-    MotorInst->Stop();
+    motorInst->stop();
 }
 
-void motors::Start()
+void motors::start()
 {
-    if ( this->Status == status::Off ) {
-        this->threadRet = pthread_create( &this->motorSpeedThread, NULL, motors::maintainTargetSpeed, this );
+    if ( Status == status::Off ) {
+        threadRet = pthread_create( &threadHandle, NULL, motors::maintainTargetSpeed, this );
 
-        if ( this->threadRet == 0 )
-            this->setStatus( status::On );
+        if ( threadRet == 0 )
+            setStatus( status::On );
         else {
-            this->setStatus( status::Error );
-            if ( this->threadRet == EAGAIN )
-                throw ( "Unable to create thread : Resource Limit Reached." );
+            setStatus( status::Error );
+            if ( threadRet == EAGAIN )
+                throw pwmSetupException( "Unable to create thread : Resource Limit Reached." );
             else
-                throw ( "Unable to create thread : Unknown Error Occurred." );
+                throw pwmSetupException( "Unable to create thread : Unknown Error Occurred." );
         }
     }
 }
 
-void motors::Stop()
+void motors::stop()
 {
-    cout << "Stopping motor" << endl;
-    if ( this->Status != status::Off ) {
-        this->setStatus( status::Off );
-        pthread_exit( &this->motorSpeedThread );
+    if ( Status != status::Off ) {
+        setStatus( status::Off );
+        pthread_exit( &threadHandle );
     }
 }
 
 long motors::getMaxSpeed()
 {
-    return this->maxSpeed;
+    return maxSpeed;
 }
 
 long motors::getMinSpeed()
 {
-    return this->minSpeed;
+    return minSpeed;
 }
 
 int motors::getSpeedStep()
 {
-    return this->speedStep;
+    return speedStep;
 }
 
 void motors::setMinSpeed( long _minSpeed )
 {
-    this->minSpeed = _minSpeed;
+    minSpeed = _minSpeed;
 }
 
 void motors::setMaxSpeed( long _maxSpeed )
 {
-    this->maxSpeed = _maxSpeed;
+    maxSpeed = _maxSpeed;
 }
 
 void motors::setSpeedStep( int _speedStep )
 {
-    this->speedStep = _speedStep;
+    speedStep = _speedStep;
 }
