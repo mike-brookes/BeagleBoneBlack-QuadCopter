@@ -17,12 +17,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef QUADRO_QUADRO_H
 #define QUADRO_QUADRO_H
-#define MOTOR_COUNT 4
 
-#include "lib/PWM/motors/dji_2212/dji_2212.h"
 #include "lib/exceptions/fatalException.h"
-#include "lib/Orientation/orientation.h"
-#include "lib/External/PID.h"
+#include "lib/orientation/orientation.h"
+#include "lib/aeronautics/aeronautics.h"
+
 #include <sstream>
 
 namespace quadro {
@@ -39,14 +38,6 @@ namespace quadro {
          * @params none
          */
         quadroCopter();
-
-        /**
-         * maintainTargets()
-         * Allows me to determine what targets should be met in each run.
-         * @param none
-         * @returns none
-         */
-        void maintainTargets();
 
         /**
          * setStartupTargets()
@@ -74,64 +65,19 @@ namespace quadro {
         } state;
 
         /**
-         * Four pointers for new DJI_2212 objects
-         */
-        pwm::dji_2212* motor[4];
-
-        /**
          * Pointer for a new orientation object
          */
         orientation* myOrientation;
 
         /**
-         * Pointer for a new PID (Proportional–Integral–Derivative) object for pitch values
+         * Pointer for a new aeronautics object
          */
-        PID* pitchPID;
+        aeronautics* myAeronautics;
 
         /**
-         * Pointer for a new PID (Proportional–Integral–Derivative) object for roll values
+         * Compare sensor data against targets and send data to Aeronautic library.
          */
-        PID* rollPID;
-
-    private:
-
-        /**
-         * maintainAltitude()
-         * Allow the quadcopter to analyse current altitude related sensor readings against target settings and adjust motors accordingly
-         * @param none
-         * @return none
-         * TODO: implement this method
-         */
-        void maintainAltitude();
-
-        /**
-         * maintainHeading()
-         * Allow the quadcopter to analyse current heading readings against target settings and adjust motors accordingly
-         * @param none
-         * @return none
-         * TODO: implement this method
-         */
-        void maintainHeading();
-
-        /**
-         * maintainRoll()
-         * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
-         * @param none
-         * @return none
-         * TODO: handle potential errors.
-         */
-        void maintainRoll();
-
-        /**
-         * maintainPitch()
-         * Allow the quadcopter to analyse current readings against target settings and adjust motors accordingly
-         * @param none
-         * @return none
-         * TODO: handle potential errors.
-         */
-        void maintainPitch();
-
-
+        void monitorSensorData();
     };
 
 }

@@ -44,14 +44,14 @@ int main()
         AeroBot = new quadroCopter;
     }
     catch( exceptions::fatalException& e ) {
+        //print the error and exit immediately, running exit here should cause everything to destruct properly.
         cout << "Fatal Exception With Message : " << e.what() << endl;
-        //exit immediately, running exit here will cause everything to destruct properly.
         exit( 1 );
     }
 
     /**
     * Program initialisation.
-    * From here, I loop for the lifetime of the program - the idea is to have this as stream lined as possible to allow for ease of adding new features later.
+    * From here, the program loops indefinitely - the idea is to have this as stream lined as possible to allow for ease of adding new features later.
     * This main thread simply reads current values and makes required changes to maintain set targets. i.e 0 degree pitch and roll to hover.
     */
     while ( 1 ) {
@@ -63,12 +63,12 @@ int main()
         /**
         * Make motor adjustments to ensure the quadCopter is maintaining it's target values.
         */
-        AeroBot->maintainTargets();
+        AeroBot->monitorSensorData();
         
         /**
         * Waste of resources to loop too fast, wait here until data is refreshed based on the data rate.
         */
-        while ( Timer::milliTimer() - startTime < ( DATA_RATE * 1000 )) {
+        while ( Timer::milliTimer() - startTime < ( AeroBot->myOrientation->DATA_RATE * 1000 )) {
             usleep( 100 );
         }
     }
