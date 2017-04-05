@@ -2,3 +2,4 @@
 .DS_Store
 CMakeLists.txt
 cmake-build-debug/
+/lib/docs/html/
