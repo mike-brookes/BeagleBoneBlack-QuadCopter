@@ -1,4 +1,4 @@
-/*
+/*!
 Copyright (C) 2017 Michael Brookes
 
 This program is free software: you can redistribute it and/or modify
@@ -21,40 +21,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdio>
 
 namespace quadro {
-    /*
-     /brief Interface class for all devices
+    /*!
+     * Interface class for all devices
      */
     class IDevice {
     public:
         virtual ~IDevice() { };
 
-        /*
-        /fn pure virtual openDevice
-        /brief All devices implementing this interface will require this functionality.
+        /*!
+        * pure virtual openDevice - All devices implementing this interface will require this functionality.
         */
         virtual void initDevice() = 0;
 
-        /*
-        /fn pure virtual openDevice
-        /brief All devices implementing this interface will require this functionality.
+        /*!
+        * pure virtual openDevice - All devices implementing this interface will require this functionality.
         */
         virtual int openDevice() = 0;
 
-        /*
-        /fn pure virtual writeToDevice
-        /brief All devices implementing this interface will require this functionality.
+        /*!
+        * pure virtual writeToDevice - All devices implementing this interface will require this functionality.
         */
         virtual int writeToDevice( size_t _BufferSize ) = 0;
 
-        /*
-        /fn pure virtual readDevice
-        /brief All devices implementing this interface will require this functionality.
+        /*!
+        * pure virtual readDevice - All devices implementing this interface will require this functionality.
         */
         virtual short readDevice( size_t _BufferSize ) = 0;
 
-        /*
-        /fn pure virtual connectToDevice
-        /brief All devices implementing this interface will require this functionality.
+        /*!
+        * pure virtual connectToDevice - All devices implementing this interface will require this functionality.
         */
         virtual int connectToDevice() = 0;
 
