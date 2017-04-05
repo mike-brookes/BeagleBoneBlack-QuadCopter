@@ -21,7 +21,7 @@ namespace quadro {
         class analogRuntimeException : public runtimeException {
         public:
             /**
-             * Public access point to throw AnalogSetupExceptions
+             * Public access point to throw Analog Runtime Exceptions
              * @param _errMsg
              */
             analogRuntimeException( string _errMsg ) { }
