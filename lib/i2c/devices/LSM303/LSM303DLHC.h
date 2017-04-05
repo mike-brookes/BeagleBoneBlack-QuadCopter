@@ -112,7 +112,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HIGHPASS_MODE_NORMAL                        0b10000000
 #define HIGHPASS_MODE_AUTO_RESET_ON_INTERRUPT       0b11000000
 /*
- \brief FDS = Filtered Data Selection
+ * FDS = Filtered Data Selection
  */
 #define HIGHPASS_FDS_INTERNAL_BYPASSED_ENABLED      0b00001000
 #define HIGHPASS_FDS_INTERNAL_BYPASSED_DISABLED     0b00000000
@@ -346,115 +346,312 @@ namespace quadro {
     namespace i2c {
 
         /**
-         \brief LSM303DLHC : Base class that provides control of the BBBLSM303DLHC, inherits I2C methods.
-         \version   2.3
-         \date      Oct-2015
-         \copyright GNU Public License.
+         * LSM303DLHC : Base class that provides control of the LSM303DLHC, inherits I2C methods.
          */
         class LSM303DLHC : public i2cDevice {
 
         public:
 
             /**
-             \brief BBBLSM303DLHC : A class that provides control of the BBBLSM303DLHC's accelerometer, magnetometer, temp and gyro.
+             * LSM303DLHC : A class that provides control of the LSM303DLHC's accelerometer, magnetometer, temp and gyro.
              */
             LSM303DLHC();
 
+            /**
+             * Runs the stopRecording method and attempts to cancel threads.
+             */
+            ~LSM303DLHC();
+
+            /**
+             * Loads default settings suitable for flight on the LSM303DLHC.
+             */
             void loadRecommendedFlightSettings();
 
-            uint8_t getPowerSettings() { return this->powerSettings; }
+            /**
+             * Returns the current binary value used on the power settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor settings for power
+             */
+            uint8_t getPowerSettings() { return powerSettings; }
 
-            uint8_t getHighPassSettings() { return this->highPassSettings; }
+            /**
+             * Returns the current binary value used on the high pass settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor settings for high pass
+             */
+            uint8_t getHighPassSettings() { return highPassSettings; }
 
-            uint8_t getInt1Settings() { return this->int1Settings; }
+            /**
+             * Returns the current binary value used on the interrupt 1 settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor settings for interrupt 1
+             */
+            uint8_t getInt1Settings() { return int1Settings; }
 
-            uint8_t getDataSettings() { return this->dataSettings; }
+            /**
+             * Returns the current binary value used on the data rate settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor settings for the date rate
+             */
+            uint8_t getDataSettings() { return dataSettings; }
 
-            uint8_t getMemorySettings() { return this->memorySettings; }
+            /**
+             * Returns the current binary value used on the memory settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor settings for memory
+             */
+            uint8_t getMemorySettings() { return memorySettings; }
 
-            uint8_t getInterruptSettings() { return this->interruptSettings; }
+            /**
+             * Returns the current binary value used on the interrupt settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor settings for interrupt events
+             */
+            uint8_t getInterruptSettings() { return interruptSettings; }
 
-            uint8_t getFIFOSettings() { return this->FIFOSettings; }
+            /**
+             * Returns the current binary value used on the FirstIn FirstOut settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor settings for FIFO
+             */
+            uint8_t getFIFOSettings() { return FIFOSettings; }
 
-            uint8_t getInterrupt1CFGSettings() { return this->interrupt1CFGSettings; }
+            /**
+             * Returns the current binary value used on the interrupt 1 CFG settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor setting for interrupt 1 CFG settings
+             */
+            uint8_t getInterrupt1CFGSettings() { return interrupt1CFGSettings; }
 
-            uint8_t getInterrupt2CFGSettings() { return this->interrupt2CFGSettings; }
+            /**
+             * Returns the current binary value used on the interrupt 2 CFG settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor setting for interrupt 2 CFG settings
+             */
+            uint8_t getInterrupt2CFGSettings() { return interrupt2CFGSettings; }
 
-            uint8_t getClickCFGSettings() { return this->clickCFGSettings; }
+            /**
+             * Returns the current binary value used on the click CFG settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor setting for click CFG settings
+             */
+            uint8_t getClickCFGSettings() { return clickCFGSettings; }
 
-            uint8_t getClickSRCSettings() { return this->clickSRCSettings; }
+            /**
+             * Returns the current binary value used on the click SRC settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor setting for click SRC settings
+             */
+            uint8_t getClickSRCSettings() { return clickSRCSettings; }
 
-            uint8_t getCRARegMSettings() { return this->CRARegMSettings; }
+            /**
+             * Returns the current binary value used on the CRARegM settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor setting for CRARegM settings
+             */
+            uint8_t getCRARegMSettings() { return CRARegMSettings; }
 
-            uint8_t getMRRegMSettings() { return this->MRRegMSettings; }
+            /**
+             * Returns the current binary value used on the MRRegM settings.
+             *
+             * @see LSM303 Data sheet ( lib/docs/LSM303DLHC.PDF )
+             * @return uint8_t Current sensor setting for MRRegM settings
+             */
+            uint8_t getMRRegMSettings() { return MRRegMSettings; }
 
-            void init();
+            /**
+             * startSensorThread() - Allows the independent control to start the thread that updates the raw sensor readings.
+             * @param none
+             * @throws i2cSetupException
+             * @returns int deviceStatus : 1 = on, 0 = off or 2 = error
+             */
+            void startSensorThread();
 
-            short x, y, z;
+            short x; //!< @var x X Reading from the sensor, either Magnetometer or Accelerometer depending on the device type.
+            short y; //!< @var y Y Reading from the sensor, either Magnetometer or Accelerometer depending on the device type.
+            short z; //!< @var z Z Reading from the sensor, either Magnetometer or Accelerometer depending on the device type.
 
-            unsigned int dataTimer;
+            unsigned int dataTimer; //!< set from the devices data rate settings
 
         protected:
 
-            void setDeviceAddress( unsigned char _deviceAddress ) { this->deviceAddress = _deviceAddress; }
+            /**
+             * Sets the I2C device address, pass as hex value
+             *
+             * @param _deviceAddress
+             */
+            void setDeviceAddress( unsigned char _deviceAddress ) { deviceAddress = _deviceAddress; }
 
-            void setBusId( int _busId ) { this->busId = _busId; }
+            /**
+             * Set the I2C Bus ID
+             *
+             * @param _busId
+             */
+            void setBusId( int _busId ) { busId = _busId; }
 
         private:
 
+            /**
+             * This method writes the setting to the device
+             *
+             * @param registerAddress
+             * @param registerValue
+             * @return
+             */
             uint8_t commitSetting( uint8_t registerAddress, uint8_t registerValue );
 
-            uint8_t powerSettings;
-            uint8_t highPassSettings;
-            uint8_t int1Settings;
-            uint8_t dataSettings;
-            uint8_t memorySettings;
-            uint8_t interruptSettings;
-            uint8_t FIFOSettings;
-            uint8_t interrupt1CFGSettings;
-            uint8_t interrupt2CFGSettings;
-            uint8_t clickCFGSettings;
-            uint8_t clickSRCSettings;
-            uint8_t CRARegMSettings;
-            uint8_t MRRegMSettings;
+            uint8_t powerSettings; //!< @var stores the current powerSettings
 
+            uint8_t highPassSettings; //!< @var stores the current highPassSettings
+            uint8_t int1Settings; //!< @var stores the current int1Settings
+            uint8_t dataSettings; //!< @var stores the current dataSettings
+            uint8_t memorySettings; //!< @var stores the current memorySettings
+            uint8_t interruptSettings; //!< @var stores the current interruptSettings
+            uint8_t FIFOSettings; //!< @var stores the current FIFOSettings
+            uint8_t interrupt1CFGSettings; //!< @var stores the current interrupt1CFGSettings
+            uint8_t interrupt2CFGSettings; //!< @var stores the current interrupt2CFGSettings
+            uint8_t clickCFGSettings; //!< @var stores the current clickCFGSettings
+            uint8_t clickSRCSettings; //!< @var stores the current clickSRCSettings
+            uint8_t CRARegMSettings; //!< @var stores the current CRARegMSettings
+            uint8_t MRRegMSettings; //!< @var stores the current MRRegMSettings
+            /**
+             * Start a thread to record the accelerometers X, Y and Z values, loop timing is set by the device data rate.
+             *
+             * @param _LSM303
+             * @return 0
+             */
             static void* recordAccelerometerValues( void* _LSM303 );
 
+            /**
+             * Start a thread to record the magnetometers X, Y and Z values, loop timing is set by the device data rate.
+             *
+             * @param _LSM303
+             * @return 0
+             */
             static void* recordMagnetometerValues( void* _LSM303 );
 
+            /**
+             * Accelerometer uses Output Data Rate to set speed of data, this method synchronises the thread loop with the speed of the data.
+             */
             void setAccelerometerTimerBasedOnODR();
 
+            /**
+             * Magnetometer uses Data Output to set speed of data, this method synchronises the thread loop with the speed of the data.
+             */
             void setMagnetometerTimerBasedOnDO();
 
+            /**
+             * Depending on the device type selected i.e Accelerometer, this method starts the thread that updates the raw sensor readings.
+             */
             void startRecording();
 
+            /**
+             * Depending on the device type selected i.e Accelerometer, this method stops the thread that updates the raw sensor readings.
+             */
+            void stopRecording();
+
+            /**
+             * This method uses the applicable data rate to set the timer.
+             */
             void setDataTimer();
 
+            /**
+             * This simple getter function returns the raw X reading for the device type selected.
+             * Private because the raw data shouldn't be used except by a class extending this class and doing the math equation to convert it into something usable.
+             *
+             * @return short Raw X sensor reading.
+             */
             short getX();
 
+            /**
+             * This simple getter function returns the raw Y reading for the device type selected.
+             * Private because the raw data shouldn't be used except by a class extending this class and doing the math equation to convert it into something usable.
+             *
+             * @return short Raw Y sensor reading.
+             */
             short getY();
 
+            /**
+             * This simple getter function returns the raw Z reading for the device type selected.
+             * Private because the raw data shouldn't be used except by a class extending this class and doing the math equation to convert it into something usable.
+             *
+             * @return short Raw Z sensor reading.
+             */
             short getZ();
 
+            /**
+             * Set the raw X value
+             */
             void setX();
 
+            /**
+             * Set the raw Y value
+             */
             void setY();
 
+            /**
+             * Set the raw Z value
+             */
             void setZ();
 
+            /**
+             * Returns the magnetometerIsEnabled value.
+             *
+             * @return uint8_t Value of the register for whether the Magnetometer is active or not.
+             */
             uint8_t magnetometerIsEnabled();
 
+            /**
+             * Returns the Accelerometers OutputDataRate value.
+             *
+             * @return uint8_t Value from the register for OutputDataRate.
+             */
             uint8_t getOutputDataRate();
 
+
+            /**
+             * Returns the Magnetometers DataOutputRate value.
+             *
+             * @return uint8_t Value from the register for DataOutputRate.
+             */
             uint8_t getDataOutputRate();
 
+            /**
+             * Returns the XAxisIsEnabled value, this value is device type dependant
+             *
+             * @return bool simple yes or no will do.
+             */
             bool XAxisIsEnabled();
 
+            /**
+             * Returns the YAxisIsEnabled value, this value is device type dependant
+             *
+             * @return bool simple yes or no will do.
+             */
             bool YAxisIsEnabled();
 
+            /**
+             * Returns the ZAxisIsEnabled value, this value is device type dependant
+             *
+             * @return bool simple yes or no will do.
+             */
             bool ZAxisIsEnabled();
 
-            pthread_t LSM303AccelThread, LSM303MagThread;
+            pthread_t LSM303AccelThread, LSM303MagThread; //!< @var Thread handles
+
+            int threadRet; //!< @var Thread return value
 
         };
 

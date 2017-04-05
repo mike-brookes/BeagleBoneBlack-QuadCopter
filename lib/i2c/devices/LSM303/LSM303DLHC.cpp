@@ -21,9 +21,9 @@ using namespace quadro::i2c;
 
 void LSM303DLHC::loadRecommendedFlightSettings()
 {
-    if ( this->deviceAddress == ACCEL_ADDRESS ) {
-        this->powerSettings =
-                this->commitSetting(
+    if ( deviceAddress == ACCEL_ADDRESS ) {
+        powerSettings =
+                commitSetting(
                         CTRL_REG1_A,
                         SET_CTRL_REG1_A(
                                 ODR_1344KHZ,
@@ -34,8 +34,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->highPassSettings =
-                this->commitSetting(
+        highPassSettings =
+                commitSetting(
                         CTRL_REG2_A,
                         SET_CTRL_REG2_A (
                                 HIGHPASS_MODE_NORMAL_WITH_RESET,
@@ -46,8 +46,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->int1Settings =
-                this->commitSetting(
+        int1Settings =
+                commitSetting(
                         CTRL_REG3_A,
                         SET_CTRL_REG3_A(
                                 CLICK_INTERRUPT_ON_INT1_DISABLED,
@@ -60,8 +60,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->dataSettings =
-                this->commitSetting(
+        dataSettings =
+                commitSetting(
                         CTRL_REG4_A,
                         SET_CTRL_REG4_A(
                                 BDU_UPDATE_REGISTERS_CONTINUOUSLY,
@@ -72,8 +72,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->memorySettings =
-                this->commitSetting(
+        memorySettings =
+                commitSetting(
                         CTRL_REG5_A,
                         SET_CTRL_REG5_A(
                                 BOOT_REBOOT_MEM_CONTENT_DISABLED,
@@ -84,8 +84,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                                 D4D_INT2_4D_DISABLED
                         )
                 );
-        this->interruptSettings =
-                this->commitSetting(
+        interruptSettings =
+                commitSetting(
                         CTRL_REG6_A,
                         SET_CTRL6_REG_A(
                                 I2_CLICK_INTERRUPT_ON_PAD2_DISABLED,
@@ -97,8 +97,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->FIFOSettings =
-                this->commitSetting(
+        FIFOSettings =
+                commitSetting(
                         FIFO_CTRL_REG_A,
                         SET_FIFO_CTRL_REG_A(
                                 FM_BYPASS_MODE,
@@ -106,8 +106,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->interrupt1CFGSettings =
-                this->commitSetting(
+        interrupt1CFGSettings =
+                commitSetting(
                         INT1_CFG_A,
                         SET_INT1_CFG_A(
                                 AOI_OR_COMBINATION,
@@ -120,8 +120,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->interrupt2CFGSettings =
-                this->commitSetting(
+        interrupt2CFGSettings =
+                commitSetting(
                         INT2_CFG_A,
                         SET_INT2_CFG_A(
                                 AOI_OR_COMBINATION,
@@ -134,8 +134,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->clickCFGSettings =
-                this->commitSetting(
+        clickCFGSettings =
+                commitSetting(
                         CLICK_CFG_A,
                         SET_CLICK_CFG_A(
                                 ZD_DOUBLECLICK_ON_Z_AXIS_DISABLED,
@@ -147,8 +147,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->clickSRCSettings =
-                this->commitSetting(
+        clickSRCSettings =
+                commitSetting(
                         CLICK_SRC_A,
                         SET_CLICK_SRC_A(
                                 DCLICK_DOUBLE_CLICK_DETECTION_DISABLED,
@@ -157,10 +157,10 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
     }
-    else if ( this->deviceAddress == MAG_ADDRESS ) {
+    else if ( deviceAddress == MAG_ADDRESS ) {
 
-        this->CRARegMSettings =
-                this->commitSetting(
+        CRARegMSettings =
+                commitSetting(
                         CRA_REG_M,
                         SET_CRA_REG_M(
                                 TEMP_ENABLED,
@@ -168,8 +168,8 @@ void LSM303DLHC::loadRecommendedFlightSettings()
                         )
                 );
 
-        this->MRRegMSettings =
-                this->commitSetting(
+        MRRegMSettings =
+                commitSetting(
                         MR_REG_M,
                         SET_MR_REG_M(
                                 MD_CONTINUOUS_CONVERSION_MODE
@@ -184,141 +184,148 @@ LSM303DLHC::LSM303DLHC()
 
 }
 
-void LSM303DLHC::init()
+LSM303DLHC::~LSM303DLHC()
 {
-    if ( this->deviceAddress == ACCEL_ADDRESS )
-        this->getOutputDataRate();
-    else if ( this->deviceAddress == MAG_ADDRESS )
-        this->getDataOutputRate();
+    stopRecording();
+}
 
-    this->setDataTimer();
-    this->startRecording();
+void LSM303DLHC::startSensorThread()
+{
+    if ( deviceAddress == ACCEL_ADDRESS ) {
+        getOutputDataRate();
+    }
+    else if ( deviceAddress == MAG_ADDRESS ) {
+        getDataOutputRate();
+    }
+
+    setDataTimer();
+    startRecording();
 }
 
 uint8_t LSM303DLHC::commitSetting( uint8_t registerAddress, uint8_t registerValue )
 {
-    this->setRegisterAddress( registerAddress );
-    this->setRegisterValue( registerValue );
-    this->writeToDevice( 2 );
+    setRegisterAddress( registerAddress );
+    setRegisterValue( registerValue );
+    writeToDevice( 2 );
     return registerValue;
 }
 
 short LSM303DLHC::getX()
 {
-    return ( this->getValueFromRegister(
-            ( unsigned char ) (( this->deviceAddress == ACCEL_ADDRESS ) ? OUT_X_H_A : OUT_X_H_M )) << 8 ) |
-            this->getValueFromRegister(
-                    ( unsigned char ) (( this->deviceAddress == ACCEL_ADDRESS ) ? OUT_X_L_A : OUT_X_L_M ));
+    return ( getValueFromRegister(
+            ( unsigned char ) (( deviceAddress == ACCEL_ADDRESS ) ? OUT_X_H_A : OUT_X_H_M )) << 8 ) |
+            getValueFromRegister(
+                    ( unsigned char ) (( deviceAddress == ACCEL_ADDRESS ) ? OUT_X_L_A : OUT_X_L_M ));
 }
 
 short LSM303DLHC::getY()
 {
-    return ( this->getValueFromRegister(
-            ( unsigned char ) (( this->deviceAddress == ACCEL_ADDRESS ) ? OUT_Y_H_A : OUT_Y_H_M )) << 8 ) |
-            this->getValueFromRegister(
-                    ( unsigned char ) (( this->deviceAddress == ACCEL_ADDRESS ) ? OUT_Y_L_A : OUT_Y_L_M ));
+    return ( getValueFromRegister(
+            ( unsigned char ) (( deviceAddress == ACCEL_ADDRESS ) ? OUT_Y_H_A : OUT_Y_H_M )) << 8 ) |
+            getValueFromRegister(
+                    ( unsigned char ) (( deviceAddress == ACCEL_ADDRESS ) ? OUT_Y_L_A : OUT_Y_L_M ));
 }
 
 short LSM303DLHC::getZ()
 {
-    return ( this->getValueFromRegister(
-            ( unsigned char ) (( this->deviceAddress == ACCEL_ADDRESS ) ? OUT_Z_H_A : OUT_Z_H_M )) << 8 ) |
-            this->getValueFromRegister(
-                    ( unsigned char ) (( this->deviceAddress == ACCEL_ADDRESS ) ? OUT_Z_L_A : OUT_Z_L_M ));
+    return ( getValueFromRegister(
+            ( unsigned char ) (( deviceAddress == ACCEL_ADDRESS ) ? OUT_Z_H_A : OUT_Z_H_M )) << 8 ) |
+            getValueFromRegister(
+                    ( unsigned char ) (( deviceAddress == ACCEL_ADDRESS ) ? OUT_Z_L_A : OUT_Z_L_M ));
 
 }
 
-void LSM303DLHC::setX() { this->x = getX(); }
+void LSM303DLHC::setX() { x = getX(); }
 
-void LSM303DLHC::setY() { this->y = getY(); }
+void LSM303DLHC::setY() { y = getY(); }
 
-void LSM303DLHC::setZ() { this->z = getZ(); }
+void LSM303DLHC::setZ() { z = getZ(); }
 
 //bits required `0000`0000 >> 4 = 0000`0000` & 15 (00001111) = val of the 4 bits
-uint8_t LSM303DLHC::getOutputDataRate() { return uint8_t(( this->getPowerSettings() >> 4 ) & 15 ); }
+uint8_t LSM303DLHC::getOutputDataRate() { return uint8_t(( getPowerSettings() >> 4 ) & 15 ); }
 
 //bits required 0000000`0` & 1 (00000001) = val of the 1 bit
-bool LSM303DLHC::XAxisIsEnabled() { return uint8_t( this->getPowerSettings() & 1 ); }
+bool LSM303DLHC::XAxisIsEnabled() { return uint8_t( getPowerSettings() & 1 ); }
 
 //bits required 000000`0`0 >> 1 = 0000000`0` & 1 (00000001) = val of the 1 bit
-bool LSM303DLHC::YAxisIsEnabled() { return uint8_t(( this->getPowerSettings() >> 1 ) & 1 ); }
+bool LSM303DLHC::YAxisIsEnabled() { return uint8_t(( getPowerSettings() >> 1 ) & 1 ); }
 
 //bits required 00000`0`00 >> 2 = 0000000`0` & 1 (00000001) = val of the 1 bit
-bool LSM303DLHC::ZAxisIsEnabled() { return uint8_t(( this->getPowerSettings() >> 2 ) & 1 ); }
+bool LSM303DLHC::ZAxisIsEnabled() { return uint8_t(( getPowerSettings() >> 2 ) & 1 ); }
 
 //bits required 000`000`00 >> 2 = 00000`000` & 7 (00000111) = val of the 3 bits
-uint8_t LSM303DLHC::getDataOutputRate() { return uint8_t(( this->getCRARegMSettings() >> 2 ) & 7 ); }
+uint8_t LSM303DLHC::getDataOutputRate() { return uint8_t(( getCRARegMSettings() >> 2 ) & 7 ); }
 
 //bits required 000000`00` & 3 (00000011) = val of the 2 bits
-uint8_t LSM303DLHC::magnetometerIsEnabled() { return uint8_t(( this->getMRRegMSettings()) & 3 ); }
+uint8_t LSM303DLHC::magnetometerIsEnabled() { return uint8_t(( getMRRegMSettings()) & 3 ); }
 
 void LSM303DLHC::setDataTimer()
 {
-    ( this->deviceAddress == ACCEL_ADDRESS ) ? this->setAccelerometerTimerBasedOnODR()
-                                             : setMagnetometerTimerBasedOnDO();
+    ( deviceAddress == ACCEL_ADDRESS ) ? setAccelerometerTimerBasedOnODR()
+                                       : setMagnetometerTimerBasedOnDO();
 }
 
 void LSM303DLHC::setAccelerometerTimerBasedOnODR()
 { //ODR = Output Data Rate
-    switch ( this->getOutputDataRate() << 4 ) {
+    switch ( getOutputDataRate() << 4 ) {
     case ODR_10HZ    :
-        this->dataTimer = 1000000 / 10;
+        dataTimer = 1000000 / 10;
         break; //1Hz = 1000000 Micro Seconds
     case ODR_25HZ    :
-        this->dataTimer = 1000000 / 25;
+        dataTimer = 1000000 / 25;
         break;
     case ODR_50HZ    :
-        this->dataTimer = 1000000 / 50;
+        dataTimer = 1000000 / 50;
         break;
     case ODR_100HZ   :
-        this->dataTimer = 1000000 / 100;
+        dataTimer = 1000000 / 100;
         break;
     case ODR_200HZ   :
-        this->dataTimer = 1000000 / 200;
+        dataTimer = 1000000 / 200;
         break;
     case ODR_400HZ   :
-        this->dataTimer = 1000000 / 400;
+        dataTimer = 1000000 / 400;
         break;
     case ODR_1344KHZ :
-        this->dataTimer = 800;
+        dataTimer = 800;
         break;
     case POWER_OFF   :
-        this->dataTimer = 0;
+        dataTimer = 0;
         break;
     default :
-        this->dataTimer = 1000000;
+        dataTimer = 1000000;
     }
 }
 
 void LSM303DLHC::setMagnetometerTimerBasedOnDO()
 { //DO = Data Output
-    switch ( this->getDataOutputRate() << 2 ) {
+    switch ( getDataOutputRate() << 2 ) {
     case DO2_0_75Hz :
-        this->dataTimer = 1333333;
+        dataTimer = 1333333;
         break; //1.5Hz = 1333333 Micro Seconds
     case DO2_1_5Hz  :
-        this->dataTimer = ( unsigned int ) ( 1000000 / 1.5 );
+        dataTimer = ( unsigned int ) ( 1000000 / 1.5 );
         break;
     case DO2_3_0Hz  :
-        this->dataTimer = 1000000 / 3;
+        dataTimer = 1000000 / 3;
         break;
     case DO2_7_5Hz  :
-        this->dataTimer = ( unsigned int ) ( 1000000 / 7.5 );
+        dataTimer = ( unsigned int ) ( 1000000 / 7.5 );
         break;
     case DO2_15Hz   :
-        this->dataTimer = 1000000 / 15;
+        dataTimer = 1000000 / 15;
         break;
     case DO2_30Hz   :
-        this->dataTimer = 1000000 / 30;
+        dataTimer = 1000000 / 30;
         break;
     case DO2_75Hz   :
-        this->dataTimer = 1000000 / 75;
+        dataTimer = 1000000 / 75;
         break;
     case DO2_220Hz  :
-        this->dataTimer = 1000000 / 220;
+        dataTimer = 1000000 / 220;
         break;
     default :
-        this->dataTimer = 1333333;
+        dataTimer = 1333333;
     }
 }
 
@@ -337,7 +344,7 @@ void* LSM303DLHC::recordAccelerometerValues( void* _LSM303 )
 void* LSM303DLHC::recordMagnetometerValues( void* _LSM303 )
 {
     LSM303DLHC* LSM303 = ( LSM303DLHC* ) _LSM303;
-    while ( LSM303->magnetometerIsEnabled() == 0 ) { //"1 = Singe Conversion Mode", "Sleep Mode" with values of 2 or 3
+    while ( LSM303->magnetometerIsEnabled() == 0 ) { //0 = continuous mode, 1 = "Singe Conversion Mode", "Sleep Mode" with values of 2 or 3
         LSM303->setX();
         LSM303->setY();
         LSM303->setZ();
@@ -348,8 +355,77 @@ void* LSM303DLHC::recordMagnetometerValues( void* _LSM303 )
 
 void LSM303DLHC::startRecording()
 {
-    if ( this->deviceAddress == ACCEL_ADDRESS )
-        pthread_create( &this->LSM303AccelThread, NULL, LSM303DLHC::recordAccelerometerValues, this );
-    else
-        pthread_create( &this->LSM303MagThread, NULL, LSM303DLHC::recordMagnetometerValues, this );
+    if ( deviceAddress == ACCEL_ADDRESS ) {
+        threadRet = pthread_create( &LSM303AccelThread, NULL, LSM303DLHC::recordAccelerometerValues, this );
+        if ( threadRet == EAGAIN ) {
+            //Failed because of resource unavailability, try once more and then throw an exception on failure
+            threadRet = pthread_create( &LSM303AccelThread, NULL, LSM303DLHC::recordAccelerometerValues, this );
+            if ( threadRet != 0 ) {
+                throw new i2cSetupException(
+                        "(LVMaxSonarEZ) " + i2c::THREAD_FATAL + " : errorNumber = "
+                                + to_string( threadRet ));
+            }
+        }
+    }
+    else {
+        threadRet = pthread_create( &LSM303MagThread, NULL, LSM303DLHC::recordMagnetometerValues, this );
+        if ( threadRet == EAGAIN ) {
+            //Failed because of resource unavailability, try once more and then throw an exception on failure
+            threadRet = pthread_create( &LSM303MagThread, NULL, LSM303DLHC::recordMagnetometerValues, this );
+            if ( threadRet != 0 ) {
+                throw new i2cSetupException(
+                        "(LVMaxSonarEZ) " + i2c::THREAD_FATAL + " : errorNumber = "
+                                + to_string( threadRet ) );
+            }
+        }
+    }
+
+    //Thread returned 0 (Success Code)
+    if ( threadRet != 0 ) {
+        //The sonic sensor thread failed, throw an appropriate exception.
+        if ( threadRet == EPERM ) {
+            //Thread creation failed because of invalid permissions on the system to create threads.
+            throw new i2cSetupException(
+                    "(LVMaxSonarEZ) " + i2c::THREAD_PERMISSIONS + " : errorNumber = " + to_string( threadRet ) );
+        }
+        else if ( threadRet == EINVAL ) {
+            //Thread creation failed because the argument used is invalid.
+            throw new i2cSetupException(
+                    "(LVMaxSonarEZ) " + i2c::THREAD_INVALID_ARG + " : errorNumber = " + to_string( threadRet ) );
+        }
+        else {
+            //An unknown error occurred - unknown error code.
+            throw new i2cSetupException(
+                    "(LVMaxSonarEZ) " + i2c::THREAD_UNKNOWN + " : errorNumber = " + to_string( threadRet ) );
+        }
+    }
+}
+
+void LSM303DLHC::stopRecording()
+{
+    if ( deviceAddress == ACCEL_ADDRESS ) {
+        powerSettings =
+                commitSetting(
+                        CTRL_REG1_A,
+                        SET_CTRL_REG1_A(
+                                POWER_OFF,
+                                LP_LOW_POWER_DISABLED,
+                                Z_AXIS_DISABLED,
+                                Y_AXIS_DISABLED,
+                                X_AXIS_DISABLED
+                        )
+                );
+        setDataTimer();
+        stop( LSM303AccelThread );
+    }
+    else {
+        MRRegMSettings =
+                commitSetting(
+                        MR_REG_M,
+                        SET_MR_REG_M(
+                                MD_SLEEP_MODE_1
+                        )
+                );
+        stop( LSM303MagThread );
+    }
 }
