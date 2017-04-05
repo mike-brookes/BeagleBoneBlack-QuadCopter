@@ -1,10 +1,19 @@
-//
-//  L3GD20H.h
-//  L3GD20H
-//
-//  Created by Michael Brookes on 14/11/2015.
-//  Copyright © 2015 Michael Brookes. All rights reserved.
-//
+/*
+Copyright (C) 2017 Michael Brookes
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef SRC_H_L3GD20H_H_
 #define SRC_H_L3GD20H_H_
@@ -19,7 +28,7 @@
 
 using namespace std;
 
-//From Table 17. of the L3GD20H Data sheet ( http://www.adafruit.com/datasheets/L3GD20H.pdf )
+//From Table 17. of the L3GD20H Data sheet ( /lib/docs/L3GD20H.pdf )
 #define GYRO_ADDRESS    0x6B
 #define CTRL1           0x20
 #define OUT_X_L         0x28
@@ -32,34 +41,45 @@ using namespace std;
 #define DT              0.02
 #define AA              0.97
 
-/**
- \brief L3GD20H : A class that provides control of the L3GD20H which contains : gyroscope.
- \author    Michael Brookes
- \version   1.0
- \date      Nov-2015
- \copyright GNU Public License.
- */
-
 namespace quadro {
 
     namespace i2c {
 
+        /**
+         * L3GD20H : A class that provides control of the L3GD20H which contains : gyroscope.
+         */
         class L3GD20H : public i2cDevice {
 
         public:
 
+            /*!
+             * L3GD20H Constructor, initialises the device - writes default settings to the sensor
+             *
+             * @see start() to start reading the device and updating X, Y and Z values.
+             * @param _deviceAddress
+             * @param _busId
+             */
+            L3GD20H( unsigned char _deviceAddress = GYRO_ADDRESS, int _busId = 1 );
+
             /**
-             \brief Please refer to the documention provided for your L3GD20H for further details (CTRL1 pg 36 point 7.2)
+             * start() - Allows the independent control to start the thread that updates the Accelerometer readings.
+             *
+             * @param none
+             * @throws i2cSetupException
+             * @returns int deviceStatus : 1 = on, 0 = off or 2 = error
+             */
+            int start();
+
+            /**
+             * Please refer to the documentation provided for your L3GD20H for further details (CTRL1 pg 36 point 7.2)
              */
             enum _switch {
                 ON = 0x7F,        //!< 0x7F 200 Hz Data Rate, Power On and X, Y, Z enabled
                 OFF = 0x00        //!< 0x00 Off
             };
 
-            void start();
-
             /**
-             \brief Creates the template for vector, used by the gyroscope.
+             *Creates the template for vector, used by the gyroscope.
              */
             template<typename T>
             struct vector {
@@ -69,27 +89,66 @@ namespace quadro {
             vector<int> rad; //!< Gyroscope Radian vector (X, Y, Z)
             vector<float> angle; //!< Gyroscope Angle Vector (X, Y, Z)
 
-            L3GD20H( unsigned char _deviceAddress = GYRO_ADDRESS, int _busId = 1 );
+            pthread_t threadHandle;//!< @var Thread Handle
 
         protected:
 
+            /**
+             * Sets the devices I2C device address - to satisfy the interface
+             *
+             * @param _deviceAddress
+             */
             void setDeviceAddress( unsigned char _deviceAddress ) { this->deviceAddress = _deviceAddress; }
 
+            /**
+             * Sets the devices I2C Bus Id - to satisfy the interface
+             *
+             * @param _busId
+             */
             void setBusId( int _busId ) { this->busId = _busId; }
 
-            _switch gyroSwitch;                    //!< enum value for the Gyroscope power status.
+            _switch gyroSwitch; //!< enum value for the Gyroscope power status.
 
+            /**
+             * Set the power status on the Gyroscope
+             *
+             * @param gyroSwitch
+             * @return int
+             */
             int setPower( _switch gyroSwitch );
 
-            void setX( void );
+            /**
+             * Calculate the Gyro X angular rate of change using the equation :
+             * X = SensorRawValue * 0.00875 * 0.02
+             * sets the angle vector x value.
+             */
+            void calcX( void );
 
-            void setY( void );
+            /**
+             * Calculate the Gyro Y angular rate of change using the equation :
+             * Y = SensorRawValue * 0.00875 * 0.02
+             * sets the angle vector y value.
+             */
+            void calcY( void );
 
-            void setZ( void );
+            /**
+             * Calculate the Gyro Z angular rate of change using the equation :
+             * Z = SensorRawValue * 0.00875 * 0.02
+             * sets the angle vector z value.
+             */
+            void calcZ( void );
 
-            static void* getValues( void* gyroInst );
+            /*!
+             * runMainSensorUpdateThread starts a continuous thread updating the programs values from the sensors values.
+             *
+             * @see start() to start this thread running
+             * @see stop() to stop this thread running
+             * @param static_inst
+             * @return 0
+             */
+            static void* runMainSensorUpdateThread( void* static_inst );
 
-            pthread_t gyroNotifyer;
+            int threadRet; //!< @var thread return value
 
         };
 
