@@ -65,6 +65,5 @@ before_install:
   - sudo apt-get install -y libc6 libc6:${ARCH};
   - sudo apt-get install -y libc6-dev:${ARCH};
   - sudo apt-get install -y libatk1.0-0:${ARCH};
-  - sudo apt-get install -y libgtk2.0-0:${ARCH};
   - sudo apt-get install -y libx11-dev:${ARCH};
   - sudo apt-get install -y libxkbfile-dev:${ARCH};
