@@ -4,7 +4,7 @@
 #define _PID_SOURCE_
 
 #include <iostream>
-#include "pid.h"
+#include "PID.h"
 
 using namespace std;
 
