@@ -34,10 +34,6 @@ before_install:
   - echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
   - sudo dpkg --add-architecture ${ARCH};
   - sudo apt-get update -yq;
-  - sudo apt-get install -y libwww-perl;
-  - sudo apt-get install -y libexpat1;
-  - sudo apt-get install -y libxml-libxml-perl;
-  - sudo apt-get install -y libxml-sax-expat-perl;
   - sudo apt-get install -y gcc-${GNU_TRIPLET};
   - sudo apt-get install -y g++-${GNU_TRIPLET};
   - sudo apt-get install -y pkg-config-${GNU_TRIPLET};
@@ -45,28 +41,9 @@ before_install:
   - sudo apt-get install -y g++-multilib-${GNU_MULTILIB_TRIPLET};
   - sudo apt-get install -y gcc-multilib-${GNU_MULTILIB_TRIPLET};
   - sudo apt-get install -y dpkg-dev;
-  - sudo apt-get install -y perl;
-  - sudo apt-get install -y libconfig-inifiles-perl;
-  - sudo apt-get install -y libxml-simple-perl;
-  - sudo apt-get install -y liblocale-gettext-perl;
   - sudo apt-get install -y libgcc1;
   - sudo apt-get install -y libgcc1:${ARCH};
-  - sudo apt-get install -y libdpkg-perl;
-  - sudo apt-get install -y libconfig-auto-perl;
-  - sudo apt-get install -y libdebian-dpkgcross-perl;
-  - sudo apt-get install -y ucf;
   - sudo apt-get install -y dpkg-cross;
-  - sudo apt-get install -y libdbus-1-3:${ARCH};
-  - sudo apt-get install -y libffi6:${ARCH};
-  - sudo apt-get install -y libpcre3:${ARCH};
-  - sudo apt-get install -y libselinux1:${ARCH};
-  - sudo apt-get install -y libp11-kit0:${ARCH};
-  - sudo apt-get install -y libcomerr2:${ARCH};
-  - sudo apt-get install -y libc6 libc6:${ARCH};
-  - sudo apt-get install -y libc6-dev:${ARCH};
-  - sudo apt-get install -y libatk1.0-0:${ARCH};
-  - sudo apt-get install -y libx11-dev:${ARCH};
-  - sudo apt-get install -y libxkbfile-dev:${ARCH};
   - sudo apt-get install -y cmake
 
 script:
