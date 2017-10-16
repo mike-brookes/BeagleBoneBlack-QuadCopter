@@ -16,28 +16,11 @@ include: &toolchain_linux_armhf
     - GNU_MULTILIB_TRIPLET=arm-linux-gnueabihf
     - GPP_COMPILER=arm-linux-gnueabihf-g++
     - GCC_COMPILER=arm-linux-gnueabihf-gcc
-    - VSCODE_ELECTRON_PLATFORM=arm
-  
-# arm64 toolchain
-include: &toolchain_linux_arm64
-  <<: *toolchain_linux_cross
-  env:
-    - LABEL=arm64_linux
-    - CROSS_TOOLCHAIN=true
-    - ARCH=arm64
-    - NPM_ARCH=arm
-    - GNU_TRIPLET=aarch64-linux-gnu
-    - GNU_MULTILIB_TRIPLET=arm-linux-gnueabihf
-    - GPP_COMPILER=aarch64-linux-gnu-g++
-    - GCC_COMPILER=aarch64-linux-gnu-gcc
-    - VSCODE_ELECTRON_PLATFORM=arm
 
 matrix:
   include:
   - os: linux
     <<: *toolchain_linux_armhf
-  - os: linux
-    <<: *toolchain_linux_arm64
 
 notifications:
   email: false
@@ -51,4 +34,61 @@ before_install:
   - echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
   - sudo dpkg --add-architecture ${ARCH};
   - sudo apt-get update -yq;
-  - sudo apt-get install -y libwww-perl libexpat1 libxml-libxml-perl libxml-sax-expat-perl gcc-${GNU_TRIPLET} g++-${GNU_TRIPLET} pkg-config-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-multilib-${GNU_MULTILIB_TRIPLET} gcc-multilib-${GNU_MULTILIB_TRIPLET} dpkg-dev perl libconfig-inifiles-perl libxml-simple-perl liblocale-gettext-perl libgcc1 libgcc1:${ARCH} libdpkg-perl libconfig-auto-perl libdebian-dpkgcross-perl ucf debconf dpkg-cross libdbus-1-3:${ARCH} libffi6:${ARCH} libpcre3:${ARCH} libselinux1:${ARCH} libp11-kit0:${ARCH} libcomerr2:${ARCH} libk5crypto3:${ARCH} libkrb5-3:${ARCH} libpango-1.0-0:${ARCH} libpangocairo-1.0-0:${ARCH} libpangoft2-1.0-0:${ARCH} libxcursor1:${ARCH} libxfixes3:${ARCH} libglib2.0-0:${ARCH} libfreetype6:${ARCH} libpng12-0:${ARCH} libavahi-client3:${ARCH} libgssapi-krb5-2:${ARCH} fontconfig-config:${ARCH} libexpat1:${ARCH} libjasper1:${ARCH} libjpeg8:${ARCH} libpng12-0:${ARCH} libtiff5:${ARCH} libgdk-pixbuf2.0-common:${ARCH} libgdk-pixbuf2.0-0:${ARCH} libfontconfig1:${ARCH} libcups2:${ARCH} libcairo2:${ARCH} libc6 libc6:${ARCH} libc6-dev:${ARCH} libatk1.0-0:${ARCH} libgtk2.0-0:${ARCH} libx11-dev:${ARCH} libxkbfile-dev:${ARCH};
+  - sudo apt-get install -y libwww-perl;
+  - sudo apt-get install -y libexpat1;
+  - sudo apt-get install -y libxml-libxml-perl;
+  - sudo apt-get install -y libxml-sax-expat-perl;
+  - sudo apt-get install -y gcc-${GNU_TRIPLET};
+  - sudo apt-get install -y g++-${GNU_TRIPLET};
+  - sudo apt-get install -y pkg-config-${GNU_TRIPLET};
+  - sudo apt-get install -y crossbuild-essential-${ARCH};
+  - sudo apt-get install -y g++-multilib-${GNU_MULTILIB_TRIPLET};
+  - sudo apt-get install -y gcc-multilib-${GNU_MULTILIB_TRIPLET};
+  - sudo apt-get install -y dpkg-dev;
+  - sudo apt-get install -y perl;
+  - sudo apt-get install -y libconfig-inifiles-perl;
+  - sudo apt-get install -y libxml-simple-perl;
+  - sudo apt-get install -y liblocale-gettext-perl;
+  - sudo apt-get install -y libgcc1;
+  - sudo apt-get install -y libgcc1:${ARCH};
+  - sudo apt-get install -y libdpkg-perl;
+  - sudo apt-get install -y libconfig-auto-perl;
+  - sudo apt-get install -y libdebian-dpkgcross-perl;
+  - sudo apt-get install -y ucf;
+  - sudo apt-get install -y xdebconf;
+  - sudo apt-get install -y dpkg-cross;
+  - sudo apt-get install -y libdbus-1-3:${ARCH};
+  - sudo apt-get install -y libffi6:${ARCH};
+  - sudo apt-get install -y libpcre3:${ARCH};
+  - sudo apt-get install -y libselinux1:${ARCH};
+  - sudo apt-get install -y libp11-kit0:${ARCH};
+  - sudo apt-get install -y libcomerr2:${ARCH};
+  - sudo apt-get install -y libk5crypto3:${ARCH};
+  - sudo apt-get install -y libkrb5-3:${ARCH};
+  - sudo apt-get install -y libpango-1.0-0:${ARCH};
+  - sudo apt-get install -y libpangocairo-1.0-0:${ARCH};
+  - sudo apt-get install -y libpangoft2-1.0-0:${ARCH};
+  - sudo apt-get install -y libxcursor1:${ARCH};
+  - sudo apt-get install -y libxfixes3:${ARCH};
+  - sudo apt-get install -y libglib2.0-0:${ARCH};
+  - sudo apt-get install -y libfreetype6:${ARCH};
+  - sudo apt-get install -y libpng12-0:${ARCH};
+  - sudo apt-get install -y libavahi-client3:${ARCH};
+  - sudo apt-get install -y libgssapi-krb5-2:${ARCH};
+  - sudo apt-get install -y fontconfig-config:${ARCH};
+  - sudo apt-get install -y libexpat1:${ARCH};
+  - sudo apt-get install -y libjasper1:${ARCH};
+  - sudo apt-get install -y libjpeg8:${ARCH};
+  - sudo apt-get install -y  libpng12-0:${ARCH};
+  - sudo apt-get install -y libtiff5:${ARCH};
+  - sudo apt-get install -y libgdk-pixbuf2.0-common:${ARCH};
+  - sudo apt-get install -y libgdk-pixbuf2.0-0:${ARCH};
+  - sudo apt-get install -y libfontconfig1:${ARCH};
+  - sudo apt-get install -y libcups2:${ARCH};
+  - sudo apt-get install -y libcairo2:${ARCH};
+  - sudo apt-get install -y libc6 libc6:${ARCH};
+  - sudo apt-get install -y libc6-dev:${ARCH};
+  - sudo apt-get install -y libatk1.0-0:${ARCH};
+  - sudo apt-get install -y libgtk2.0-0:${ARCH};
+  - sudo apt-get install -y libx11-dev:${ARCH};
+  - sudo apt-get install -y libxkbfile-dev:${ARCH};
