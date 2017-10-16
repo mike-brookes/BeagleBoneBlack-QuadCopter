@@ -62,7 +62,6 @@ before_install:
   - sudo apt-get install -y libselinux1:${ARCH};
   - sudo apt-get install -y libp11-kit0:${ARCH};
   - sudo apt-get install -y libcomerr2:${ARCH};
-  - sudo apt-get install -y libk5crypto3:${ARCH};
   - sudo apt-get install -y libkrb5-3:${ARCH};
   - sudo apt-get install -y libpango-1.0-0:${ARCH};
   - sudo apt-get install -y libpangocairo-1.0-0:${ARCH};
