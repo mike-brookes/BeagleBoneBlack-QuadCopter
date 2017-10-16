@@ -70,4 +70,4 @@ before_install:
   - sudo apt-get install -y cmake-curses-gui
 
 script:
-  ccmake
+  ccmake ./CMakeLists.txt
