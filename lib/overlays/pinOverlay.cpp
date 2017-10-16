@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "pinOverlay.h"
-#include "../PWM/pwmDevice.h"
+#include "../pwm/pwmDevice.h"
 
 using namespace quadro::overlays;
 
