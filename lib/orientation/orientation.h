@@ -24,12 +24,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <pthread.h>
 #include <iostream>
 #include <fstream>
-#include "../External/Kalman.h"
+#include "../external/Kalman.h"
 #include "../Timer/Timer.h"
-#include "../I2C/Devices/L3GD20H/L3GD20H.h"
-#include "../I2C/Devices/LSM303/Accelerometer/LSM303Accelerometer.h"
+#include "../i2C/devices/L3GD20H/L3GD20H.h"
+#include "../i2C/devices/LSM303/Accelerometer/LSM303Accelerometer.h"
 #include "../analog/devices/LVMaxSonarEZ/LVMaxSonarEZ.h"
-#include "../I2C/Devices/LSM303/Magnetometer/LSM303Magnetometer.h"
+#include "../i2C/devices/LSM303/Magnetometer/LSM303Magnetometer.h"
 #include "../external/PID.h"
 
 namespace quadro {
