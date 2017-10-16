@@ -1,4 +1,4 @@
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1316/badge)](https://bestpractices.coreinfrastructure.org/projects/1316)
+[![Build Status](https://travis-ci.org/mbircohoakeels/BeagleBoneBlack-QuadCopter.svg?branch=master)](https://travis-ci.org/mbircohoakeels/BeagleBoneBlack-QuadCopter) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1316/badge)](https://bestpractices.coreinfrastructure.org/projects/1316)
 
 # BeagleBoneBlack-QuadCopter
 This project hopes to achieve a flying BeagleBone, this project is a hobby. The build is custom (see installation section for a list of parts required).
