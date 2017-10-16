@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ANALOG_MAX_BUF 1024
 
 #include "../../overlays/overlayBase.h"
-#include "../Exceptions/analogSetupException.h"
+#include "../exceptions/analogSetupException.h"
 
 namespace quadro {
 

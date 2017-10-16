@@ -20,10 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef ANALOGDEVICE_ANALOGDEVICE_H
 #define ANALOGDEVICE_ANALOGDEVICE_H
 
-#include "Exceptions/analogSetupException.h"
-#include "Exceptions/analogRuntimeException.h"
+#include "exceptions/analogSetupException.h"
+#include "exceptions/analogRuntimeException.h"
 
-#include "../Interfaces/IDevice.h"
+#include "../interfaces/IDevice.h"
 #include "overlays/analogOverlay.h"
 
 #include <unistd.h>
