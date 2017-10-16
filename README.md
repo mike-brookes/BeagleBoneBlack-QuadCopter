@@ -1,3 +1,5 @@
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1316/badge)](https://bestpractices.coreinfrastructure.org/projects/1316)
+
 # BeagleBoneBlack-QuadCopter
 This project hopes to achieve a flying BeagleBone, this project is a hobby. The build is custom (see installation section for a list of parts required).
 The general goal is to have a Linux board (BeagleBone Black currently) attached to a Quadcopter frame and acting as it's flight controller.
