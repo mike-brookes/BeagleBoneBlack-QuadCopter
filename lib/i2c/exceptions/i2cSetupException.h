@@ -5,7 +5,7 @@
 #ifndef QUADRO_I2CSETUPEXCEPTION_H
 #define QUADRO_I2CSETUPEXCEPTION_H
 
-#include "../../Exceptions/setupException.h"
+#include "../../exceptions/setupException.h"
 
 using namespace quadro::exceptions;
 

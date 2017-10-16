@@ -5,7 +5,7 @@
 #ifndef I2CDEVICE_H
 #define I2CDEVICE_H
 
-#include "../Interfaces/IDevice.h"
+#include "../interfaces/IDevice.h"
 #include "exceptions/i2cSetupException.h"
 #include "exceptions/i2cRuntimeException.h"
 

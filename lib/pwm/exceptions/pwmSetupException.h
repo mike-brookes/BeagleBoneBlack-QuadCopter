@@ -5,7 +5,7 @@
 #ifndef QUADRO_PWMSETUPEXCEPTION_H
 #define QUADRO_PWMSETUPEXCEPTION_H
 
-#include "../../Exceptions/setupException.h"
+#include "../../exceptions/setupException.h"
 
 using namespace quadro::exceptions;
 using namespace std;
