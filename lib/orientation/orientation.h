@@ -26,10 +26,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include "../external/Kalman.h"
 #include "../Timer/Timer.h"
-#include "../i2C/devices/L3GD20H/L3GD20H.h"
-#include "../i2C/devices/LSM303/Accelerometer/LSM303Accelerometer.h"
+#include "../i2c/devices/L3GD20H/L3GD20H.h"
+#include "../i2c/devices/LSM303/Accelerometer/LSM303Accelerometer.h"
 #include "../analog/devices/LVMaxSonarEZ/LVMaxSonarEZ.h"
-#include "../i2C/devices/LSM303/Magnetometer/LSM303Magnetometer.h"
+#include "../i2c/devices/LSM303/Magnetometer/LSM303Magnetometer.h"
 #include "../external/PID.h"
 
 namespace quadro {
@@ -66,7 +66,7 @@ namespace quadro {
          * @params none
          * @throws setupException
          */
-        orientation( );
+        orientation();
 
         /**
          * Destructor : Kills all threads.
