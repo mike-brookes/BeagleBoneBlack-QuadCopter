@@ -31,13 +31,14 @@ namespace quadro {
          */
         class dji_2212 : public motors {
 
-            const long MAX_DUTY = 320000; //150000
-            const long MIN_DUTY = 500000;
-            const long SPIN_SLOWSPEED = 700000;
-            const long SPIN_TAKEOFFSPEED = 250000;
-            const long DEFAULT_PERIOD = 1900000;
-            const long ACTIVATE_PERIOD = 1200000;
-            const int DEFAULT_SPEED_STEP = 50;
+            //The reason these values are set in this class : Every motor type will have it's own values.
+            //For each motor type, the motors class should be extended and the below values set accordingly.
+            const long MAX_DUTY = 140000; //!< Maximum Duty Value, any lower than this doesn't impact the motors
+            const long MIN_DUTY = 200000; //!< Minimum Duty Value, any higher than this doesn't impact the motors
+            const long SPIN_SLOWSPEED = 700000; //!< Used to show the motors are set up correctly.
+            const long SPIN_TAKEOFFSPEED = 250000; //!< Speed of motors required to achieve lift off.
+            const long DEFAULT_PERIOD = 1900000; //!< This value is used when you want to fly.
+            const long ACTIVATE_PERIOD = 1200000; //!< This value should only be used in setup to initialise the motors.
 
         public:
 
@@ -53,34 +54,6 @@ namespace quadro {
              * This method will set the basic settings to initialise the motor, this will normally result in the motor spinning slowly.
              */
             void init();
-
-            /**
-             * Set the motors duty value
-             *
-             * @param _duty
-             */
-            void setDuty( long _duty );
-
-            /**
-             * Set the motors Period value here
-             *
-             * @param _period
-             */
-            void setPeriod( long _period );
-
-            /**
-             * Set the motors Run value here
-             *
-             * @param _run
-             */
-            void setRun( int _run );
-
-            /**
-             * Set the motors Polarity here.
-             *
-             * @param _polarity
-             */
-            void setPolarity( int _polarity );
 
         };
 

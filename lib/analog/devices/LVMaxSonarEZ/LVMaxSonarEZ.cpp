@@ -31,7 +31,7 @@ int LVMaxSonarEZ::start()
 {
 
     //pthread_create doesn't throw an exception, only returns error codes - these are handled below.
-    threadRet = pthread_create( &threadHandle, NULL, LVMaxSonarEZ::runMainSensorUpdateThread, this );
+    threadRet = pthread_create( &threadHandle, nullptr, LVMaxSonarEZ::runMainSensorUpdateThread, this );
 
     //Thread returned 0 (Success Code)
     if ( threadRet != 0 ) {
@@ -39,27 +39,27 @@ int LVMaxSonarEZ::start()
         setStatus( deviceStatus::Error );
         if ( threadRet == EAGAIN ) {
             //Failed because of resource unavailability, try once more and then throw an exception on failure
-            threadRet = pthread_create( &threadHandle, NULL, LVMaxSonarEZ::runMainSensorUpdateThread, this );
+            threadRet = pthread_create( &threadHandle, nullptr, LVMaxSonarEZ::runMainSensorUpdateThread, this );
             if ( threadRet != 0 ) {
-                throw new analogSetupException(
+                throw analogSetupException(
                         "(LVMaxSonarEZ) " + analog::THREAD_FATAL + " : errorNumber = "
-                                + to_string( threadRet ) );
+                                + to_string( threadRet ));
             }
         }
         else if ( threadRet == EPERM ) {
             //Thread creation failed because of invalid permissions on the system to create threads.
-            throw new analogSetupException(
-                    "(LVMaxSonarEZ) " + analog::THREAD_PERMISSIONS + " : errorNumber = " + to_string( threadRet ) );
+            throw analogSetupException(
+                    "(LVMaxSonarEZ) " + analog::THREAD_PERMISSIONS + " : errorNumber = " + to_string( threadRet ));
         }
         else if ( threadRet == EINVAL ) {
             //Thread creation failed because the argument used is invalid.
-            throw new analogSetupException(
-                    "(LVMaxSonarEZ) " + analog::THREAD_INVALID_ARG + " : errorNumber = " + to_string( threadRet ) );
+            throw analogSetupException(
+                    "(LVMaxSonarEZ) " + analog::THREAD_INVALID_ARG + " : errorNumber = " + to_string( threadRet ));
         }
         else {
             //An unknown error occurred - unknown error code.
-            throw new analogSetupException(
-                    "(LVMaxSonarEZ) " + analog::THREAD_UNKNOWN + " : errorNumber = " + to_string( threadRet ) );
+            throw analogSetupException(
+                    "(LVMaxSonarEZ) " + analog::THREAD_UNKNOWN + " : errorNumber = " + to_string( threadRet ));
         }
     }
 
@@ -81,11 +81,11 @@ int LVMaxSonarEZ::stop()
         setStatus( deviceStatus::Error );
         if ( threadRet == ESRCH ) {
             //Unable to locate process to cancel.
-            throw new analogRuntimeException( THREAD_CANCELLATION_FAILURE );
+            throw analogRuntimeException( THREAD_CANCELLATION_FAILURE );
         }
         else {
             //An unknown error occurred - unknown error code.
-            throw new analogRuntimeException( THREAD_CANCELLATION_UNKNOWN );
+            throw analogRuntimeException( THREAD_CANCELLATION_UNKNOWN );
         }
     }
 
@@ -98,11 +98,12 @@ int LVMaxSonarEZ::stop()
 
 void* LVMaxSonarEZ::runMainSensorUpdateThread( void* static_inst )
 {
-    LVMaxSonarEZ* SonicInst = ( LVMaxSonarEZ* ) static_inst;
+    auto* SonicInst = ( LVMaxSonarEZ* ) static_inst;
     while ( SonicInst->currentStatus == deviceStatus::On ) {
         SonicInst->reading = SonicInst->getCurrentReading();
         usleep( SonicInst->dataTimer );
     }
+    return nullptr;
 }
 
 double LVMaxSonarEZ::convertReadingToDistance( int _reading )

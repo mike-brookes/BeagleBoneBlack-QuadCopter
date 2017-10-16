@@ -28,7 +28,7 @@ float LSM303Accelerometer::calcPitch()
 int LSM303Accelerometer::start()
 {
     //pthread_create doesn't throw an exception, only returns error codes - these are handled below.
-    threadRet = pthread_create( &threadHandle, NULL, LSM303Accelerometer::runMainSensorUpdateThread, this );
+    threadRet = pthread_create( &threadHandle, nullptr, LSM303Accelerometer::runMainSensorUpdateThread, this );
 
     //Thread returned 0 (Success Code)
     if ( threadRet != 0 ) {
@@ -36,26 +36,26 @@ int LSM303Accelerometer::start()
         setStatus( deviceStatus::Error );
         if ( threadRet == EAGAIN ) {
             //Failed because of resource unavailability, try once more and then throw an exception on failure
-            threadRet = pthread_create( &threadHandle, NULL, LSM303Accelerometer::runMainSensorUpdateThread, this );
+            threadRet = pthread_create( &threadHandle, nullptr, LSM303Accelerometer::runMainSensorUpdateThread, this );
             if ( threadRet != 0 ) {
-                throw new i2cSetupException(
+                throw i2cSetupException(
                         "(LVMaxSonarEZ) " + i2c::THREAD_FATAL + " : errorNumber = "
                                 + to_string( threadRet ) );
             }
         }
         else if ( threadRet == EPERM ) {
             //Thread creation failed because of invalid permissions on the system to create threads.
-            throw new i2cSetupException(
+            throw i2cSetupException(
                     "(LVMaxSonarEZ) " + i2c::THREAD_PERMISSIONS + " : errorNumber = " + to_string( threadRet ) );
         }
         else if ( threadRet == EINVAL ) {
             //Thread creation failed because the argument used is invalid.
-            throw new i2cSetupException(
+            throw i2cSetupException(
                     "(LVMaxSonarEZ) " + i2c::THREAD_INVALID_ARG + " : errorNumber = " + to_string( threadRet ) );
         }
         else {
             //An unknown error occurred - unknown error code.
-            throw new i2cSetupException(
+            throw i2cSetupException(
                     "(LVMaxSonarEZ) " + i2c::THREAD_UNKNOWN + " : errorNumber = " + to_string( threadRet ) );
         }
     }
@@ -70,12 +70,12 @@ int LSM303Accelerometer::start()
 
 void* LSM303Accelerometer::runMainSensorUpdateThread( void* static_inst )
 {
-    LSM303Accelerometer* accel = ( LSM303Accelerometer* ) static_inst;
+    auto* accel = ( LSM303Accelerometer* ) static_inst;
     while ( accel->currentStatus == deviceStatus::On ) {
         accel->pitch = accel->calcPitch();
         accel->roll = accel->calcRoll();
         usleep( accel->dataTimer );
     }
 
-    return 0;
+    return nullptr;
 }

@@ -21,7 +21,7 @@ namespace quadro {
              * Public access point to throw overlaySetupException
              * @param _errMsg
              */
-            overlaySetupException( string _errMsg ) { }
+            explicit overlaySetupException( const string& _errMsg ) { }
         };
 
     }

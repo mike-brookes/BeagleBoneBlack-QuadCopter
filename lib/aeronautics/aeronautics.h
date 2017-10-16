@@ -19,14 +19,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define QUADRO_AERONAUTICS_H
 
 #include "../pwm/motors/dji_2212/dji_2212.h"
+#include <algorithm>
 
 namespace quadro {
 
-using namespace pwm;
+    using namespace pwm;
 
     class aeronautics {
 
     public:
+
         aeronautics();
 
         /**

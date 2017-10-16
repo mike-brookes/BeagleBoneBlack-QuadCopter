@@ -31,7 +31,7 @@ quadroCopter::quadroCopter()
     catch( setupException& e ) {
         //If a setup error occurred, we need to exit before we start flying otherwise catastrophic consequences undoubtedly will follow...
         //Re throw an exception here for the main thread to catch for a proper exit.
-        throw new fatalException( e.what() );
+        throw fatalException( e.what() );
     }
 
     setStartupTargets();
@@ -50,6 +50,6 @@ void quadroCopter::setStartupTargets()
 
 void quadroCopter::monitorSensorData()
 {
-    myAeronautics->maintainRoll( myOrientation->rollPID->calculate( roll.targetVal, myOrientation->roll ), myOrientation->roll );
-    myAeronautics->maintainPitch( myOrientation->pitchPID->calculate( pitch.targetVal, myOrientation->pitch ), myOrientation->pitch );
+    myAeronautics->maintainRoll( abs( myOrientation->rollPID->calculate( roll.targetVal, myOrientation->roll ) ), myOrientation->roll );
+    myAeronautics->maintainPitch( abs( myOrientation->pitchPID->calculate( pitch.targetVal, myOrientation->pitch ) ), myOrientation->pitch );
 }

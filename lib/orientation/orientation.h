@@ -18,8 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef QUADRO_ORIENTATION_H
 #define QUADRO_ORIENTATION_H
 
+#define STORE_DATA 1;
+
 #include <cstdio>
 #include <pthread.h>
+#include <iostream>
+#include <fstream>
 #include "../External/Kalman.h"
 #include "../Timer/Timer.h"
 #include "../I2C/Devices/L3GD20H/L3GD20H.h"
@@ -42,7 +46,12 @@ namespace quadro {
         /**
         * DATA_RATE is the speed that data is being refreshed.
         */
-        const float DATA_RATE = 0.02;
+        const float DATA_RATE = 0.01;
+
+        /**
+         * Store the location for accelerometer data log file
+         */
+        string const dataStorageFileName = "/root/robotics/QuadCopter/Data/accelData.dat";
 
         /**
          * COMPLIMENTARY_FILTER_TUNING is the percentage of the first value used in the filter, it is offset by
@@ -131,6 +140,8 @@ namespace quadro {
          * runComplimentaryCalculations run all the sensor data through the Complimentary filter and assign orientation values.
          */
         void runComplimentaryCalculations();
+
+        ofstream dataStorageFile;
 
     };
 

@@ -59,7 +59,7 @@ namespace quadro {
              * @param _deviceAddress
              * @param _busId
              */
-            L3GD20H( unsigned char _deviceAddress = GYRO_ADDRESS, int _busId = 1 );
+            explicit L3GD20H( unsigned char _deviceAddress = GYRO_ADDRESS, int _busId = 1 );
 
             /**
              * start() - Allows the independent control to start the thread that updates the Accelerometer readings.
@@ -91,6 +91,8 @@ namespace quadro {
 
             pthread_t threadHandle;//!< @var Thread Handle
 
+            bool enabled;
+
         protected:
 
             /**
@@ -98,14 +100,14 @@ namespace quadro {
              *
              * @param _deviceAddress
              */
-            void setDeviceAddress( unsigned char _deviceAddress ) { this->deviceAddress = _deviceAddress; }
+            void setDeviceAddress( unsigned char _deviceAddress ) override;
 
             /**
              * Sets the devices I2C Bus Id - to satisfy the interface
              *
              * @param _busId
              */
-            void setBusId( int _busId ) { this->busId = _busId; }
+            void setBusId ( int _busId ) override;
 
             _switch gyroSwitch; //!< enum value for the Gyroscope power status.
 
@@ -122,21 +124,21 @@ namespace quadro {
              * X = SensorRawValue * 0.00875 * 0.02
              * sets the angle vector x value.
              */
-            void calcX( void );
+            void calcX( );
 
             /**
              * Calculate the Gyro Y angular rate of change using the equation :
              * Y = SensorRawValue * 0.00875 * 0.02
              * sets the angle vector y value.
              */
-            void calcY( void );
+            void calcY( );
 
             /**
              * Calculate the Gyro Z angular rate of change using the equation :
              * Z = SensorRawValue * 0.00875 * 0.02
              * sets the angle vector z value.
              */
-            void calcZ( void );
+            void calcZ( );
 
             /*!
              * runMainSensorUpdateThread starts a continuous thread updating the programs values from the sensors values.
@@ -147,6 +149,10 @@ namespace quadro {
              * @return 0
              */
             static void* runMainSensorUpdateThread( void* static_inst );
+
+            void setEnabled( bool _enabled );
+
+            bool isEnabled();
 
             int threadRet; //!< @var thread return value
 

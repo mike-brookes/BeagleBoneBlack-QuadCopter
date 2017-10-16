@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdio>
 #include <exception>
 #include <string>
+#include <utility>
+#include <utility>
 
 namespace quadro {
 
@@ -34,12 +36,12 @@ namespace quadro {
         class runtimeException : public exception {
         public:
 
-            runtimeException() { }
+            runtimeException() = default;
 
-            runtimeException( string errMessage )
-                    :errMessage_( errMessage ) { }
+            explicit runtimeException( string errMessage )
+                    :errMessage_( std::move( std::move( errMessage ))) { }
 
-            const char* what() const throw() { return errMessage_.c_str(); }
+            const char* what() const throw() override { return errMessage_.c_str(); }
 
             string errMessage_;
         };

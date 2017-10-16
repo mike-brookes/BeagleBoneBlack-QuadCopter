@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "aeronautics.h"
 
 using namespace quadro;
+using namespace std;
 
 aeronautics::aeronautics()
 {
@@ -33,7 +34,7 @@ aeronautics::aeronautics()
 
     motor[ 3 ] = new dji_2212( pinBlocks::BLOCK_P9,
             PWMPins::PIN_22 );
-    //add additional motors here, specifying block and pin accordingly.
+//    //add additional motors here, specifying block and pin accordingly.
 
     motor[ 0 ]->init();
     motor[ 1 ]->init();
@@ -54,42 +55,24 @@ void aeronautics::maintainHeading()
 
 void aeronautics::maintainRoll( double _duty_increment, float _roll )
 {
-
-    if( _roll < 0 ) {
-        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty + _duty_increment ) ); //slow down
-        motor[ 1 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty + _duty_increment ) ); //slow down
-        motor[ 2 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty - _duty_increment ) ); //speed up
-        motor[ 3 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty - _duty_increment ) ); //speed up
+    if( _roll > 0 ) {
+        motor[ 2 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty + _duty_increment ) );
+        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty - _duty_increment ) );
     }
     else {
-        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty - _duty_increment ) ); //speed up
-        motor[ 1 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty - _duty_increment ) ); //speed up
-        motor[ 2 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty + _duty_increment ) ); //slow down
-        motor[ 3 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty + _duty_increment ) ); //slow down
+        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty + _duty_increment ) );
+        motor[ 2 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty - _duty_increment ) );
     }
-
-//    printf( "   Current Roll : \033[22;36m%7.2f \033[0m \t Increase Value :  \033[22;36m%7.2f \033[0m\n",
-//            myOrientation->roll, dutyIncreaseValue );
-
 }
 
 void aeronautics::maintainPitch( double _duty_increment, float _pitch )
 {
-
-    if( _pitch < 0 ) {
-        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty + _duty_increment ) ); //slow down
-        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty + _duty_increment ) ); //slow down
-        motor[ 2 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty - _duty_increment ) ); //speed up
-        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty - _duty_increment ) ); //speed up
+    if( _pitch > 0 ) {
+        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty - _duty_increment ) );
+        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty + _duty_increment ) );
     }
     else {
-        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty - _duty_increment ) ); //speed up
-        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty - _duty_increment ) ); //speed up
-        motor[ 2 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty + _duty_increment ) ); //slow down
-        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty + _duty_increment ) ); //slow down
+        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty - _duty_increment ) );
+        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty + _duty_increment ) );
     }
-
-//    printf( "   Current Pitch : \033[22;36m%7.2f \033[0m \t Increase Value :  \033[22;36m%7.2f \033[0m\n",
-//            myOrientation->pitch, dutyIncreaseValue );
-
 }

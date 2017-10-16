@@ -24,17 +24,15 @@ motors::motors(
         PWMPins _pin
 )
         :pwmDevice( _block, _pin )
-{
-    targetSpeed = getMinSpeed();
-};
+{ };
 
 void motors::setTargetSpeed( long _targetSpeed )
 {
-    if( _targetSpeed < getMaxSpeed() ) {
-        targetSpeed = getMaxSpeed();
+    if( _targetSpeed < maxSpeed ) {
+        targetSpeed = maxSpeed;
     }
-    else if( _targetSpeed > getMinSpeed() ) {
-        targetSpeed = getMinSpeed();
+    else if( _targetSpeed > minSpeed ) {
+        targetSpeed = minSpeed;
     }
     else {
         targetSpeed = _targetSpeed;
@@ -44,13 +42,13 @@ void motors::setTargetSpeed( long _targetSpeed )
 void motors::increaseSpeed( unsigned short _speedMod )
 {
     currentDuty -= _speedMod;
-    set( Duty, ( currentDuty ));
+    set( Duty, ( currentDuty ) );
 }
 
 void motors::decreaseSpeed( unsigned short _speedMod )
 {
     currentDuty += _speedMod;
-    set( Duty, ( currentDuty ));
+    set( Duty, ( currentDuty ) );
 }
 
 void motors::reversePolarity()
@@ -68,7 +66,7 @@ void motors::setStatus( status _status )
 
 void* motors::maintainTargetSpeed( void* _inst )
 {
-    motors* motorInst = ( motors* ) _inst;
+    auto* motorInst = ( motors* ) _inst;
     while ( motorInst->currentRun == status::On ) {
         if ( motorInst->currentDuty > motorInst->targetSpeed )
             motorInst->increaseSpeed();
@@ -76,12 +74,13 @@ void* motors::maintainTargetSpeed( void* _inst )
             motorInst->decreaseSpeed();
     }
     motorInst->stop();
+    return nullptr;
 }
 
 void motors::start()
 {
     if ( Status == status::Off ) {
-        threadRet = pthread_create( &threadHandle, NULL, motors::maintainTargetSpeed, this );
+        threadRet = pthread_create( &threadHandle, nullptr, motors::maintainTargetSpeed, this );
 
         if ( threadRet == 0 )
             setStatus( status::On );
@@ -103,19 +102,28 @@ void motors::stop()
     }
 }
 
-long motors::getMaxSpeed()
+void motors::setDuty( long _duty )
 {
-    return maxSpeed;
+    currentDuty = _duty;
+    set( Duty, currentDuty );
 }
 
-long motors::getMinSpeed()
+void motors::setPeriod( long _period )
 {
-    return minSpeed;
+    currentPeriod = _period;
+    set( Period, currentPeriod );
 }
 
-int motors::getSpeedStep()
+void motors::setRun( int _run )
 {
-    return speedStep;
+    currentRun = _run;
+    set( Run, currentRun );
+}
+
+void motors::setPolarity( int _polarity )
+{
+    currentPolarity = _polarity;
+    set( Polarity, currentPolarity );
 }
 
 void motors::setMinSpeed( long _minSpeed )
@@ -126,9 +134,4 @@ void motors::setMinSpeed( long _minSpeed )
 void motors::setMaxSpeed( long _maxSpeed )
 {
     maxSpeed = _maxSpeed;
-}
-
-void motors::setSpeedStep( int _speedStep )
-{
-    speedStep = _speedStep;
 }

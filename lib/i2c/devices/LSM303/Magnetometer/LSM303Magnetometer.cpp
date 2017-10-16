@@ -32,17 +32,17 @@ double LSM303Magnetometer::calcHeading()
 {
     double x2 = 0, y2 = 0;
 
-    double t_roll = x * x + z * z;
-    float rollRadians = ( float ) atan2(( double ) y, sqrt( t_roll ));
+    auto t_roll = x * x + z * z;
+    auto rollRadians = ( float ) atan2(( double ) y, sqrt( t_roll ));
 
-    double t_pitch = y * y + z * z;
-    float pitchRadians = ( float ) atan2(( double ) x, sqrt( t_pitch ));
+    auto t_pitch = y * y + z * z;
+    auto pitchRadians = ( float ) atan2(( double ) x, sqrt( t_pitch ));
 
-    float cosRoll = ( float ) cos( rollRadians );
-    float sinRoll = ( float ) sin( rollRadians );
+    auto cosRoll = cos( rollRadians );
+    auto sinRoll = sin( rollRadians );
 
-    float cosPitch = ( float ) cos( -1 * pitchRadians );
-    float sinPitch = ( float ) sin( -1 * pitchRadians );
+    auto cosPitch = cos( -1 * pitchRadians );
+    auto sinPitch = sin( -1 * pitchRadians );
 
     x2 = ( x ) * cosPitch + ( z ) * sinPitch;
     y2 = ( x ) * sinRoll * sinPitch + ( y ) * cosRoll - ( z ) * sinRoll * cosPitch;
@@ -52,18 +52,18 @@ double LSM303Magnetometer::calcHeading()
 
 void* LSM303Magnetometer::runMainSensorUpdateThread( void* static_inst )
 {
-    LSM303Magnetometer* mag = ( LSM303Magnetometer* ) static_inst;
+    auto* mag = ( LSM303Magnetometer* ) static_inst;
     while ( mag->currentStatus == deviceStatus::On ) {
         mag->heading = mag->calcHeading();
         usleep( mag->dataTimer );
     }
-    return 0;
+    return nullptr;
 }
 
 int LSM303Magnetometer::start()
 {
     //pthread_create doesn't throw an exception, only returns error codes - these are handled below.
-    threadRet = pthread_create( &threadHandle, NULL, LSM303Magnetometer::runMainSensorUpdateThread, this );
+    threadRet = pthread_create( &threadHandle, nullptr, LSM303Magnetometer::runMainSensorUpdateThread, this );
 
     //Thread returned 0 (Success Code)
     if ( threadRet != 0 ) {
@@ -71,27 +71,27 @@ int LSM303Magnetometer::start()
         setStatus( deviceStatus::Error );
         if ( threadRet == EAGAIN ) {
             //Failed because of resource unavailability, try once more and then throw an exception on failure
-            threadRet = pthread_create( &threadHandle, NULL, LSM303Magnetometer::runMainSensorUpdateThread, this );
+            threadRet = pthread_create( &threadHandle, nullptr, LSM303Magnetometer::runMainSensorUpdateThread, this );
             if ( threadRet != 0 ) {
-                throw new i2cSetupException(
+                throw i2cSetupException(
                         "(LVMaxSonarEZ) " + i2c::THREAD_FATAL + " : errorNumber = "
-                                + to_string( threadRet ) );
+                                + to_string( threadRet ));
             }
         }
         else if ( threadRet == EPERM ) {
             //Thread creation failed because of invalid permissions on the system to create threads.
-            throw new i2cSetupException(
-                    "(LVMaxSonarEZ) " + i2c::THREAD_PERMISSIONS + " : errorNumber = " + to_string( threadRet ) );
+            throw i2cSetupException(
+                    "(LVMaxSonarEZ) " + i2c::THREAD_PERMISSIONS + " : errorNumber = " + to_string( threadRet ));
         }
         else if ( threadRet == EINVAL ) {
             //Thread creation failed because the argument used is invalid.
-            throw new i2cSetupException(
-                    "(LVMaxSonarEZ) " + i2c::THREAD_INVALID_ARG + " : errorNumber = " + to_string( threadRet ) );
+            throw i2cSetupException(
+                    "(LVMaxSonarEZ) " + i2c::THREAD_INVALID_ARG + " : errorNumber = " + to_string( threadRet ));
         }
         else {
             //An unknown error occurred - unknown error code.
-            throw new i2cSetupException(
-                    "(LVMaxSonarEZ) " + i2c::THREAD_UNKNOWN + " : errorNumber = " + to_string( threadRet ) );
+            throw i2cSetupException(
+                    "(LVMaxSonarEZ) " + i2c::THREAD_UNKNOWN + " : errorNumber = " + to_string( threadRet ));
         }
     }
 

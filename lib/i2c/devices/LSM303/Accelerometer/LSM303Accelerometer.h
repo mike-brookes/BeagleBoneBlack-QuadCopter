@@ -4,12 +4,10 @@
 
 #ifndef LSM303_ACCELEROMETER_LSM303ACCELEROMETER_H
 #define LSM303_ACCELEROMETER_LSM303ACCELEROMETER_H
-#define EMERGENCY_ROLL 25
-#define EMERGENCY_PITCH 25
 
 #include "../LSM303DLHC.h"
 #include <bitset>
-#include <math.h>
+#include <cmath>
 
 namespace quadro {
 
@@ -28,7 +26,7 @@ namespace quadro {
              * @param _deviceAddress
              * @param _busId
              */
-            LSM303Accelerometer( unsigned char _deviceAddress = ACCEL_ADDRESS, int _busId = 1 );
+            explicit LSM303Accelerometer( unsigned char _deviceAddress = ACCEL_ADDRESS, int _busId = 1 );
 
             /*!
              * Calculates roll using the following equation :

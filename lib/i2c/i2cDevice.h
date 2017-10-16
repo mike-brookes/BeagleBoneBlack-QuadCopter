@@ -37,7 +37,7 @@ namespace quadro {
             /**
              * Public Destructor
              */
-            ~i2cDevice();
+            ~i2cDevice() override;
 
             /**
              * Public Constructor
@@ -49,7 +49,7 @@ namespace quadro {
             /**
              * Public initDevice - Requires the device address and bus id to be configured.
              */
-            void initDevice() throw( i2cSetupException& );
+            void initDevice() throw( i2cSetupException& ) override;
 
             /**
              * Public getValueFromRegister - Writes the register that you want to read, then performs a read on that register.
@@ -80,7 +80,7 @@ namespace quadro {
              * @throws i2cSetupException
              * @return int
              */
-            int writeToDevice( size_t _bufferSize ) throw( i2cSetupException& );
+            int writeToDevice( size_t _bufferSize ) throw( i2cSetupException& ) override;
 
             /**
              * stop() - Allows the independent control to stop the specified thread.
@@ -198,7 +198,7 @@ namespace quadro {
              * @param none
              * @return int
              */
-            int connectToDevice() { return ioctl( this->fileHandle, I2C_SLAVE, this->deviceAddress ); };
+            int connectToDevice() override { return ioctl( this->fileHandle, I2C_SLAVE, this->deviceAddress ); };
 
             /**
              * Protected openDevice - Attempts to open the fileHandle.
@@ -207,7 +207,7 @@ namespace quadro {
              * @throws i2cSetupException
              * @return int
              */
-            int openDevice() throw( i2cSetupException& );
+            int openDevice() throw( i2cSetupException& ) override;
 
             /**
              * Protected readDevice - Reads the current buffer from the I2C device; first writes the register address that will be read.
@@ -216,7 +216,7 @@ namespace quadro {
              * @throws i2cSetupException
              * @return short
              */
-            short readDevice( size_t _bufferSize ) throw( i2cSetupException& );
+            short readDevice( size_t _bufferSize ) throw( i2cSetupException& ) override;
 
             const char* deviceBusPath;
 

@@ -15,6 +15,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+#pragma ide diagnostic ignored "OCUnusedMacroInspection"
 #ifndef SRC_LSM303DLHC_H_
 #define SRC_LSM303DLHC_H_
 
@@ -99,7 +102,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define X_AXIS_ENABLED                              0b00000001
 #define X_AXIS_DISABLED                             0b00000000
 
-#define SET_CTRL_REG1_A( ODR, LPEN, ZEN, YEN, XEN ) ODR | LPEN | ZEN | YEN | XEN
+#define SET_CTRL_REG1_A( ODR, LPEN, ZEN, YEN, XEN ) ((ODR) | (LPEN) | (ZEN) | (YEN) | (XEN))
 /*
  * END OF POWER SETTINGS
  */
@@ -123,7 +126,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HIGHPASS_FILTER_ENABLED_AOI_INT1            0b00000001
 #define HIGHPASS_FILTER_DISABLED_AOI_INT1           0b00000000
 
-#define SET_CTRL_REG2_A( HIGHPASS_MODE, HIGHPASS_FDS, HIGHPASS_CLICK_FILTER, HIGHPASS_AOI_INT2, HIGHPASS_AOI_INT1 ) HIGHPASS_MODE | HIGHPASS_FDS | HIGHPASS_CLICK_FILTER | HIGHPASS_AOI_INT2 | HIGHPASS_AOI_INT1
+#define SET_CTRL_REG2_A( HIGHPASS_MODE, HIGHPASS_FDS, HIGHPASS_CLICK_FILTER, HIGHPASS_AOI_INT2, HIGHPASS_AOI_INT1 ) ((HIGHPASS_MODE) | (HIGHPASS_FDS) | (HIGHPASS_CLICK_FILTER) | (HIGHPASS_AOI_INT2) | (HIGHPASS_AOI_INT1))
 /*
  * END OF HIGH PASS FILTER SETTINGS
  */
@@ -146,7 +149,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FIFO_OVERRUN_INTERRUPT_ON_INT1_ENABLED      0b00000010
 #define FIFO_OVERRUN_INTERRUPT_ON_INT1_DISABLED     0b00000000
 
-#define SET_CTRL_REG3_A( CLICK, AOI1, AOI2, DRDY1, DRDY2, WTM, OVERRUN ) CLICK | AOI1 | AOI2 | DRDY1 | DRDY2 | WTM | OVERRUN
+#define SET_CTRL_REG3_A( CLICK, AOI1, AOI2, DRDY1, DRDY2, WTM, OVERRUN ) ((CLICK) | (AOI1) | (AOI2) | (DRDY1) | (DRDY2) | (WTM) | (OVERRUN))
 /*
  * END OF INTERRUPT SETTINGS
  */
@@ -167,7 +170,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SIM_SERIAL_INTERFACE_4_WIRE                 0b00000000
 #define SIM_SERIAL_INTERFACE_3_WIRE                 0b00000001
 
-#define SET_CTRL_REG4_A( BDU, BLE, FS, HR, SIM ) BDU | BLE | FS | HR | SIM
+#define SET_CTRL_REG4_A( BDU, BLE, FS, HR, SIM ) ((BDU) | (BLE) | (FS) | (HR) | (SIM))
 /*
  * END OF RESOLUTION AND SCALE SETTINGS
  */
@@ -188,7 +191,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define D4D_INT2_4D_ENABLED                         0b00000001
 #define D4D_INT2_4D_DISABLED                        0b00000000
 
-#define SET_CTRL_REG5_A( BOOT, FIFO_EN, LIR_INT1, D4D_INT1, LIR_INT2, D4D_INT2 ) BOOT | FIFO_EN | LIR_INT1 | D4D_INT1 | LIR_INT2 | D4D_INT2
+#define SET_CTRL_REG5_A( BOOT, FIFO_EN, LIR_INT1, D4D_INT1, LIR_INT2, D4D_INT2 ) ((BOOT) | (FIFO_EN) | (LIR_INT1) | (D4D_INT1) | (LIR_INT2) | (D4D_INT2))
 /*
  * END OF REGISTER
  */
@@ -209,7 +212,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define H_LACTIVE_INTERRUPT_ACTIVE_HIGH             0b00000000
 #define H_LACTIVE_INTERRUPT_ACTIVE_LOW              0b00000010
 
-#define SET_CTRL6_REG_A( I2_CLICK, I2_INT1, I2_INT2, BOOT_I1, P2_ACT, H_LACTIVE ) I2_CLICK | I2_INT1 | I2_INT2 | BOOT_I1 | P2_ACT | H_LACTIVE
+#define SET_CTRL6_REG_A( I2_CLICK, I2_INT1, I2_INT2, BOOT_I1, P2_ACT, H_LACTIVE ) ((I2_CLICK) | (I2_INT1) | (I2_INT2) | (BOOT_I1) | (P2_ACT) | (H_LACTIVE))
 /*
  * END OF REGISTER
  */
@@ -224,7 +227,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TR_TRIGGER_LINKED_TO_INTERRUPT1             0b00000000
 #define TR_TRIGGER_LINKED_TO_INTERRUPT2             0b00100000
 
-#define SET_FIFO_CTRL_REG_A( FM, TR ) FM | TR
+#define SET_FIFO_CTRL_REG_A( FM, TR ) ((FM) | (TR))
 /*
  * END OF REGISTER
  */
@@ -249,8 +252,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define XLIE_INTERRUPT_ON_X_LOW_ENABLED             0b00000001
 #define XLIE_INTERRUPT_ON_X_LOW_DISABLED            0b00000000
 
-#define SET_INT1_CFG_A( AOI, ZHIE, ZLIE, YHIE, YLIE, XHIE, XLIE ) AOI | ZHIE | ZLIE | YHIE | YLIE | XHIE | XLIE
-#define SET_INT2_CFG_A( AOI, ZHIE, ZLIE, YHIE, YLIE, XHIE, XLIE ) AOI | ZHIE | ZLIE | YHIE | YLIE | XHIE | XLIE
+#define SET_INT1_CFG_A( AOI, ZHIE, ZLIE, YHIE, YLIE, XHIE, XLIE ) ((AOI) | (ZHIE) | (ZLIE) | (YHIE) | (YLIE) | (XHIE) | (XLIE))
+#define SET_INT2_CFG_A( AOI, ZHIE, ZLIE, YHIE, YLIE, XHIE, XLIE ) ((AOI) | (ZHIE) | (ZLIE) | (YHIE) | (YLIE) | (XHIE) | (XLIE))
 /*
  * END OF REGISTER
  */
@@ -271,7 +274,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define XS_SINGLECLICK_ON_X_AXIS_ENABLED            0b00000001
 #define XS_SINGLECLICK_ON_X_AXIS_DISABLED           0b00000000
 
-#define SET_CLICK_CFG_A( ZD, ZS, YD, YS, XD, XS ) ZD | ZS | YD | YS | XD | XS
+#define SET_CLICK_CFG_A( ZD, ZS, YD, YS, XD, XS ) ((ZD) | (ZS) | (YD) | (YS) | (XD) | (XS))
 /*
  * END OF CLICK_CFG_A
  */
@@ -288,7 +291,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SIGN_POSITIVE_DETECTION                     0b00000000
 #define SIGN_NEGATIVE_DETECTION                     0b00001000
 
-#define SET_CLICK_SRC_A( DCLICK, SCLICK, SIGN ) DCLICK | SCLICK | SIGN
+#define SET_CLICK_SRC_A( DCLICK, SCLICK, SIGN ) ((DCLICK) | (SCLICK) | (SIGN))
 /*
  * END OF CLICK_SRC_A
  */
@@ -307,7 +310,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DO2_75Hz                                    0b00011000
 #define DO2_220Hz                                   0b00011100
 
-#define SET_CRA_REG_M( TEMP_EN, DO2 ) TEMP_EN | DO2
+#define SET_CRA_REG_M( TEMP_EN, DO2 ) ((TEMP_EN) | (DO2))
 /*
  * END OF CRA_REG_M
  */
@@ -360,7 +363,7 @@ namespace quadro {
             /**
              * Runs the stopRecording method and attempts to cancel threads.
              */
-            ~LSM303DLHC();
+            ~LSM303DLHC() override;
 
             /**
              * Loads default settings suitable for flight on the LSM303DLHC.
@@ -492,14 +495,14 @@ namespace quadro {
              *
              * @param _deviceAddress
              */
-            void setDeviceAddress( unsigned char _deviceAddress ) { deviceAddress = _deviceAddress; }
+            void setDeviceAddress( unsigned char _deviceAddress ) override { deviceAddress = _deviceAddress; }
 
             /**
              * Set the I2C Bus ID
              *
              * @param _busId
              */
-            void setBusId( int _busId ) { busId = _busId; }
+            void setBusId( int _busId ) override { busId = _busId; }
 
         private:
 
@@ -620,7 +623,6 @@ namespace quadro {
              */
             uint8_t getOutputDataRate();
 
-
             /**
              * Returns the Magnetometers DataOutputRate value.
              *
@@ -658,3 +660,5 @@ namespace quadro {
     }
 }
 #endif /* SRC_LSM303DLHC_H_ */
+
+#pragma clang diagnostic pop

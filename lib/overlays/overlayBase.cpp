@@ -22,8 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using namespace quadro::overlays;
 
 overlayBase::overlayBase()
-{
-}
+= default;
 
 bool overlayBase::isLoaded( const char* searchFile )
 {
@@ -65,5 +64,6 @@ bool overlayBase::load( const char* Overlay )
     }
     catch ( exception& e ) {
         cerr << "Exception : " << e.what() << endl;
+        return false;
     }
 }

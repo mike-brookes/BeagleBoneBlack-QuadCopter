@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../LSM303DLHC.h"
 #include <bitset>
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 
@@ -39,7 +39,7 @@ namespace quadro {
              * @param _deviceAddress
              * @param _busId
              */
-            LSM303Magnetometer( unsigned char _deviceAddress = MAG_ADDRESS, int _busId = 1 );
+            explicit LSM303Magnetometer( unsigned char _deviceAddress = MAG_ADDRESS, int _busId = 1 );
 
             /*!
              * Calculates heading using the following equation :

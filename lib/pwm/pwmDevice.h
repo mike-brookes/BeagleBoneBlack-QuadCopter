@@ -43,7 +43,7 @@ namespace quadro {
              * Base class for PWM devices
              * @uses IDevice, pwmOverlay
              */
-            pwmDevice() { };
+            pwmDevice() = default;;
 
             /**
              * Alternative constructor, setting the pins on setup.
@@ -64,11 +64,12 @@ namespace quadro {
                 Polarity, //!< Polarity Value Type
                 Power_Control, //!< Power_Control Value Type
                 Power_RunTime_Active, //!< Power_RunTime_Active Value Type
-                Power_RunTime_Suspended //!< Power_RunTime_Suspended Value Type
+                Power_RunTime_Suspended, //!< Power_RunTime_Suspended Value Type
+                None
             };
 
-            pinBlocks blockNum; //!< stores the PWM device block num
-            PWMPins pinNum; //!< stores the PWM device pin num
+            pinBlocks blockNum{}; //!< stores the PWM device block num
+            PWMPins pinNum{}; //!< stores the PWM device pin num
 
             string powerControlStr; //!< stores the current power setting string
 
@@ -104,7 +105,7 @@ namespace quadro {
 
         private:
 
-            valType VT; //!< Container for the val type
+            valType VT = valType::None; //!< Container for the val type
 
             /**
              * Reads the file of valType (enum) e.g duty
@@ -119,20 +120,20 @@ namespace quadro {
              * @param _bufferSize
              * @return short
              */
-            short readDevice( size_t _bufferSize );
+            short readDevice( size_t _bufferSize ) override;
 
             /**
              * Runs an init check to make sure the applicable pwm overlay has been loaded.
              *
              * @throws pwmSetupException
              */
-            void initDevice() throw( pwmSetupException& );
+            void initDevice() throw( pwmSetupException& ) override;
 
             /**
              * TODO: Implement a connection test functionality here.
              * @return
              */
-            int connectToDevice() { return 1; }
+            int connectToDevice() override { return 1; }
 
             /**
              * Write a value to the PWM file
@@ -141,7 +142,7 @@ namespace quadro {
              * @param _bufferSize
              * @return int
              */
-            int writeToDevice( size_t _bufferSize ) throw( pwmSetupException& );
+            int writeToDevice( size_t _bufferSize ) throw( pwmSetupException& ) override;
 
             /**
              * This function is called when setting a pwm value, the valType is the file you need to write to : e.g duty
@@ -158,7 +159,7 @@ namespace quadro {
              * @thows pwmSetupException
              * @return int
              */
-            int openDevice() throw( pwmSetupException& );
+            int openDevice() throw( pwmSetupException& ) override;
 
             /**
              *
@@ -192,27 +193,27 @@ namespace quadro {
              */
             void setFilePaths();
 
-            long val2Write; //!< stores the value to be written
+            long val2Write{}; //!< stores the value to be written
 
             ifstream PWMFile; //!< File stream handle
 
             string currentReading; //!< latest reading from a file
 
-            overlays::pinOverlay* _pinOverlay; //!< setup a pointer to the pinOverlay class
+            overlays::pinOverlay* _pinOverlay{}; //!< setup a pointer to the pinOverlay class
 
-            char dutyPath[50]; //!< storage for the duty file path
+            char dutyPath[50]{}; //!< storage for the duty file path
 
-            char periodPath[50]; //!< storage for the period file path
+            char periodPath[50]{}; //!< storage for the period file path
 
-            char runPath[50]; //!< storage for the run file path
+            char runPath[50]{}; //!< storage for the run file path
 
-            char polarityPath[50]; //!< storage for the polarity file path
+            char polarityPath[50]{}; //!< storage for the polarity file path
 
-            char powerControlPath[100]; //!< storage for the power control file path
+            char powerControlPath[100]{}; //!< storage for the power control file path
 
-            char powerRunTime_ActivePath[100]; //!< storage for the power run time active file path
+            char powerRunTime_ActivePath[100]{}; //!< storage for the power run time active file path
 
-            char powerRunTime_SuspendedPath[100]; //!< storage for the power run time suspended file path
+            char powerRunTime_SuspendedPath[100]{}; //!< storage for the power run time suspended file path
 
         };
 

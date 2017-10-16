@@ -44,7 +44,7 @@ namespace quadro {
             struct overlaySettings {
                 const char* overlay = "am33xx_pwm"; //!< overlay name
                 const char* searchFile = "/sys/devices/ocp.3/48300000.epwmss/modalias"; //!< overlay created file
-                bool overlayLoaded; //!< overlay Loaded switch
+                bool overlayLoaded{}; //!< overlay Loaded switch
             } settings;
 
         };

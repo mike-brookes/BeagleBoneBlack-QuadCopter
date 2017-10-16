@@ -179,10 +179,7 @@ void LSM303DLHC::loadRecommendedFlightSettings()
 
 }
 
-LSM303DLHC::LSM303DLHC()
-{
-
-}
+LSM303DLHC::LSM303DLHC() = default;
 
 LSM303DLHC::~LSM303DLHC()
 {
@@ -331,49 +328,49 @@ void LSM303DLHC::setMagnetometerTimerBasedOnDO()
 
 void* LSM303DLHC::recordAccelerometerValues( void* _LSM303 )
 {
-    LSM303DLHC* LSM303 = ( LSM303DLHC* ) _LSM303;
+    auto* LSM303 = ( LSM303DLHC* ) _LSM303;
     while ( LSM303->dataTimer ) { //dataTimer will be 0 if the LSM303 is powered off.
         if ( LSM303->XAxisIsEnabled()) LSM303->setX();
         if ( LSM303->YAxisIsEnabled()) LSM303->setY();
         if ( LSM303->ZAxisIsEnabled()) LSM303->setZ();
         usleep( LSM303->dataTimer );
     }
-    return 0;
+    return nullptr;
 }
 
 void* LSM303DLHC::recordMagnetometerValues( void* _LSM303 )
 {
-    LSM303DLHC* LSM303 = ( LSM303DLHC* ) _LSM303;
+    auto* LSM303 = ( LSM303DLHC* ) _LSM303;
     while ( LSM303->magnetometerIsEnabled() == 0 ) { //0 = continuous mode, 1 = "Singe Conversion Mode", "Sleep Mode" with values of 2 or 3
         LSM303->setX();
         LSM303->setY();
         LSM303->setZ();
         usleep( LSM303->dataTimer );
     }
-    return 0;
+    return nullptr;
 }
 
 void LSM303DLHC::startRecording()
 {
     if ( deviceAddress == ACCEL_ADDRESS ) {
-        threadRet = pthread_create( &LSM303AccelThread, NULL, LSM303DLHC::recordAccelerometerValues, this );
+        threadRet = pthread_create( &LSM303AccelThread, nullptr, LSM303DLHC::recordAccelerometerValues, this );
         if ( threadRet == EAGAIN ) {
             //Failed because of resource unavailability, try once more and then throw an exception on failure
-            threadRet = pthread_create( &LSM303AccelThread, NULL, LSM303DLHC::recordAccelerometerValues, this );
+            threadRet = pthread_create( &LSM303AccelThread, nullptr, LSM303DLHC::recordAccelerometerValues, this );
             if ( threadRet != 0 ) {
-                throw new i2cSetupException(
+                throw i2cSetupException(
                         "(LVMaxSonarEZ) " + i2c::THREAD_FATAL + " : errorNumber = "
                                 + to_string( threadRet ));
             }
         }
     }
     else {
-        threadRet = pthread_create( &LSM303MagThread, NULL, LSM303DLHC::recordMagnetometerValues, this );
+        threadRet = pthread_create( &LSM303MagThread, nullptr, LSM303DLHC::recordMagnetometerValues, this );
         if ( threadRet == EAGAIN ) {
             //Failed because of resource unavailability, try once more and then throw an exception on failure
-            threadRet = pthread_create( &LSM303MagThread, NULL, LSM303DLHC::recordMagnetometerValues, this );
+            threadRet = pthread_create( &LSM303MagThread, nullptr, LSM303DLHC::recordMagnetometerValues, this );
             if ( threadRet != 0 ) {
-                throw new i2cSetupException(
+                throw i2cSetupException(
                         "(LVMaxSonarEZ) " + i2c::THREAD_FATAL + " : errorNumber = "
                                 + to_string( threadRet ) );
             }
@@ -385,17 +382,17 @@ void LSM303DLHC::startRecording()
         //The sonic sensor thread failed, throw an appropriate exception.
         if ( threadRet == EPERM ) {
             //Thread creation failed because of invalid permissions on the system to create threads.
-            throw new i2cSetupException(
+            throw i2cSetupException(
                     "(LVMaxSonarEZ) " + i2c::THREAD_PERMISSIONS + " : errorNumber = " + to_string( threadRet ) );
         }
         else if ( threadRet == EINVAL ) {
             //Thread creation failed because the argument used is invalid.
-            throw new i2cSetupException(
+            throw i2cSetupException(
                     "(LVMaxSonarEZ) " + i2c::THREAD_INVALID_ARG + " : errorNumber = " + to_string( threadRet ) );
         }
         else {
             //An unknown error occurred - unknown error code.
-            throw new i2cSetupException(
+            throw i2cSetupException(
                     "(LVMaxSonarEZ) " + i2c::THREAD_UNKNOWN + " : errorNumber = " + to_string( threadRet ) );
         }
     }

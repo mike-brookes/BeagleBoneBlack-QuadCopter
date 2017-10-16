@@ -56,8 +56,8 @@ namespace quadro {
                 const char* searchFile = "AIN0"; //<! Successful setup file name
                 const char* fileType = "AIN"; //<! Successful setup folder name
                 const char* helperParentDir = "/sys/devices/ocp.3/"; //<! Location for ananlog file structure
-                char helperPath[ANALOG_MAX_BUF]; //<! Full path to analogBase helper file.
-                bool overlayLoaded; //<! Boolean that holds the loaded value
+                char helperPath[ANALOG_MAX_BUF]{}; //<! Full path to analogBase helper file.
+                bool overlayLoaded{}; //<! Boolean that holds the loaded value
             } settings;
 
             char analogFilePath[ANALOG_MAX_BUF]; //<! Full path to analogBase file

@@ -34,7 +34,7 @@ namespace quadro {
             /**
              * default constructor
              */
-            motors() { };
+            motors() = default;
 
             /**
              * Constructor for initialising the motor with it's associated pinBlock and PWMPin
@@ -70,36 +70,41 @@ namespace quadro {
              */
             void stop();
 
-            long currentDuty; //!< Storage for the current Duty value
-            long currentPeriod; //!< Storage for the current Period value
-            int currentRun; //!< Storage for the current Run value
-            int currentPolarity; //!< Storage for the current Polarity value
+            /**
+             * Set the motors duty value
+             *
+             * @param _duty
+             */
+            void setDuty( long _duty );
+
+            /**
+             * Set the motors Period value here
+             *
+             * @param _period
+             */
+            void setPeriod( long _period );
+
+            /**
+             * Set the motors Run value here
+             *
+             * @param _run
+             */
+            void setRun( int _run );
+
+            /**
+             * Set the motors Polarity here.
+             *
+             * @param _polarity
+             */
+            void setPolarity( int _polarity );
+
+            long currentDuty = 0; //!< Storage for the current Duty value
+            long currentPeriod = 0; //!< Storage for the current Period value
+            int currentRun = 0; //!< Storage for the current Run value
+            int currentPolarity = 0; //!< Storage for the current Polarity value
 
         protected:
 
-            /**
-             * Every motor has it's own max PWM value, you can retrieve it here after it has been set using setMaxSpeed()
-             *
-             * @see setMaxSpeed()
-             * @return long maxSpeed
-             */
-            long getMaxSpeed();
-
-            /**
-             * Every motor has it's own min PWM value, you can retrieve it here after it has been set using setMinSpeed()
-             *
-             * @see setMinSpeed()
-             * @return long minSpeed
-             */
-            long getMinSpeed();
-
-            /**
-             * After testing you may find you need to change how fast the motors speed up and slow down, one way of accomplishing
-             * this is to set the speed step to a larger number, you can get the current speed step here.
-             *
-             * @return int
-             */
-            int getSpeedStep();
 
             /**
              * Set your motors max speed here, it will probably be the lowest of the numbers as lower means faster.
@@ -114,14 +119,6 @@ namespace quadro {
              * @param _minSpeed
              */
             void setMinSpeed( long _minSpeed );
-
-            /**
-             * Set the speed step increment here, this is how fast your motor will speed up - some testing may be required
-             * to find the ideal setting.
-             *
-             * @param _speedStep
-             */
-            void setSpeedStep( int _speedStep );
 
         private:
 
@@ -170,15 +167,14 @@ namespace quadro {
              */
             static void* maintainTargetSpeed( void* );
 
-            pthread_t threadHandle; //!< Thread Handle
-            int threadRet; //!< Thread return value
-            int speedStep; //!< Storage for the size of step taken when speeding up or slowing down motors
+            pthread_t threadHandle = 0; //!< Thread Handle
+            int threadRet = 0; //!< Thread return value
 
-            long targetSpeed; //!< Storage for this motors target speed.
-            long maxSpeed; //!< Storage for this motors max speed value.
-            long minSpeed; //!< Storage for this motors min speed value.
+            long targetSpeed = 0; //!< Storage for this motors target speed.
+            long maxSpeed = 0; //!< Storage for this motors max speed value.
+            long minSpeed = 0; //!< Storage for this motors min speed value.
 
-            status Status; //!< Storage for this motors status.
+            status Status = status::Off; //!< Storage for this motors status.
         };
 
     }

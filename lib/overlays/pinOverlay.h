@@ -39,7 +39,7 @@ namespace quadro {
                 const char* overlay = "bone_pwm_P";
                 const char* overlayDir = "/sys/devices/ocp.3/";
                 const char* searchFile = "pwm_test_P";
-                bool overlayLoaded;
+                bool overlayLoaded{};
             } settings;
 
             char pinOverlayDir[MAX_BUF]; //!< Stores the PWM folder name

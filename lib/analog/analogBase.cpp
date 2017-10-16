@@ -20,83 +20,86 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using namespace quadro::analog;
 
 analogBase::analogBase()
+        :devicePort{ analogPort::PORT0 }
 {
 
-    this->setDevicePort( analogPort::PORT0 );
-    this->initDevice();
-    if ( this->_analogOverlay.settings.overlayLoaded ) {
-        this->setDeviceFilePath();
+    setDevicePort( analogPort::PORT0 );
+    initDevice();
+    if ( analogOverlay_.settings.overlayLoaded ) {
+        setDeviceFilePath();
     }
     else {
-        snprintf( this->_analogOverlay.errMessage, sizeof( this->_analogOverlay.errMessage ),
+        snprintf( analogOverlay_.errMessage, sizeof( analogOverlay_.errMessage ),
                 "Fatal analogBase Error - Unable to initialise the analogBase Device." );
-        throw analogSetupException( this->_analogOverlay.errMessage );
+        throw analogSetupException( analogOverlay_.errMessage );
     }
 }
 
-analogBase::~analogBase() { }
+analogBase::~analogBase() = default;
 
 void analogBase::initDevice() throw( analogSetupException& )
 {
-    if ( !this->_analogOverlay.settings.overlayLoaded ) {
-        snprintf( this->_analogOverlay.errMessage, sizeof( this->_analogOverlay.errMessage ),
+    if ( !analogOverlay_.settings.overlayLoaded ) {
+        snprintf( analogOverlay_.errMessage, sizeof( analogOverlay_.errMessage ),
                 "Fatal analogBase Error - Unable to load overlays : %s",
-                this->_analogOverlay.settings.overlay );
-        throw analogSetupException( this->_analogOverlay.errMessage );
+                analogOverlay_.settings.overlay );
+        throw analogSetupException( analogOverlay_.errMessage );
     }
 }
 
 int analogBase::getCurrentReading()
 {
-    this->readDevice( 1024 );
-    if ( this->currentReading.length() > 0 ) {
-        return stoi( this->currentReading );
+    readDevice( 1024 );
+    if ( currentReading.length() > 0 ) {
+        return stoi( currentReading );
     }
     else {
         return 1;
     }
 }
 
-short analogBase::readDevice( size_t _bufferSize )
+short analogBase::readDevice( size_t bufferSize_ )
 {
-    if ( !this->deviceFile.is_open()) {
-        if ( this->openDevice()) {
+    if ( !deviceFile.is_open()) {
+        if ( openDevice()) {
             try {
-                getline( this->deviceFile, this->currentReading );
-                this->deviceFile.close();
+                getline( deviceFile, currentReading );
+                deviceFile.close();
             }
-            catch ( ifstream::failure e ) {
-                throw new analogSetupException( e.what() );
+            catch ( ifstream::failure& e ) {
+                throw analogSetupException( e.what());
             }
         }
         return 0;
+    } else {
+        return -1;
     }
 }
 
 int analogBase::openDevice() throw( analogSetupException& )
 {
     try {
-        this->deviceFile.open( this->deviceFilePath.c_str(), ios::binary | ios::in );
+        deviceFile.open( deviceFilePath.c_str(), ios::binary | ios::in );
         return 1;
     }
     catch ( exception& e ) {
-        snprintf( this->_analogOverlay.errMessage, sizeof( this->_analogOverlay.errMessage ),
+        snprintf( analogOverlay_.errMessage, sizeof( analogOverlay_.errMessage ),
                 "Fatal analogBase Error - Unable to create fileHandle : %s",
-                this->deviceFilePath.c_str());
-        throw analogSetupException( this->_analogOverlay.errMessage );
+                deviceFilePath.c_str());
+        throw analogSetupException( analogOverlay_.errMessage );
     }
 }
 
 void analogBase::setDevicePort( analogPort DevicePort )
 {
-    this->devicePort = DevicePort;
+    devicePort = DevicePort;
 }
 
 void analogBase::setDeviceFilePath()
 {
     ostringstream oss;
-    this->deviceFilePath = this->_analogOverlay.settings.helperPath;
-    this->deviceFilePath.append( this->_analogOverlay.settings.fileType );
-    oss << this->devicePort;
-    this->deviceFilePath.append( oss.str());
+    deviceFilePath = analogOverlay_.settings.helperPath;
+    deviceFilePath.append( analogOverlay_.settings.fileType );
+    oss << devicePort;
+    deviceFilePath.append( oss.str());
 }

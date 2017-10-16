@@ -24,7 +24,7 @@ namespace quadro {
              * Public access point to throw Analog Runtime Exceptions
              * @param _errMsg
              */
-            analogRuntimeException( string _errMsg ) { }
+            explicit analogRuntimeException( string _errMsg ) { }
         };
 
     }

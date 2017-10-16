@@ -44,7 +44,7 @@ namespace quadro { //<! Main Quadro Namespace
             /*!
              * Public Destructor
              */
-            ~analogBase();
+            ~analogBase() override;
 
             /*!
              * Public Constructor - sets the default port to 0 and attempts to initialise that device.
@@ -79,7 +79,7 @@ namespace quadro { //<! Main Quadro Namespace
 
         private:
 
-            analogOverlay _analogOverlay; //!< Loads the overlays for Analog devices.
+            analogOverlay analogOverlay_; //!< Loads the overlays for Analog devices.
 
             analogPort devicePort; //!< Enum type analogPort
 
@@ -91,16 +91,16 @@ namespace quadro { //<! Main Quadro Namespace
 
             /*!
              * readDevice allows us to read the value on a specified Analog Port.
-             * @param _bufferSize
+             * @param bufferSize_
              * @return short
              */
-            short readDevice( size_t _bufferSize );
+            short readDevice( size_t bufferSize_ ) override;
 
             /*!
              * initDevice attempts to load the overlay
              * @throws analogSetupException
              */
-            void initDevice() throw( analogSetupException& );
+            void initDevice() throw( analogSetupException& ) override;
 
             /*!
              * setDeviceFilePath appends the helper file path with the analog file name and port.
@@ -112,21 +112,21 @@ namespace quadro { //<! Main Quadro Namespace
              * @todo use this function to check everything is setup correctly
              * @return int
              */
-            int connectToDevice() throw( analogSetupException& ) { return 1; }
+            int connectToDevice() throw( analogSetupException& ) override { return 1; }
 
             /*!
              * unused but a part of the interface
              * @param _bufferSize
              * @return int
              */
-            int writeToDevice( size_t _bufferSize ) throw( analogSetupException& ) { return 1; }
+            int writeToDevice( size_t _bufferSize ) throw( analogSetupException& ) override { return 1; }
 
             /*!
              * This method checks the analog file can be opened in binary mode for reading.
              * @throws analogSetupException
              * @return int
              */
-            int openDevice() throw( analogSetupException& );
+            int openDevice() throw( analogSetupException& ) override;
 
         };
 

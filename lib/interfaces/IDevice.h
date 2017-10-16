@@ -26,7 +26,7 @@ namespace quadro {
      */
     class IDevice {
     public:
-        virtual ~IDevice() { };
+        virtual ~IDevice() = default;
 
         /*!
         * pure virtual openDevice - All devices implementing this interface will require this functionality.
@@ -41,12 +41,12 @@ namespace quadro {
         /*!
         * pure virtual writeToDevice - All devices implementing this interface will require this functionality.
         */
-        virtual int writeToDevice( size_t _BufferSize ) = 0;
+        virtual int writeToDevice( size_t bufferSize_ ) = 0;
 
         /*!
         * pure virtual readDevice - All devices implementing this interface will require this functionality.
         */
-        virtual short readDevice( size_t _BufferSize ) = 0;
+        virtual short readDevice( size_t bufferSize_ ) = 0;
 
         /*!
         * pure virtual connectToDevice - All devices implementing this interface will require this functionality.

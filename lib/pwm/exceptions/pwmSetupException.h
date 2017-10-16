@@ -20,7 +20,7 @@ namespace quadro {
              * Public access point to throw i2cSetupExceptions
              * @param _errMsg
              */
-            pwmSetupException( string _errMsg ) { }
+            explicit pwmSetupException( string _errMsg ) { }
         };
 
     }

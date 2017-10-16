@@ -43,7 +43,7 @@ namespace quadro {
              * Public access point to throw AnalogSetupExceptions
              * @param _errMsg
              */
-            analogSetupException( string _errMsg ) { }
+            explicit analogSetupException( const string& _errMsg ) { }
         };
 
     }
