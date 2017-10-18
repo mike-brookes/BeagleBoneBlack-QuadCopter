@@ -81,7 +81,7 @@ I use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-* **Michael Brookes** - *Initial work* - [MBircohoakeels](https://github.com/mbircohoakeels)
+* **Michael Brookes** - *Initial work* - [Mike Brookes](https://github.com/mike-brookes)
 
 ## License
 
