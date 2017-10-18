@@ -6,8 +6,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -Wall -Wextra -Wno-u
 
 SET(CMAKE_BUILD_TYPE Debug)
 
-#set(CMAKE_SYSROOT /Volumes/xtools/arm-none-linux-gnueabi/arm-none-linux-gnueabi/sysroot/)
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ~/Documents/Remote-File-Mount/QuadCopter/Debug/)
 
 set(SOURCE_FILES
