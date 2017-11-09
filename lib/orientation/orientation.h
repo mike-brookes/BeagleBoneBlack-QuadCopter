@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef QUADRO_ORIENTATION_H
 #define QUADRO_ORIENTATION_H
 
-#define STORE_DATA 1;
+//#define STORE_DATA 1;
 
 #include <cstdio>
 #include <pthread.h>
@@ -108,16 +108,9 @@ namespace quadro {
          */
         PID* rollPID;
 
+        void setValues();
+
     private:
-
-        /**
-         * setValues is a static method that runs in it's own thread assigning values from all assigned orientation sensors.
-         *
-         * @params *this - a pointer to this object
-         */
-        static void* setValues( void* orientationInst );
-
-        pthread_t orientationNotifyer; //!< Thread Handle
 
         Kalman kalmanPitch; //!< kalmanPitch - Create a Kalman filter object for pitch
 
