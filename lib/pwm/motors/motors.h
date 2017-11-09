@@ -47,9 +47,9 @@ namespace quadro {
             /**
              * Set the speed that you want the motor to achieve.
              *
-             * @param _targetSpeed
+             * @param targetSpeed_
              */
-            void setTargetSpeed( long _targetSpeed );
+            void setTargetSpeed( long targetSpeed_ );
 
             /**
              * Reverse the motors polarity using this method
@@ -73,30 +73,37 @@ namespace quadro {
             /**
              * Set the motors duty value
              *
-             * @param _duty
+             * @param duty_
              */
-            void setDuty( long _duty );
+            void setDuty( long duty_ );
 
             /**
              * Set the motors Period value here
              *
-             * @param _period
+             * @param period_
              */
-            void setPeriod( long _period );
+            void setPeriod( long period_ );
+
+            /**
+             * Set the motors Period value here
+             *
+             * @param hz_
+             */
+            void setPeriodByHz( int hz_ );
 
             /**
              * Set the motors Run value here
              *
-             * @param _run
+             * @param run_
              */
-            void setRun( int _run );
+            void setRun( int run_ );
 
             /**
              * Set the motors Polarity here.
              *
-             * @param _polarity
+             * @param polarity_
              */
-            void setPolarity( int _polarity );
+            void setPolarity( int polarity_ );
 
             long currentDuty = 0; //!< Storage for the current Duty value
             long currentPeriod = 0; //!< Storage for the current Period value
@@ -109,16 +116,16 @@ namespace quadro {
             /**
              * Set your motors max speed here, it will probably be the lowest of the numbers as lower means faster.
              *
-             * @param _maxSpeed
+             * @param maxSpeed_
              */
-            void setMaxSpeed( long _maxSpeed );
+            void setMaxSpeed( long maxSpeed_ );
 
             /**
              * Set your motors min speed here, it will probably be the highest of the numbers as higher means slower.
              *
-             * @param _minSpeed
+             * @param minSpeed_
              */
-            void setMinSpeed( long _minSpeed );
+            void setMinSpeed( long minSpeed_ );
 
         private:
 
@@ -142,30 +149,9 @@ namespace quadro {
             /**
              * Set the motor status as per the available status settings
              *
-             * @param _status
+             * @param status_
              */
-            void setStatus( status _status );
-
-            /**
-             * Increase the motor speed, if no speed step is specified this method will use the default value.
-             *
-             * @param _SpeedMod (defaults to 250)
-             */
-            void increaseSpeed( unsigned short _SpeedMod = 250 );
-
-            /**
-             * Decrease the motor speed, if no speed step is specified this method will use the default value.
-             *
-             * @param _SpeedMod (defaults to 250)
-             */
-            void decreaseSpeed( unsigned short _SpeedMod = 250 );
-
-            /**
-             * Main thread for each motor, its goal is to maintain the motors current speed in line with the set target speed.
-             *
-             * @return 0
-             */
-            static void* maintainTargetSpeed( void* );
+            void setStatus( status status_ );
 
             pthread_t threadHandle = 0; //!< Thread Handle
             int threadRet = 0; //!< Thread return value

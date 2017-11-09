@@ -32,15 +32,17 @@ namespace quadro {
         class dji_2212 : public motors {
 
             //The reason these values are set in this class : Every motor type will have it's own values.
-            //For each motor type, the motors class should be extended and the below values set accordingly.
-            const long MAX_DUTY = 140000; //!< Maximum Duty Value, any lower than this doesn't impact the motors
-            const long MIN_DUTY = 200000; //!< Minimum Duty Value, any higher than this doesn't impact the motors
-            const long SPIN_SLOWSPEED = 700000; //!< Used to show the motors are set up correctly.
-            const long SPIN_TAKEOFFSPEED = 250000; //!< Speed of motors required to achieve lift off.
-            const long DEFAULT_PERIOD = 1900000; //!< This value is used when you want to fly.
-            const long ACTIVATE_PERIOD = 1200000; //!< This value should only be used in setup to initialise the motors.
+            //For each motor type, the motors class should be extended and the below values set accordingly. (nanoseconds)
+            const long MAX_DUTY = 575000; //!< Maximum Duty Value, any lower than this doesn't impact the motors
+            const long MIN_DUTY = 625000; //!< Minimum Duty Value, any higher than this doesn't impact the motors
+
+            const long SPIN_SLOWSPEED = 1000000; //!< Used to show the motors are set up correctly.
+            const long SPIN_TAKEOFFSPEED = 800000; //!< Speed of motors required to achieve lift off.
+            const long DEFAULT_PERIOD = 2222222; //!< This value is used when you want to fly.
+            const long ACTIVATE_PERIOD = 2222222; //!< This value should only be used in setup to initialise the motors.
 
         public:
+            const static long HOVER_THROTTLE = 600000;
 
             /**
              * Public entry point for running a DJI_2212 motor, set the Block and Pin number in the constructor.

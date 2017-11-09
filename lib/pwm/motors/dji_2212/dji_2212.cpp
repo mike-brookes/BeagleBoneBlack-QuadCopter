@@ -27,8 +27,8 @@ dji_2212::dji_2212( pinBlocks _block,
 
     setMaxSpeed( MAX_DUTY );
     setMinSpeed( MIN_DUTY );
-    setPeriod( ACTIVATE_PERIOD );
-    setDuty( MIN_DUTY );
+    setPeriodByHz( 450 );
+    setDuty( SPIN_SLOWSPEED );
     setPolarity( 1 );
 
 }
@@ -36,7 +36,7 @@ dji_2212::dji_2212( pinBlocks _block,
 void dji_2212::init()
 {
     setPeriod( DEFAULT_PERIOD );
-    setTargetSpeed( SPIN_SLOWSPEED );
+    setTargetSpeed( SPIN_TAKEOFFSPEED );
     setRun( 1 );
     start();
 }
