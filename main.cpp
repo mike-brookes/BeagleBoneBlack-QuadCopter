@@ -25,13 +25,13 @@ int main()
     /**
     * @param startTime for timing iterations in the main thread loop.
     */
-    int startTime;
-    
+    //int startTime;
+
     /**
     * Initialise a pointer for main quadroCopter object.
     */
     quadroCopter* AeroBot;
-    
+
     /**
     * @var AeroBot as new quadroCopter object.
     * The constructor in the quadroCopter :
@@ -44,7 +44,7 @@ int main()
     try {
         AeroBot = new quadroCopter;
     }
-    catch( exceptions::fatalException& e ) {
+    catch ( exceptions::fatalException& e ) {
         //print the error and exit immediately, running exit here should cause everything to destruct properly.
         cout << "Fatal Exception With Message : " << e.what() << endl;
         exit( 1 );
@@ -65,7 +65,7 @@ int main()
         /**
         * Record the start time for this iteration.
         */
-        startTime = Timer::milliTimer();
+        //startTime = Timer::milliTimer();
 
         /**
         * Make motor adjustments to ensure the quadCopter is maintaining it's target values.
@@ -75,9 +75,9 @@ int main()
         /**
         * Waste of resources to loop too fast, wait here until data is refreshed based on the data rate.
         */
-        while ( Timer::milliTimer() - startTime < ( AeroBot->myOrientation->DATA_RATE * 1000 )) {
-            usleep( 100 );
-        }
+//        while ( Timer::milliTimer() - startTime < ( AeroBot->myOrientation->DATA_RATE * 1000 )) {
+//            usleep( 100 );
+//        }
 
         //clock_gettime(CLOCK_MONOTONIC, &finish);
 
