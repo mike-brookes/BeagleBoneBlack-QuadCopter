@@ -57,16 +57,14 @@ orientation::orientation()
     }
 
     //Set up a new PID object for Pitch
-    pitchPID = new PID( 0.1, 10, -10, 0.1, 0.01, 0.5 );
+    pitchPID = new PID( 0.1, 40, -40, 1.3, 0.05, 15 );
 
     //Set up a new PID object for Roll
-    rollPID = new PID( 0.1, 10, -10, 0.1, 0.01, 0.5 );
+    rollPID = new PID( 0.1, 250, -250, 1.3, 0, 15 );
 
     //select the Kalman filter method by default, this can be altered using the public setDataFilterSelection method.
     setDataFilterSelection( KALMAN );
 
-    //Start the orientation main thread that calculates it's own values based on sensor thread updated values.
-    pthread_create( &orientationNotifyer, nullptr, orientation::setValues, this );
 }
 
 orientation::~orientation() noexcept
@@ -77,41 +75,27 @@ orientation::~orientation() noexcept
     gyroscope->stop( gyroscope->threadHandle );
 }
 
-void* orientation::setValues( void* orientationInst )
+void orientation::setValues()
 {
 
-    int startTime;
+    //Complimentary filter method
+    if ( dataFilterSelection == COMPLIMENTARY ) {
+        runComplimentaryCalculations();
+    }
 
-    auto* position = ( orientation* ) orientationInst;
-
-    while ( true ) {
-
-        startTime = Timer::milliTimer();
-
-        //Complimentary filter method
-        if ( position->dataFilterSelection == COMPLIMENTARY ) {
-            position->runComplimentaryCalculations();
-        }
-
-        //Kalman Filter Method.
-        if ( position->dataFilterSelection == KALMAN ) {
-            position->runKalmanCalculations();
-        }
+    //Kalman Filter Method.
+    if ( dataFilterSelection == KALMAN ) {
+        runKalmanCalculations();
+    }
 
 #ifdef STORE_DATA
-        position->dataStorageFile.open( position->dataStorageFileName );
-        if ( position->dataStorageFile.is_open()) {
-            position->dataStorageFile << position->pitch << "," << position->roll;
-            position->dataStorageFile.close();
-        }
+    dataStorageFile.open( position->dataStorageFileName );
+    if ( dataStorageFile.is_open()) {
+        dataStorageFile << position->pitch << "," << position->roll;
+        dataStorageFile.close();
+    }
 #endif
 
-        while ( Timer::milliTimer() - startTime < ( position->DATA_RATE * 1000 )) {
-            usleep( 100 );
-        }
-
-    }
-    return nullptr;
 }
 
 void orientation::runKalmanCalculations()
