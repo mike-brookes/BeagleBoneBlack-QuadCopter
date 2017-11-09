@@ -55,24 +55,25 @@ void aeronautics::maintainHeading()
 
 void aeronautics::maintainRoll( double _duty_increment, float _roll )
 {
-    if( _roll > 0 ) {
-        motor[ 2 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty + _duty_increment ) );
-        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty - _duty_increment ) );
+
+    if ( _roll > 0 ) {
+        motor[ 0 ]->setTargetSpeed( long( pwm::dji_2212::HOVER_THROTTLE - _duty_increment ));
+        motor[ 2 ]->setTargetSpeed( long( pwm::dji_2212::HOVER_THROTTLE + _duty_increment ));
     }
     else {
-        motor[ 0 ]->setTargetSpeed( long( motor[ 0 ]->currentDuty + _duty_increment ) );
-        motor[ 2 ]->setTargetSpeed( long( motor[ 2 ]->currentDuty - _duty_increment ) );
+        motor[ 0 ]->setTargetSpeed( long( pwm::dji_2212::HOVER_THROTTLE + ( _duty_increment )));
+        motor[ 2 ]->setTargetSpeed( long( pwm::dji_2212::HOVER_THROTTLE - ( _duty_increment )));
     }
 }
 
 void aeronautics::maintainPitch( double _duty_increment, float _pitch )
 {
-    if( _pitch > 0 ) {
-        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty - _duty_increment ) );
-        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty + _duty_increment ) );
+    if ( _pitch > 0 ) {
+        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty - _duty_increment ));
+        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty + _duty_increment ));
     }
     else {
-        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty - _duty_increment ) );
-        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty + _duty_increment ) );
+        motor[ 3 ]->setTargetSpeed( long( motor[ 3 ]->currentDuty - _duty_increment ));
+        motor[ 1 ]->setTargetSpeed( long( motor[ 1 ]->currentDuty + _duty_increment ));
     }
 }
