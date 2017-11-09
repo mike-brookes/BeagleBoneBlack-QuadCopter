@@ -24,19 +24,19 @@ using namespace quadro::exceptions;
 quadroCopter::quadroCopter()
 {
 
-    try{
+    try {
         myOrientation = new orientation(); //!< myOrientation sets up a new orientation object
         myAeronautics = new aeronautics(); //!< myMovement sets up a new orientation object
     }
-    catch( setupException& e ) {
+    catch ( setupException& e ) {
         //If a setup error occurred, we need to exit before we start flying otherwise catastrophic consequences undoubtedly will follow...
         //Re throw an exception here for the main thread to catch for a proper exit.
-        throw fatalException( e.what() );
+        throw fatalException( e.what());
     }
 
     setStartupTargets();
 
-    sleep( 1 ); //wait 1 second for readings to be updated.
+    usleep( 300000 ); //wait .3 second for sensor readings to be updated.
 
 }
 
@@ -50,6 +50,9 @@ void quadroCopter::setStartupTargets()
 
 void quadroCopter::monitorSensorData()
 {
-    myAeronautics->maintainRoll( abs( myOrientation->rollPID->calculate( roll.targetVal, myOrientation->roll ) ), myOrientation->roll );
-    myAeronautics->maintainPitch( abs( myOrientation->pitchPID->calculate( pitch.targetVal, myOrientation->pitch ) ), myOrientation->pitch );
+    myOrientation->setValues();
+    myAeronautics->maintainRoll( abs( myOrientation->rollPID->calculate( roll.targetVal, myOrientation->roll )) * 100,
+            myOrientation->roll );
+
+    //myAeronautics->maintainPitch( abs( myOrientation->pitchPID->calculate( pitch.targetVal, myOrientation->pitch ) ), myOrientation->pitch );
 }
